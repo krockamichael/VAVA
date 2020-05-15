@@ -17,15 +17,15 @@ public interface RepairsRepository extends JpaRepository<Repairs, Long> {
     Repairs findByCarId(int car_id);
 
     @Query(value = "SELECT SUM(R.end_day - R.start_day + 1) FROM Repairs R JOIN Mechanics M on M.mechanicId = R.mechanicId WHERE M.mechanicId = ?1")
-    int total(int mechanic_id);
+    String total(int mechanic_id);
 
     @Query(value = "SELECT AVG(R.end_day - R.start_day + 1) FROM Repairs R JOIN Mechanics M on M.mechanicId = R.mechanicId WHERE M.mechanicId = ?1")
-    int AvgDate(int mechanic_id);
+    String AvgDate(int mechanic_id);
 
     @Query(value = "SELECT SUM(R.cost) AS RepairCost,SUM(Cs.cost) AS ComponentCost FROM Repairs R INNER JOIN Component C on R.repair_id = C.repair_id INNER JOIN Components Cs on C.components_id = Cs.componentId WHERE R.carId = ?1")
     String getCostSum(int car_id);
 
 
     @Query(value = "SELECT COUNT(R.repair_id) FROM Repairs R JOIN Mechanics M on M.mechanicId = R.mechanicId WHERE M.mechanicId = ?1")
-    int GetNumberOfR(int mechanic_id);
+    String GetNumberOfR(int mechanic_id);
 }

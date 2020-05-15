@@ -54,7 +54,7 @@
          <GridPane.margin>
             <Insets left="230.0" />
          </GridPane.margin></TextField>
-        <TextField fx:id="selectedCustomer" maxWidth="150.0" GridPane.rowIndex="3" editable="false" text="Selected Customer">
+        <TextField fx:id="selectedCustomer" editable="false" maxWidth="150.0" text="Selected Customer" GridPane.rowIndex="3">
             <GridPane.margin>
                 <Insets left="420.0" />
             </GridPane.margin>
@@ -75,13 +75,19 @@
             </GridPane.margin>
         </Label>
         <Button fx:id="Back_btn" layoutX="14.0" layoutY="36.0" mnemonicParsing="false" onAction="#BackToAdminScene" style="-fx-background-color: #3e4247; -fx-border-color: #000000;" text="&lt; Back" textFill="#99aab5" GridPane.rowIndex="1" />
-        <Label fx:id="carAddedMess" layoutX="231.0" layoutY="261.0" text="New car added" textFill="#99aab5" visible="false" GridPane.rowIndex="7" />
+        <Label fx:id="carAddedMess" layoutX="231.0" layoutY="261.0" text="New car added" textFill="#99aab5" visible="false" GridPane.rowIndex="7">
+         <GridPane.margin>
+            <Insets left="450.0" top="10.0" />
+         </GridPane.margin></Label>
         <Label layoutX="420.0" layoutY="117.0" text="Customer :" textFill="#99aab5" GridPane.rowIndex="2">
         <GridPane.margin>
             <Insets left="420.0" top="30" />
         </GridPane.margin>
         </Label>
-        <Label fx:id="emptyFieldsError" layoutX="430.0" layoutY="261.0" text="Some fields are missing!" textFill="#e40808" visible="false" GridPane.rowIndex="7" />
+        <Label fx:id="emptyFieldsError" layoutX="430.0" layoutY="261.0" text="Some fields are missing!" textFill="#e40808" visible="false" GridPane.rowIndex="7">
+         <GridPane.margin>
+            <Insets left="430.0" top="10.0" />
+         </GridPane.margin></Label>
         <ChoiceBox fx:id="fuelType" layoutX="224.0" layoutY="220.0" prefWidth="150.0" GridPane.rowIndex="6">
             <GridPane.margin>
                 <Insets left="230.0" />

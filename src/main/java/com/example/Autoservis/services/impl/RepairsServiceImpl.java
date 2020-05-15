@@ -58,12 +58,12 @@ public class RepairsServiceImpl implements RepairsService {
     }
 
     @Override
-    public int total(int mechanic_id) {
+    public String total(int mechanic_id) {
         return repairsRepository.total(mechanic_id);
     }
 
     @Override
-    public int AvgDate(int mechanic_id) {
+    public String AvgDate(int mechanic_id) {
         return repairsRepository.AvgDate(mechanic_id);
     }
 
@@ -73,7 +73,7 @@ public class RepairsServiceImpl implements RepairsService {
     }
 
     @Override
-    public int GetNumberOfR(int mechanic_id) {
+    public String GetNumberOfR(int mechanic_id) {
         return repairsRepository.GetNumberOfR(mechanic_id);
     }
 

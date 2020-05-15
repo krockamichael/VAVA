@@ -29,7 +29,7 @@
                 <Label layoutX="29.0" layoutY="94.0" text="Surname :" textFill="#99aab5" />
                 <Button fx:id="filterrr" layoutX="60.0" layoutY="155.0" mnemonicParsing="false" onAction="#filterCustomers" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" />
                 <Label layoutX="176.0" layoutY="14.0" text="Results :" textFill="#99aab5" />
-                <TableView fx:id="customersTable" layoutX="176.0" layoutY="42.0" prefHeight="251.0" prefWidth="242.0">
+                <TableView fx:id="customersTable" layoutX="176.0" layoutY="42.0" prefHeight="285.0" prefWidth="242.0">
                     <columns>
                         <TableColumn fx:id="nameCol1" text="Name" />
                         <TableColumn fx:id="surnameCol1" text="Surname" />
@@ -39,9 +39,6 @@
                 </TableView>
                 <Button layoutX="273.0" layoutY="336.0" mnemonicParsing="false" onAction="#select" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
                 <Label layoutX="59.0" layoutY="14.0" text="Filter by:" textFill="#99aab5" />
-                <Button layoutX="235.0" layoutY="298.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="38.0" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&lt;" textFill="#99aab5" />
-                <Button layoutX="320.0" layoutY="298.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="38.0" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&gt;" textFill="#99aab5" />
-                <Label layoutX="294.0" layoutY="303.0" text="1" textFill="#99aab5" />
             </children></Pane>
     </children>
 </AnchorPane>

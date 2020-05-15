@@ -13,19 +13,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
@@ -111,8 +106,6 @@ public class MainController implements Initializable {
     private Label componentCost;
 
     @FXML
-    private Label selectedPage;
-    @FXML
     private TableView<Mechanics> OverViewTable;
     @FXML
     private TableColumn<Mechanics,String> nameCol;
@@ -142,8 +135,6 @@ public class MainController implements Initializable {
     private Label invalidFormatR;
     @FXML
     private Label invalidFormatP;
-    @FXML
-    private Label repairPage;
 
     @FXML
     private TableView<Repairs> repairHistTable;
@@ -191,6 +182,12 @@ public class MainController implements Initializable {
 
     @FXML
     private TableColumn<Mechanics,String> surnameColM;
+
+    @FXML
+    private TextField surnameTextReward;
+
+    @FXML
+    private TextField nameTextReward;
     /////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////
@@ -423,8 +420,14 @@ public class MainController implements Initializable {
         fuelType.getSelectionModel().select(0);
     }
 
+    public String rewardForM;
+    public String reasonForRewardM;
+    public String payoutForM;
+
     @FXML
     private void selectMechanicReward() throws IOException {
+        rewardForM = reward.getText().toString();
+        reasonForRewardM = reasonReward.getText().toString();
         stageManager.switchScene(FxmlView.MechanicSelectionScene);
         nameColM.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameColM.setCellValueFactory(new PropertyValueFactory<>("Surname"));
@@ -432,6 +435,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void selectMechanicPayout() throws IOException{
+        payoutForM = payout_s.getText().toString();
         stageManager.switchScene(FxmlView.MechanicSelectionPayoutScene);
         nameColPay.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameColPay.setCellValueFactory(new PropertyValueFactory<>("Surname"));
@@ -486,12 +490,8 @@ public class MainController implements Initializable {
         if(number.matches("[0-9]+")) {
             sd1 = Integer.parseInt(number);
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
-            Payouts payout = new Payouts();
-            payout.setName(r1[0]);
-            payout.setSurname(r1[1]);
-            payout.setAmount(sd1);
-            payout.setMechanic_id((int) mechanic.getMechanicId());
-            payoutsService.save(payout);
+            System.out.println("name: "+r1[0]);
+            payoutsService.UpdatePayoutMechanic(sd1,(int) mechanic.getMechanicId(),r1[0],r1[1]);
             selectedMechanic1.setText("");
             payout_s.setText("");
         }
@@ -515,12 +515,8 @@ public class MainController implements Initializable {
         else
         {
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
-            Payouts payout = new Payouts();
-            payout.setName(r1[0]);
-            payout.setSurname(r1[1]);
-            payout.setMechanic_id((int) mechanic.getMechanicId());
-
-            payoutsService.delete(payout);
+            payoutsService.DeletePayoutMechanic((int) mechanic.getMechanicId(),r1[0],r1[1]);
+            rewardsService.DeleteRewardMechanic((int) mechanic.getMechanicId(),r1[0],r1[1]);
             selectedMechanic1.setText("");
         }
     }
@@ -551,6 +547,21 @@ public class MainController implements Initializable {
             rewardsM.setMechanic_id((int) mechanic.getMechanicId());
             rewardsService.save(rewardsM);
 
+            int newAmount=0;
+            Payouts oldPayout = payoutsService.findByNameAndSurname(r[0],r[1]);
+            if(oldPayout == null) {
+                Payouts payout = new Payouts();
+                payout.setName(r[0]);
+                payout.setSurname(r[1]);
+                payout.setAmount(sd);
+                payout.setMechanic_id((int) mechanic.getMechanicId());
+                payoutsService.save(payout);
+            }
+            else {
+                newAmount = oldPayout.getAmount() + sd;
+                payoutsService.UpdatePayoutMechanic(newAmount, (int) mechanic.getMechanicId(), r[0], r[1]);
+            }
+
             selectedMechanic.setText("");
             reward.setText("");
             reasonReward.setText("");
@@ -572,8 +583,8 @@ public class MainController implements Initializable {
         }
         else {
             Cars car = new Cars();
-            car.setModel(brand);
-            car.setBrand(model);
+            car.setModel(model);
+            car.setBrand(brand);
             car.setVin(vin);
             car.setFuel(fuel);
 
@@ -600,8 +611,18 @@ public class MainController implements Initializable {
         stageManager.switchScene(FxmlView.AdminScene);
     }
 
+    public String VINCarC;
+    public String BrandCarC;
+    public String ModelCarC;
+    public int FuelTypeCarC;
+
     @FXML
     private void loadCustomerSelection() throws IOException {
+        VINCarC = Car_vin.getText().toString();
+        BrandCarC = Car_brand.getText().toString();
+        ModelCarC = Car_model.getText().toString();
+        FuelTypeCarC = fuelType.getSelectionModel().getSelectedIndex();
+
         stageManager.switchScene(FxmlView.CustomerSelection);
         nameCol1.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameCol1.setCellValueFactory(new PropertyValueFactory<>("Surname"));
@@ -680,108 +701,43 @@ public class MainController implements Initializable {
         }
     }
 
-    /*
-    @FXML
-    protected void nextRight(){
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        surnameCol.setCellValueFactory(new PropertyValueFactory<>("Surname"));
-
-        offset += 100;
-        loadingIndicator.setVisible(true);
-        selectedPage.setText(Integer.toString(offset/100+1));
-        loadThread = new Thread(() -> {
-            ResultSet rs = mechanic.GetMechanics(overName.getText(),overSurname.getText(),offset);
-
-            ObservableList<Mechanics> data = FXCollections.observableArrayList();
-            if(rs == null)
-                System.out.println("No result");
-            else {
-                while (true) {
-                    try {
-                        if (!rs.next()) break;
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    Mechanics mechanic1 = null;
-                    try {
-                        mechanic1 = new Mechanics(rs.getString(1),rs.getString(2));
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    data.add(mechanic1);
-                }
-                OverViewTable.setItems(data);
-            }
-            loadingIndicator.setVisible(false);
-        });
-        loadThread.start();
-    }
-
-    @FXML
-    protected void nextLeft(){
-        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
-        surnameCol.setCellValueFactory(new PropertyValueFactory<>("Surname"));
-
-        if(offset >=100) {
-            offset -=100;
-            loadingIndicator.setVisible(true);
-            selectedPage.setText(Integer.toString((offset/100)+1));
-            loadThread = new Thread(() -> {
-                ResultSet rs = mechanic.GetMechanics(overName.getText(),overSurname.getText(),offset);
-
-                ObservableList<Mechanics> data = FXCollections.observableArrayList();
-                if(rs == null)
-                    System.out.println("No result");
-                else {
-                    while (true) {
-                        try {
-                            if (!rs.next()) break;
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        Mechanics mechanic1 = null;
-                        try {
-                            mechanic1 = new Mechanics(rs.getString(1),rs.getString(2));
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        data.add(mechanic1);
-                    }
-                    OverViewTable.setItems(data);
-                }
-                loadingIndicator.setVisible(false);
-            });
-            loadThread.start();
-        }
-    }
-*/
     @FXML
     private void returnSeMechanic()
     {
         String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
         String r[] = NameR.split("\\s+");
         int originalQty=0;
-        int numOfDays=0;
-        int sumOfDate=0;
-        int avgOfDate=0;
+        double numOfDays=0;
+        double sumOfDate=0;
+        double avgOfDate=0;
 
         Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
         originalQty= (int) mechanic.getMechanicId();
 
-        numOfDays = repairsService.GetNumberOfR(originalQty);
+        if(repairsService.GetNumberOfR(originalQty) != null)
+            numOfDays = Double.valueOf(repairsService.GetNumberOfR(originalQty));
 
-        sumOfDate = repairsService.total(originalQty);
+        if(repairsService.total(originalQty) != null)
+            sumOfDate = Double.valueOf(repairsService.total(originalQty));
 
-        avgOfDate = repairsService.AvgDate(originalQty);
+        if(repairsService.AvgDate(originalQty) != null)
+            avgOfDate = Double.valueOf(repairsService.AvgDate(originalQty));
 
-        String det = Integer.toString(numOfDays);
-        String det1 = Integer.toString(sumOfDate);
-        String det2 = Integer.toString(avgOfDate);
+        String det = Double.toString(numOfDays);
+        String det1 = Double.toString(sumOfDate);
+        String det2 = Double.toString(avgOfDate);
 
         TotalNumber.setText(det);
         TotalRepairT.setText(det1);
         AveRepairT.setText(det2);
     }
+
+    public String TotalNumberOfRepairs;
+    public String AverageRepairTime;
+    public String TotalRepairTime;
+    public String NameAtOverviewR;
+    public String SurnameAtOverviewR;
+    public ObservableList<Mechanics> itemsMechanics;
 
     public void LoadRepairD() throws IOException {
         String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
@@ -790,6 +746,12 @@ public class MainController implements Initializable {
 
         Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
         IdM = mechanic.getMechanicId();
+        NameAtOverviewR = overName.getText().toString();
+        SurnameAtOverviewR = overSurname.getText().toString();
+        TotalNumberOfRepairs = TotalNumber.getText().toString();
+        AverageRepairTime = AveRepairT.getText().toString();
+        TotalRepairTime = TotalRepairT.getText().toString();
+        itemsMechanics = OverViewTable.getItems();
 
         stageManager.switchScene(FxmlView.RepairScene);
 
@@ -838,6 +800,15 @@ public class MainController implements Initializable {
     private void BackToAdminSceneRepair(ActionEvent e)throws IOException{
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(overview_R_Tab);
+        overName.setText(NameAtOverviewR);
+        overSurname.setText(SurnameAtOverviewR);
+        TotalNumber.setText(TotalNumberOfRepairs);
+        AveRepairT.setText(AverageRepairTime);
+        TotalRepairT.setText(TotalRepairTime);
+
+        nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
+        surnameCol.setCellValueFactory(new PropertyValueFactory<>("Surname"));
+        OverViewTable.setItems(itemsMechanics);
     }
 
     public void loadSelectedRepairInfo(int carId){
@@ -848,11 +819,12 @@ public class MainController implements Initializable {
         repairCol.setCellValueFactory(new PropertyValueFactory<>("Repair"));
         costCol.setCellValueFactory(new PropertyValueFactory<>("Cost"));
         repairOffset = 0;
-        repairPage.setText("1");
 
         loadThread = new Thread(() -> {
             Repairs r = repairsService.findByCarId(carId);
-            Mechanics m = mechanicsService.findByMechanicId(r.getMechanicId());
+            Mechanics m = null;
+            if(r != null)
+                m = mechanicsService.findByMechanicId(r.getMechanicId());
 
             ObservableList<Repairs> data = FXCollections.observableArrayList();
             if(r == null)
@@ -872,8 +844,8 @@ public class MainController implements Initializable {
 
             String rCost= repairsService.getCostSum(carId);
             String[] rCosts = rCost.split(",");
-
             System.out.println(rCosts[0]+" "+rCosts[1]);
+
             Platform.runLater(() -> {
                 repairCost.setText(rCosts[0]);
                 componentCost.setText(rCosts[1]);
@@ -906,8 +878,13 @@ public class MainController implements Initializable {
 
     @FXML
     private void select(ActionEvent event) throws IOException {
-        String SelectedUser;
-        SelectedUser = customersTable.getSelectionModel().getSelectedItem().getName()+" "+customersTable.getSelectionModel().getSelectedItem().getSurname()+" "+customersTable.getSelectionModel().getSelectedItem().getId();
+        String SelectedUser="";
+        int customerId=0;
+
+        if(customersTable.getSelectionModel().getSelectedItem() != null) {
+            SelectedUser = customersTable.getSelectionModel().getSelectedItem().getName()+" "+customersTable.getSelectionModel().getSelectedItem().getSurname()+" "+customersTable.getSelectionModel().getSelectedItem().getId();
+            customerId = (int)customersTable.getSelectionModel().getSelectedItem().getCustomerId();
+        }
 
         stageManager.switchScene(FxmlView.CarScene);
         ObservableList<String> fuelTypeBox = FXCollections.observableArrayList();
@@ -916,16 +893,19 @@ public class MainController implements Initializable {
         fuelTypeBox.add("Diesel");
         fuelTypeBox.add("Elektrina");
         fuelType.setItems(fuelTypeBox);
-        fuelType.getSelectionModel().select(0);
 
+        Car_vin.setText(VINCarC);
+        Car_brand.setText(BrandCarC);
+        Car_model.setText(ModelCarC);
+        fuelType.getSelectionModel().select(FuelTypeCarC);
         selectedCustomer.setText(SelectedUser);
-        selectedCustomer.setUserData(customersTable.getSelectionModel().getSelectedItem().getCustomerId());
+        selectedCustomer.setUserData(customerId);
     }
 
     @FXML
     private void filterMechanic()
     {
-        List<Mechanics> mechanics = mechanicsService.getMechanicG();
+        List<Mechanics> mechanics = mechanicsService.getMechanics(nameTextReward.getText(),surnameTextReward.getText());
         ObservableList<Mechanics> data = FXCollections.observableArrayList();
 
         if(mechanics.size() == 0){
@@ -946,12 +926,19 @@ public class MainController implements Initializable {
     @FXML
     private void returnMechanic(ActionEvent event)
     {
-        String SelectedMechanic;
-        SelectedMechanic = mechanicsTableR.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTableR.getSelectionModel().getSelectedItem().getSurname();
-
+        String SelectedMechanic="";
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
-        selectedMechanic.setText(SelectedMechanic);
+
+        if(mechanicsTableR.getSelectionModel().getSelectedItem() != null) {
+            SelectedMechanic = mechanicsTableR.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTableR.getSelectionModel().getSelectedItem().getSurname();
+            selectedMechanic.setText(SelectedMechanic);
+        }
+        else
+            selectedMechanic.setText("Selected Mechanic");
+
+        reward.setText(rewardForM);
+        reasonReward.setText(reasonForRewardM);
     }
 
     @FXML
@@ -978,12 +965,18 @@ public class MainController implements Initializable {
     @FXML
     private void returnMechanicPayout(ActionEvent event)
     {
-        String SelectedMechanic;
-        SelectedMechanic = mechanicsTablePayout1.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTablePayout1.getSelectionModel().getSelectedItem().getSurname();
-
+        String SelectedMechanic="";
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
-        selectedMechanic1.setText(SelectedMechanic);
+
+        if(mechanicsTablePayout1.getSelectionModel().getSelectedItem() != null) {
+            SelectedMechanic = mechanicsTablePayout1.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTablePayout1.getSelectionModel().getSelectedItem().getSurname();
+            selectedMechanic1.setText(SelectedMechanic);
+        }
+        else
+            selectedMechanic1.setText("Selected Mechanic");
+
+        payout_s.setText(payoutForM);
     }
 
     @FXML
@@ -1013,81 +1006,8 @@ public class MainController implements Initializable {
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(repairHistoryTab);
         if(carsTableCar.getSelectionModel().getSelectedItem() != null) {
-            carSelection.setText(carsTableCar.getSelectionModel().getSelectedItem().getModel() + " " + carsTableCar.getSelectionModel().getSelectedItem().getBrand());
+            carSelection.setText(carsTableCar.getSelectionModel().getSelectedItem().getBrand() + " " + carsTableCar.getSelectionModel().getSelectedItem().getModel());
             loadSelectedRepairInfo((int) carsTableCar.getSelectionModel().getSelectedItem().getCar_id());
         }
     }
-
-
- /*
-    @FXML
-    protected void repairRight() {
-        repairOffset +=100;
-        repairLoadingIndicator.setVisible(true);
-        repairPage.setText(Integer.toString(repairOffset/100+1));
-        loadThread = new Thread(() -> {
-            ResultSet repairs1 = repairs.getRepairInfo(carId,repairOffset);
-
-            ObservableList<Repairs> data = FXCollections.observableArrayList();
-            if(repairs1 == null)
-                System.out.println("No result");
-            else {
-
-                while (true) {
-                    try {
-                        if (!repairs1.next()) break;
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    Repairs component = null;
-                    try {
-                        component = new Repairs(repairs1.getString(1),repairs1.getString(5),repairs1.getString(6),repairs1.getString(2)+" "+repairs1.getString(3),repairs1.getDouble(4));
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    data.add(component);
-                }
-                repairHistTable.setItems(data);
-            }
-            repairLoadingIndicator.setVisible(false);
-        });
-        loadThread.start();
-    }
-
-    @FXML
-    protected void repairLeft() {
-        if (repairOffset >= 100) {
-            repairOffset -= 100;
-            repairLoadingIndicator.setVisible(true);
-            repairPage.setText(Integer.toString(repairOffset / 100 + 1));
-            loadThread = new Thread(() -> {
-                ResultSet repairs1 = repairs.getRepairInfo(carId, repairOffset);
-
-                ObservableList<Repairs> data = FXCollections.observableArrayList();
-                if (repairs1 == null)
-                    System.out.println("No result");
-                else {
-
-                    while (true) {
-                        try {
-                            if (!repairs1.next()) break;
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        Repairs component = null;
-                        try {
-                            component = new Repairs(repairs1.getString(1), repairs1.getString(5), repairs1.getString(6), repairs1.getString(2) + " " + repairs1.getString(3), repairs1.getDouble(4));
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        data.add(component);
-                    }
-                    repairHistTable.setItems(data);
-                }
-                repairLoadingIndicator.setVisible(false);
-            });
-            loadThread.start();
-        }
-    }
-   */
 }

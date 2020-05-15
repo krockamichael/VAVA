@@ -26,10 +26,6 @@ import java.util.ResourceBundle;
 @Controller
 public class MechanicMainSceneController implements Initializable {
 
-    private int offset;
-
-    private Thread loadThread = null;
-
     @FXML
     private TableView<Cars> carsTable;
     @FXML
@@ -52,10 +48,6 @@ public class MechanicMainSceneController implements Initializable {
     private TextField carType;
     @FXML
     private TextField carVIN;
-    @FXML
-    private ProgressIndicator loadingIndicator;
-    @FXML
-    private Label selectedPage;
     @FXML
     private Label repairAdded;
     @FXML
@@ -216,8 +208,26 @@ public class MechanicMainSceneController implements Initializable {
 
     }
 
+    public String RepairCostM;
+    public String RepairTextM;
+    public String ModelCarM;
+    public String ModelTypeM;
+    public String ModelVinM;
+    public LocalDate StartingDateM;
+    public LocalDate FinishDateM;
+    public ObservableList<Cars> items;
+
     @FXML
     protected void loadComponentSelection() throws IOException {
+        RepairCostM = repairCost.getText().toString();
+        StartingDateM = startDate.getValue();
+        FinishDateM = finishDate.getValue();
+        RepairTextM = repair.getText().toString();
+        ModelCarM = carModel.getText().toString();
+        ModelTypeM = carType.getText().toString();
+        ModelVinM = carVIN.getText().toString();
+        items = carsTable.getItems();
+
         stageManager.switchScene(FxmlView.ComponentSelection);
         componentColC.setCellValueFactory(new PropertyValueFactory<>("Name"));
         carTypeColC.setCellValueFactory(new PropertyValueFactory<>("CarType"));
@@ -249,78 +259,22 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     private void selectC(ActionEvent event){
+        ObservableList<Cars> data = FXCollections.observableArrayList();
         stageManager.switchScene(FxmlView.MechanicScene);
+
+        repairCost.setText(RepairCostM);
+        startDate.setValue(StartingDateM);
+        finishDate.setValue(FinishDateM);
+        repair.setText(RepairTextM);
+        carModel.setText(ModelCarM);
+        carType.setText(ModelTypeM);
+        carVIN.setText(ModelVinM);
+
+        carsTable.setItems(items);
+
         if(componentsTableC.getSelectionModel().getSelectedItem() != null) {
             componentSelection.setText(componentsTableC.getSelectionModel().getSelectedItem().getName() + " " + componentsTableC.getSelectionModel().getSelectedItem().getCarType());
             componentSelection.setUserData(componentsTableC.getSelectionModel().getSelectedItem().getComponentId());
         }
     }
-
-    /*
-    @FXML
-    protected void rightPage() {
-        offset +=100;
-        loadingIndicator.setVisible(true);
-        selectedPage.setText(Integer.toString(offset/100+1));
-        loadThread = new Thread(() -> {
-            ResultSet rs = carsService.getCars(carModel.getText(), carType.getText(), carVIN.getText(), offset);
-            ObservableList<Cars> data = FXCollections.observableArrayList();
-            if (rs == null)
-                System.out.println("No result");
-            else {
-                while (true) {
-                    try {
-                        if (!rs.next()) break;
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    Cars car = null;
-                    try {
-                        car = new Cars(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-                    } catch (SQLException e) {
-                        e.printStackTrace();
-                    }
-                    data.add(car);
-                }
-                carsTable.setItems(data);
-            }
-            loadingIndicator.setVisible(false);
-        });
-        loadThread.start();
-    }
-
-    @FXML
-    protected void leftPage() {
-        if(offset >= 100){
-            offset-=100;
-            loadingIndicator.setVisible(true);
-            selectedPage.setText(Integer.toString(offset/100+1));
-            loadThread = new Thread(() -> {
-                ResultSet rs = carsService.getCars(carModel.getText(), carType.getText(), carVIN.getText(), offset);
-                ObservableList<Cars> data = FXCollections.observableArrayList();
-                if (rs == null)
-                    System.out.println("No result");
-                else {
-                    while (true) {
-                        try {
-                            if (!rs.next()) break;
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        Cars car = null;
-                        try {
-                            car = new Cars(rs.getString(1), rs.getString(2), rs.getString(3), rs.getInt(4));
-                        } catch (SQLException e) {
-                            e.printStackTrace();
-                        }
-                        data.add(car);
-                    }
-                    carsTable.setItems(data);
-                }
-                loadingIndicator.setVisible(false);
-            });
-            loadThread.start();
-        }
-    }
-*/
 }

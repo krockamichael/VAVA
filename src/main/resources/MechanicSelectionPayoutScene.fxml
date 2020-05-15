@@ -1,16 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.ProgressIndicator?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.Pane?>
-<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="402.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Autoservis.controller.MainController">
+<AnchorPane prefHeight="402.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Autoservis.controller.MainController">
     <children>
         <Pane prefHeight="27.0" prefWidth="445.0" style="-fx-background-color: #23272a;">
             <children>
@@ -27,18 +21,15 @@
                 <TextField fx:id="nameTextPay" layoutX="29.0" layoutY="26.0" prefHeight="25.0" prefWidth="125.0" />
                 <TextField fx:id="surnameTextPay" layoutX="176.0" layoutY="26.0" prefHeight="25.0" prefWidth="125.0" />
                 <Label layoutX="176.0" layoutY="10.0" text="Surname :" textFill="#99aab5" />
-                <Button layoutX="335.0" layoutY="26.0" prefWidth="80.0" mnemonicParsing="false" onAction="#filterMechanicsPayout" style="-fx-background-color: #23272a;" text="Search" textFill="#99aab5" />
+                <Button layoutX="335.0" layoutY="26.0" mnemonicParsing="false" onAction="#filterMechanicsPayout" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Search" textFill="#99aab5" />
                 <Label layoutX="29.0" layoutY="64.0" text="Results :" textFill="#99aab5" />
-                <TableView fx:id="mechanicsTablePayout1" layoutX="29.0" layoutY="85.0" prefHeight="231.0" prefWidth="280.0">
+                <TableView fx:id="mechanicsTablePayout1" layoutX="29.0" layoutY="85.0" prefHeight="271.0" prefWidth="280.0">
                     <columns>
                         <TableColumn fx:id="nameColPay" prefWidth="140.0" text="Name" />
                         <TableColumn fx:id="surnameColPay" prefWidth="140.0" text="Surname" />
                     </columns>
                 </TableView>
-                <Button layoutX="335.0" layoutY="66.0" prefWidth="80.0" mnemonicParsing="false" onAction="#returnMechanicPayout" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
-                <Label layoutX="158.0" layoutY="334.0" text="1" textFill="#99aab5" />
-                <Button layoutX="205.0" layoutY="329.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="31.0" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&gt;" textFill="#99aab5" />
-                <Button layoutX="82.0" layoutY="329.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="31.0" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&lt;" textFill="#99aab5" />
+                <Button layoutX="335.0" layoutY="66.0" mnemonicParsing="false" onAction="#returnMechanicPayout" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
             </children></Pane>
     </children>
 </AnchorPane>

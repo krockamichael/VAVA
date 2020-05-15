@@ -20,6 +20,11 @@ public class RewardsServiceImpl implements RewardsService {
     }
 
     @Override
+    public void DeleteRewardMechanic(int mechanic_id, String name, String surname) {
+        rewardsRepository.DeleteRewardMechanic(mechanic_id, name, surname);
+    }
+
+    @Override
     public Rewards save(Rewards entity) {
         return rewardsRepository.save(entity);
     }

@@ -285,6 +285,14 @@
                                                 <Insets left="478.0" top="-80.0" />
                                             </GridPane.margin>
                                         </Label>
+                                        <Button mnemonicParsing="false" onAction="#generatePDF"
+                                                style="-fx-background-color: #23272a;" text="Generate bill"
+                                                textFill="#99aab5" GridPane.halignment="RIGHT" GridPane.rowIndex="3"
+                                                GridPane.valignment="BASELINE">
+                                            <GridPane.margin>
+                                                <Insets right="22.0" top="150.0"/>
+                                            </GridPane.margin>
+                                        </Button>
                                         <Label fx:id="repairCost" layoutX="479.0" layoutY="126.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
                                             <GridPane.margin>
                                                 <Insets left="479.0" top="-150.0" />
@@ -295,6 +303,15 @@
                                                 <Insets left="29.0" top="10" />
                                             </GridPane.margin>
                                         </TextField>
+                                        <Label fx:id="SelectARepair" text="Select a repair!" textFill="#e83c3c"
+                                               visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                            <GridPane.margin>
+                                                <Insets right="15.0" top="160.0"/>
+                                            </GridPane.margin>
+                                            <font>
+                                                <Font name="System Bold" size="14.0"/>
+                                            </font>
+                                        </Label>
                                         <Label fx:id="componentCost" layoutX="479.0" layoutY="200.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
                                             <GridPane.margin>
                                                 <Insets left="479.0" top="-32.0" />

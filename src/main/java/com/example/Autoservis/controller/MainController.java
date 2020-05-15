@@ -1,5 +1,6 @@
 package com.example.Autoservis.controller;
 
+import com.example.Autoservis.PDFSampleMain;
 import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
@@ -237,6 +238,8 @@ public class MainController implements Initializable {
     private TableColumn<Repairs,String> EndDayR;
     @FXML
     private TableColumn<Repairs,String> DaysRR;
+    @FXML
+    private Label SelectARepair;
     ///////////////////////////////////////////////////
 
     private Thread loadThread = null;
@@ -831,7 +834,10 @@ public class MainController implements Initializable {
                     Repairs rep1 = null;
                     rep1 = new Repairs();
                     Mechanics m = mechanicsService.findByMechanicId(rep.getMechanicId());
+                    rep1.setRepair_id(rep.getRepair_id());
+                    rep1.setMechanicId(rep.getMechanicId());
                     rep1.setRepair(rep.getRepair());
+                    rep1.setCarId(rep.getCarId());
                     rep1.setStart_day(Date.valueOf(rep.getStart_day()));
                     rep1.setEnd_day(Date.valueOf(rep.getEnd_day()));
                     rep1.setCost(rep.getCost());
@@ -994,6 +1000,8 @@ public class MainController implements Initializable {
                 car.setBrand(model.getBrand());
                 car.setVin(model.getVin());
                 car.setCar_id(model.getCar_id());
+                car.setOwner_id(model.getOwner_id());
+                car.setFuel(model.getFuel());
                 data.add(car);
             }
             carsTableCar.setItems(data);
@@ -1007,6 +1015,39 @@ public class MainController implements Initializable {
         if(carsTableCar.getSelectionModel().getSelectedItem() != null) {
             carSelection.setText(carsTableCar.getSelectionModel().getSelectedItem().getBrand() + " " + carsTableCar.getSelectionModel().getSelectedItem().getModel());
             loadSelectedRepairInfo((int) carsTableCar.getSelectionModel().getSelectedItem().getCar_id());
+        }
+    }
+
+    @FXML
+    private void generatePDF(ActionEvent event){
+        tabPane.getSelectionModel().select(repairHistoryTab);
+        if(repairHistTable != null && repairHistTable.getSelectionModel().getSelectedItem() != null &&
+            carsTableCar != null && carsTableCar.getSelectionModel().getSelectedItem() != null) {
+            String[] parameters = new String[13];
+
+            Cars c = carsTableCar.getSelectionModel().getSelectedItem();
+            Customers owner = customersService.findByCustomerId(c.getOwner_id());
+            Repairs r = repairHistTable.getSelectionModel().getSelectedItem();
+            Mechanics m = mechanicsService.findByMechanicId(r.getMechanicId());
+
+            parameters[0] = c.getBrand();
+            parameters[1] = c.getModel();
+            parameters[2] = c.getVin();
+            parameters[12] = c.getFuel();
+            parameters[3] = r.getStart_day();
+            parameters[4] = r.getEnd_day();
+            parameters[5] = String.valueOf(r.getDays());
+            parameters[6] = String.valueOf(r.getCost());
+            parameters[7] = m.getName() + ' ' + m.getSurname();
+            parameters[8] = r.getRepair();
+            parameters[9] = owner.getName() + " " + owner.getSurname();
+            parameters[10] = owner.getEmail();
+            parameters[11] = owner.getPhone_number();
+
+            PDFSampleMain.main(parameters);
+            SelectARepair.setVisible(false);
+        } else {
+            SelectARepair.setVisible(true);
         }
     }
 }

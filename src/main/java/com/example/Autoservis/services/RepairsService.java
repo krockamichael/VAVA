@@ -1,5 +1,6 @@
 package com.example.Autoservis.services;
 
+import com.example.Autoservis.bean.Cars;
 import com.example.Autoservis.bean.Repairs;
 import com.example.Autoservis.generic.GenericService;
 import org.springframework.data.jpa.repository.Query;
@@ -15,4 +16,5 @@ public interface RepairsService extends GenericService<Repairs> {
     String getCostSum(int car_id);
     String GetNumberOfR(int mechanic_id);
     List<Repairs> getWorkDetails(int mechnic_id);
+    List<Repairs> AllRepairs(int car_id);
 }

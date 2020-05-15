@@ -821,24 +821,23 @@ public class MainController implements Initializable {
         repairOffset = 0;
 
         loadThread = new Thread(() -> {
-            Repairs r = repairsService.findByCarId(carId);
-            Mechanics m = null;
-            if(r != null)
-                m = mechanicsService.findByMechanicId(r.getMechanicId());
-
+            List<Repairs> r = repairsService.AllRepairs(carId);
             ObservableList<Repairs> data = FXCollections.observableArrayList();
-            if(r == null)
+
+            if(r.size() == 0)
                 System.out.println("No result");
             else {
-                Repairs rep1 = null;
-                rep1 = new Repairs();
-                rep1.setRepair(r.getRepair());
-                rep1.setStart_day(Date.valueOf(r.getStart_day()));
-                rep1.setEnd_day(Date.valueOf(r.getEnd_day()));
-                rep1.setCost(r.getCost());
-                rep1.setMechanic_name(m.getName()+" "+m.getSurname());
-                data.add(rep1);
-
+                for(Repairs rep : r) {
+                    Repairs rep1 = null;
+                    rep1 = new Repairs();
+                    Mechanics m = mechanicsService.findByMechanicId(rep.getMechanicId());
+                    rep1.setRepair(rep.getRepair());
+                    rep1.setStart_day(Date.valueOf(rep.getStart_day()));
+                    rep1.setEnd_day(Date.valueOf(rep.getEnd_day()));
+                    rep1.setCost(rep.getCost());
+                    rep1.setMechanic_name(m.getName()+" "+m.getSurname());
+                    data.add(rep1);
+                }
                 repairHistTable.setItems(data);
             }
 

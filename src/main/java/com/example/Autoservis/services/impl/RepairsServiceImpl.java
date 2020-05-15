@@ -88,4 +88,12 @@ public class RepairsServiceImpl implements RepairsService {
         query.setParameter(1, mechnic_id);
         return query.getResultList();
     }
+
+    @Override
+    public List<Repairs> AllRepairs(int car_id) {
+        TypedQuery<Repairs> query = entityManager.createQuery(
+                "SELECT r FROM Repairs r WHERE r.carId = ?1", Repairs.class);
+        query.setParameter(1, car_id);
+        return query.getResultList();
+    }
 }

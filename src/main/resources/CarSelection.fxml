@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressIndicator?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="402.0" prefWidth="445.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Autoservis.controller.MainController">
+    <children>
+        <Pane prefHeight="27.0" prefWidth="445.0" style="-fx-background-color: #23272a;">
+            <children>
+                <Button layoutX="414.0" layoutY="1.0" mnemonicParsing="false" onAction="#closeStageAction" prefHeight="9.0" prefWidth="25.0" style="-fx-background-color: #23272a;" text="X" textFill="#99aab5">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Label layoutX="189.0" layoutY="5.0" text="Car selection" textFill="#99aab5" />
+            </children></Pane>
+        <Pane layoutY="27.0" prefHeight="375.0" prefWidth="445.0" style="-fx-background-color: #3e4247;">
+            <children>
+                <Label layoutX="31.0" layoutY="25.0" text="Model : " textFill="#99aab5" />
+                <Label layoutX="141.0" layoutY="25.0" text="Type :" textFill="#99aab5" />
+                <Label layoutX="250.0" layoutY="25.0" text="VIN :" textFill="#99aab5" />
+                <TextField fx:id="carModelCar" layoutX="31.0" layoutY="50.0" prefHeight="25.0" prefWidth="90.0" />
+                <TextField fx:id="carTypeCar" layoutX="141.0" layoutY="50.0" prefHeight="25.0" prefWidth="90.0" />
+                <TextField fx:id="carVINCar" layoutX="250.0" layoutY="50.0" prefHeight="25.0" prefWidth="90.0" />
+                <Button layoutX="351.0" layoutY="50.0" mnemonicParsing="false" onAction="#filterCar" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" />
+                <TableView fx:id="carsTableCar" layoutX="31.0" layoutY="88.0" prefHeight="200.0" prefWidth="396.0">
+                    <columns>
+                        <TableColumn fx:id="modelColCar" prefWidth="140.0" text="Model" />
+                        <TableColumn fx:id="typeColCar" prefWidth="133.0" text="Type" />
+                        <TableColumn fx:id="vinColCar" prefWidth="122.0" text="VIN" />
+                        <TableColumn fx:id="carIdColCar" prefWidth="75.0" text="id" visible="false" />
+                    </columns>
+                </TableView>
+                <Button layoutX="174.0" layoutY="301.0" mnemonicParsing="false" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&lt;" textFill="#99aab5" />
+                <Button layoutX="250.0" layoutY="301.0" mnemonicParsing="false" style="-fx-background-color: #3e4247; -fx-border-color: #23272a;" text="&gt;" textFill="#99aab5" />
+                <Label layoutX="221.0" layoutY="305.0" text="1" textFill="#99aab5" />
+                <Button layoutX="201.0" layoutY="336.0" mnemonicParsing="false" onAction="#selectCar" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
+                <Label layoutX="31.0" layoutY="305.0" prefHeight="17.0" prefWidth="133.0" text="No car selected!" textFill="#ab2626" visible="false">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Label>
+            </children></Pane>
+    </children>
+</AnchorPane>

@@ -1,5 +1,6 @@
 package com.example.Autoservis.controller;
 
+import com.example.Autoservis.PDFSampleMain;
 import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
@@ -33,6 +34,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
@@ -240,6 +242,8 @@ public class MainController implements Initializable {
     private TableColumn<Repairs,String> EndDayR;
     @FXML
     private TableColumn<Repairs,String> DaysRR;
+    @FXML
+    private Label SelectARepair;
     ///////////////////////////////////////////////////
 
     private Thread loadThread = null;
@@ -646,7 +650,6 @@ public class MainController implements Initializable {
         }
 
     }
-
 
     @FXML
     private void loadCarSelection() throws IOException {
@@ -1090,4 +1093,37 @@ public class MainController implements Initializable {
         }
     }
    */
+
+    @FXML
+    private void generatePDF(ActionEvent event){
+        tabPane.getSelectionModel().select(repairHistoryTab);
+        if(carsTableCar != null &&
+                carsTableCar.getSelectionModel().getSelectedItem() != null) {
+            String[] parameters = new String[12];
+            int owner_id = carsTableCar.getSelectionModel().getSelectedItem().getOwner_id();
+            Customers owner = customersService.findByCustomerId(owner_id);
+
+            Repairs r = repairsService.findByCarId((int) carsTableCar.getSelectionModel().getSelectedItem().getCar_id());
+            Mechanics m = mechanicsService.findByMechanicId(r.getMechanicId());
+
+            parameters[0] = carsTableCar.getSelectionModel().getSelectedItem().getBrand();
+            parameters[1] = carsTableCar.getSelectionModel().getSelectedItem().getModel();
+            parameters[2] = carsTableCar.getSelectionModel().getSelectedItem().getVin();
+            // parameters[3] = carsTableCar.getSelectionModel().getSelectedItem().getFuel(); --> return null
+            parameters[3] = r.getStart_day();
+            parameters[4] = r.getEnd_day();
+            parameters[5] = String.valueOf(r.getDays());
+            parameters[6] = String.valueOf(r.getCost());
+            parameters[7] = m.getName() + ' ' + m.getSurname();
+            parameters[8] = r.getRepair();
+//        parameters[9] = owner.getName() + " " + owner.getSurname();
+//        parameters[10] = owner.getEmail();
+//        parameters[11] = owner.getPhone_number();
+
+            PDFSampleMain.main(parameters);
+            SelectARepair.setVisible(false);
+        } else {
+            SelectARepair.setVisible(true);
+        }
+    }
 }

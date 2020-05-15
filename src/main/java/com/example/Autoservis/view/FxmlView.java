@@ -57,7 +57,6 @@ public enum FxmlView {
         }
     },
     MechanicScene {
-
         @Override
         public String getFxmlFile() {
             return "/MechanicMainScene.fxml";

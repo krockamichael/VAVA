@@ -205,17 +205,32 @@
                                                 <Insets left="170.0" />
                                             </GridPane.margin>
                                         </Label>
-                              <TextField fx:id="selectedMechanic" layoutX="50.0" layoutY="162.0" maxHeight="50.0" maxWidth="150.0" prefHeight="26.0" prefWidth="100.0" editable="false" text="Selected Mechanic" GridPane.rowIndex="7">
+                              <TextField fx:id="selectedMechanic" editable="false" layoutX="50.0" layoutY="162.0" maxHeight="50.0" maxWidth="150.0" prefHeight="26.0" prefWidth="100.0" text="Selected Mechanic" GridPane.rowIndex="7">
                                  <GridPane.margin>
                                     <Insets left="40.0" />
                                  </GridPane.margin>
                               </TextField>
-                              <TextField fx:id="selectedMechanic1" layoutX="50.0" layoutY="227.0" maxHeight="50.0" maxWidth="150.0" prefHeight="26.0" prefWidth="100.0" editable="false" text="Selected Mechanic" GridPane.rowIndex="5">
+                              <TextField fx:id="selectedMechanic1" editable="false" layoutX="50.0" layoutY="227.0" maxHeight="50.0" maxWidth="150.0" prefHeight="26.0" prefWidth="100.0" text="Selected Mechanic" GridPane.rowIndex="5">
                                  <GridPane.margin>
                                     <Insets left="400.0" />
                                  </GridPane.margin>
                               </TextField>
                                         </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
                             </content>
                         </Tab>
@@ -304,16 +319,28 @@
                                                 <Insets left="478.0" top="-50.0" />
                                             </GridPane.margin>
                                         </Label>
+                              <Button mnemonicParsing="false" onAction="#generatePDF" style="-fx-background-color: #23272a;" text="Generate bill" textFill="#99aab5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BASELINE">
+                                 <GridPane.margin>
+                                    <Insets right="22.0" top="150.0" />
+                                 </GridPane.margin></Button>
                                         <Label fx:id="repairCost" layoutX="479.0" layoutY="126.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
                                             <GridPane.margin>
                                                 <Insets left="479.0" top="-120.0" />
                                             </GridPane.margin>
                                         </Label>
-                                        <TextField fx:id="carSelection" layoutX="60.0" layoutY="20.0" maxWidth="150.0" editable="false" text="Selected car" GridPane.rowIndex="2">
+                                        <TextField fx:id="carSelection" editable="false" layoutX="60.0" layoutY="20.0" maxWidth="150.0" text="Selected car" GridPane.rowIndex="2">
                                             <GridPane.margin>
-                                                <Insets left="29.0" top="10"/>
+                                                <Insets left="29.0" top="10" />
                                             </GridPane.margin>
                                         </TextField>
+                              <Label fx:id="SelectARepair" text="Select a repair!" textFill="#e83c3c" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets right="15.0" top="160.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
                                         <Label fx:id="componentCost" layoutX="479.0" layoutY="200.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
                                             <GridPane.margin>
                                                 <Insets left="479.0" top="-2.0" />
@@ -328,6 +355,21 @@
                                                 <Insets left="479.0" top="19.0" />
                                             </GridPane.margin></Line>
                                     </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
                             </content>
                         </Tab>

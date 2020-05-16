@@ -292,6 +292,14 @@
                                                 <Insets left="29.0" top="20" />
                                             </GridPane.margin>
                                         </Label>
+                              <Label fx:id="billGeneratedOK" alignment="CENTER" prefHeight="26.0" prefWidth="97.0" text="Bill generated!" textFill="#00d327" visible="false" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+                                 <GridPane.margin>
+                                    <Insets top="160.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font name="System Bold" size="14.0" />
+                                 </font>
+                              </Label>
                                         <Button fx:id="RHt_select_btn" layoutX="192.0" layoutY="57.0" mnemonicParsing="false" onAction="#loadCarSelection" prefHeight="25.0" prefWidth="68.0" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" GridPane.rowIndex="2">
                                             <GridPane.margin>
                                                 <Insets left="192.0" top="10" />
@@ -312,9 +320,9 @@
                                                 <Insets top="150.0" />
                                             </GridPane.margin>
                                         </Button>
-                                        <Label fx:id="repairCost" layoutX="479.0" layoutY="126.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
+                                        <Label fx:id="repairCost" layoutX="479.0" layoutY="126.0" prefHeight="17.0" prefWidth="98.0" text="0" textFill="#99aab5" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                             <GridPane.margin>
-                                                <Insets left="479.0" top="-150.0" />
+                                                <Insets left="15.0" top="-150.0" />
                                             </GridPane.margin>
                                         </Label>
                                         <TextField fx:id="carSelection" editable="false" layoutX="60.0" layoutY="20.0" maxWidth="150.0" text="Selected car" GridPane.rowIndex="2">
@@ -330,9 +338,9 @@
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
                                         </Label>
-                                        <Label fx:id="componentCost" layoutX="479.0" layoutY="200.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
+                                        <Label fx:id="componentCost" layoutX="479.0" layoutY="200.0" prefHeight="17.0" prefWidth="105.0" text="0" textFill="#99aab5" GridPane.columnIndex="1" GridPane.rowIndex="3">
                                             <GridPane.margin>
-                                                <Insets left="479.0" top="-32.0" />
+                                                <Insets left="15.0" top="-32.0" />
                                             </GridPane.margin>
                                         </Label>
                                         <Line endX="300.0" layoutX="500.0" layoutY="100.0" startX="400.0" GridPane.rowIndex="3">

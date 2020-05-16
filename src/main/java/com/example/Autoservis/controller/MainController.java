@@ -34,6 +34,7 @@ public class MainController implements Initializable {
     public static int IdM;
     public Button english_lang;
     public Button slovak_lang;
+    private String global_lang = "eng";
 
     @FXML private TextField Username;
     @FXML private PasswordField Password;
@@ -73,7 +74,6 @@ public class MainController implements Initializable {
     @FXML private TableView<Mechanics> OverViewTable;
     @FXML private TableColumn<Mechanics,String> nameCol;
     @FXML private TableColumn<Mechanics,String> surnameCol;
-    @FXML private ProgressIndicator loadingIndicator;
     @FXML private TextField TotalRepairT;
     @FXML private TextField AveRepairT;
     @FXML private TextField TotalNumber;
@@ -140,8 +140,6 @@ public class MainController implements Initializable {
     ///////////////////////////////////////////////////
 
     private Thread loadThread = null;
-    private double x,y;
-    int offset = 0;
     int repairOffset = 0;
     static long CarId;
 
@@ -177,50 +175,59 @@ public class MainController implements Initializable {
 
     //login
     @FXML
-    protected void LoginAction(ActionEvent event) {
+    protected void LoginAction() {
         String Name,password;
         Name = Username.getText();
         password = Password.getText();
         int userType = usersService.checkCredentials(Name,password);
 
-        if(userType == 1)
-        {
+        if(userType == 1) {
             stageManager.switchScene(FxmlView.AdminScene);
+
+            // keep selected language
+            if (global_lang.equals("eng")) changeToEnglishLang();
+            else changeToSlovakLang();
         }
-        else if (userType == 2){
+        else if (userType == 2) {
             stageManager.switchScene(FxmlView.MechanicScene);
             UID = UID-1;
-        }
-        else{
+
+            // TODO keep selected language
+            MechanicMainSceneController MMSC = new MechanicMainSceneController();
+            if (global_lang.equals("eng")) MMSC.mechanicMainScene_changeToEnglishLang();
+            else MMSC.mechanicMainScene_changeToSlovakLang();
+        } else
             errMess.setVisible(true);
-        }
     }
 
     @FXML
-    protected void Logout(ActionEvent event) throws IOException {
+    protected void Logout() {
         stageManager.switchScene(FxmlView.Login);
+
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang_LoginScreen();
+        else changeToSlovakLang_LoginScreen();
     }
 
     @FXML
-    private void addNewUser() throws SQLException {
+    private void addNewUser() {
         int Type;
         newUserError.setVisible(false);
         String Name = newUserName.getText();
         String Password = newUserPass.getText();
         String MechName = mechanicName.getText();
         String MechSurname = mechanicSurname.getText();
-        if(Name.equals("") || Password.equals("") || MechName.equals("") || MechSurname.equals("")){
+
+        if (Name.equals("") || Password.equals("") || MechName.equals("") || MechSurname.equals("")){
             newUserError.setVisible(true);
             return;
         }
 
-        if(userTypeMechanic.isSelected()){
+        if (userTypeMechanic.isSelected())
             Type = 2;
-        }
-        else if (userTypeAdmin.isSelected()){
+        else if (userTypeAdmin.isSelected())
             Type = 1;
-        }
-        else{
+        else {
             newUserError.setVisible(true);
             return;
         }
@@ -245,42 +252,44 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void addNewCustomer()
-    {
+    private void addNewCustomer() {
         invalidFormat.setVisible(false);
         String custo_Name = Customer_name.getText();
         String custo_Surname = Customer_surname.getText();
         String custo_Email = Customer_email.getText();
         String custo_IdNum = customerIdNum.getText();
         String custo_Phone = Customer_phone.getText();
-        if(custo_Email.equals("") || custo_IdNum.equals("") || custo_Name.equals("") || custo_Phone.equals("")){
+
+        if (custo_Email.equals("") || custo_IdNum.equals("") || custo_Name.equals("") || custo_Phone.equals("")) {
             invalidFormat.setVisible(true);
             return;
         }
-        if(custo_Phone.matches("[0-9]+") && custo_Phone.length() > 2) {
+        if (custo_Phone.matches("[0-9]+") && custo_Phone.length() > 2) {
             Customers customer = new Customers();
             customer.setName(custo_Name);
             customer.setSurname(custo_Surname);
             customer.setPhone_number(custo_Phone);
             customer.setEmail(custo_Email);
             customer.setId(custo_IdNum);
-
             customersService.save(customer);
-
             Customer_name.setText("");
             Customer_email.setText("");
             Customer_phone.setText("");
             customerIdNum.setText("");
             Customer_surname.setText("");
         }
-        else{
+        else
             invalidFormat.setVisible(true);
-        }
     }
 
     @FXML
-    private void addCarInformation(ActionEvent event) throws IOException {
+    private void addCarInformation() {
         stageManager.switchScene(FxmlView.CarScene);
+
+        // keep selected language
+        if (global_lang.equals("eng")) carScene_changeToEnglishLang();
+        else carScene_changeToSlovakLang();
+
         ObservableList<String> fuelTypeBox = FXCollections.observableArrayList();
         fuelTypeBox.add("");
         fuelTypeBox.add("Benzín");
@@ -295,117 +304,116 @@ public class MainController implements Initializable {
     public String payoutForM;
 
     @FXML
-    private void selectMechanicReward() throws IOException {
-        rewardForM = reward.getText().toString();
-        reasonForRewardM = reasonReward.getText().toString();
+    private void selectMechanicReward() {
+        rewardForM = reward.getText();
+        reasonForRewardM = reasonReward.getText();
         stageManager.switchScene(FxmlView.MechanicSelectionScene);
+
+        // keep selected language
+        if (global_lang.equals("eng")) mechSel_changeToEnglishLang();
+        else mechSel_changeToSlovakLang();
+
         nameColM.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameColM.setCellValueFactory(new PropertyValueFactory<>("Surname"));
     }
 
     @FXML
-    private void selectMechanicPayout() throws IOException{
-        payoutForM = payout_s.getText().toString();
+    private void selectMechanicPayout() {
+        payoutForM = payout_s.getText();
         stageManager.switchScene(FxmlView.MechanicSelectionPayoutScene);
+
+        // keep selected language
+        if (global_lang.equals("eng")) mechSelPayoutScene_changeToEnglishLang();
+        else mechSelPayoutScene_changeToSlovakLang();
+
         nameColPay.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameColPay.setCellValueFactory(new PropertyValueFactory<>("Surname"));
     }
 
     @FXML
-    private void addNewPayout(){
-
+    private void addNewPayout() {
         String NameR1 = selectedMechanic1.getText();
         String[] r1 =NameR1.split("\\s+");
-        int sd1=0;
+        int sd1;
         String number = payout_s.getText();
-        int originalQty1=0;
 
         invalidFormatP.setVisible(false);
-        if(r1[0].equals("") || r1[1].equals("")){
+        if (r1[0].equals("") || r1[1].equals("")) {
             invalidFormatP.setVisible(true);
             return;
         }
 
-        if(number.matches("[0-9]+")) {
+        if (number.matches("[0-9]+")) {
             sd1 = Integer.parseInt(number);
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
             Payouts payout = new Payouts();
             payout.setName(r1[0]);
             payout.setSurname(r1[1]);
             payout.setAmount(sd1);
-            payout.setMechanic_id((int) mechanic.getMechanicId());
+            payout.setMechanic_id(mechanic.getMechanicId());
             payoutsService.save(payout);
             selectedMechanic1.setText("");
             payout_s.setText("");
-        }
-        else{
+        } else
             invalidFormatP.setVisible(true);
-        }
     }
 
     @FXML
-    private void UpdatePayout()
-    {
+    private void UpdatePayout() {
         String NameR1 = selectedMechanic1.getText();
         String[] r1 =NameR1.split("\\s+");
-        int sd1=0;
+        int sd1;
         String number = payout_s.getText();
 
         invalidFormatP.setVisible(false);
-        if(r1[0].equals("") || r1[1].equals("")){
+        if (r1[0].equals("") || r1[1].equals("")) {
             invalidFormatP.setVisible(true);
             return;
         }
 
-        if(number.matches("[0-9]+")) {
+        if (number.matches("[0-9]+")) {
             sd1 = Integer.parseInt(number);
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
             System.out.println("name: "+r1[0]);
-            payoutsService.UpdatePayoutMechanic(sd1,(int) mechanic.getMechanicId(),r1[0],r1[1]);
+            payoutsService.UpdatePayoutMechanic(sd1, mechanic.getMechanicId(),r1[0],r1[1]);
             selectedMechanic1.setText("");
             payout_s.setText("");
         }
-        else{
+        else
             invalidFormatP.setVisible(true);
-        }
     }
 
     @FXML
-    private void DeletePayout()
-    {
+    private void DeletePayout() {
         String NameR1 = selectedMechanic1.getText();
         String[] r1 =NameR1.split("\\s+");
-        int originalQty1=0;
 
         invalidFormatP.setVisible(false);
-        if(r1[0].equals("") || r1[1].equals("")){
+        if (r1[0].equals("") || r1[1].equals(""))
             invalidFormatP.setVisible(true);
-        }
-        else
-        {
+        else {
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
-            payoutsService.DeletePayoutMechanic((int) mechanic.getMechanicId(),r1[0],r1[1]);
-            rewardsService.DeleteRewardMechanic((int) mechanic.getMechanicId(),r1[0],r1[1]);
+            payoutsService.DeletePayoutMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
+            rewardsService.DeleteRewardMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
             selectedMechanic1.setText("");
         }
     }
 
     @FXML
-    private void addNewReward() throws SQLException {
-
+    private void addNewReward() {
         String NameR = selectedMechanic.getText();
         String[] r =NameR.split("\\s+");
-        int sd = 0;
+        int sd;
         String number = reward.getText();
         String reasonfor = reasonReward.getText();
 
         invalidFormatR.setVisible(false);
-        if(r[0].equals("") || r[1].equals("")){
+        if (r[0].equals("") || r[1].equals("")) {
             invalidFormatR.setVisible(true);
             return;
         }
 
-        if(number.matches("[0-9]+")) {
+        if (number.matches("[0-9]+")) {
             sd = Integer.parseInt(number);
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
             Rewards rewardsM = new Rewards();
@@ -413,12 +421,12 @@ public class MainController implements Initializable {
             rewardsM.setSurname(r[1]);
             rewardsM.setAmount(sd);
             rewardsM.setReason(reasonfor);
-            rewardsM.setMechanic_id((int) mechanic.getMechanicId());
+            rewardsM.setMechanic_id(mechanic.getMechanicId());
             rewardsService.save(rewardsM);
 
-            int newAmount=0;
+            int newAmount;
             Payouts oldPayout = payoutsService.findByNameAndSurname(r[0],r[1]);
-            if(oldPayout == null) {
+            if (oldPayout == null) {
                 Payouts payout = new Payouts();
                 payout.setName(r[0]);
                 payout.setSurname(r[1]);
@@ -428,28 +436,26 @@ public class MainController implements Initializable {
             }
             else {
                 newAmount = oldPayout.getAmount() + sd;
-                payoutsService.UpdatePayoutMechanic(newAmount, (int) mechanic.getMechanicId(), r[0], r[1]);
+                payoutsService.UpdatePayoutMechanic(newAmount, mechanic.getMechanicId(), r[0], r[1]);
             }
 
             selectedMechanic.setText("");
             reward.setText("");
             reasonReward.setText("");
         }
-        else{
+        else
             invalidFormatR.setVisible(true);
-        }
     }
 
     @FXML
-    private void addNewCar()
-    {
+    private void addNewCar() {
         String brand = Car_brand.getText();
         String model = Car_model.getText();
         String vin = Car_vin.getText();
         String fuel = fuelType.getSelectionModel().getSelectedItem().toString();
-        if(brand.equals("") || model.equals("") || vin.equals("") || fuel.equals("") || selectedCustomer.equals("")){
+        if (brand.equals("") || model.equals("") || vin.equals("") || fuel.equals("") || selectedCustomer.toString().equals(""))
             emptyFieldsError.setVisible(true);
-        }
+
         else {
             Cars car = new Cars();
             car.setModel(model);
@@ -476,8 +482,11 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void BackToAdminScene(ActionEvent e)throws IOException{
+    private void BackToAdminScene() {
         stageManager.switchScene(FxmlView.AdminScene);
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
     }
 
     public String VINCarC;
@@ -486,13 +495,17 @@ public class MainController implements Initializable {
     public int FuelTypeCarC;
 
     @FXML
-    private void loadCustomerSelection() throws IOException {
-        VINCarC = Car_vin.getText().toString();
-        BrandCarC = Car_brand.getText().toString();
-        ModelCarC = Car_model.getText().toString();
+    private void loadCustomerSelection() {
+        VINCarC = Car_vin.getText();
+        BrandCarC = Car_brand.getText();
+        ModelCarC = Car_model.getText();
         FuelTypeCarC = fuelType.getSelectionModel().getSelectedIndex();
 
         stageManager.switchScene(FxmlView.CustomerSelection);
+        // keep selected language
+        if (global_lang.equals("eng")) custSel_changeToEnglishLang();
+        else custSel_changeToSlovakLang();
+
         nameCol1.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameCol1.setCellValueFactory(new PropertyValueFactory<>("Surname"));
         idCol.setCellValueFactory(new PropertyValueFactory<>("Id"));
@@ -500,28 +513,27 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void addNewComponent(){
+    private void addNewComponent() {
         errComponents.setVisible(false);
         String componentS = component.getText();
         String carTypeS = carType.getText();
-        double costD = 0;
-        int amountI = 0;
+        double costD;
+        int amountI;
 
-        if(cost.getText().equals("") || !cost.getText().matches("^[0-9]+\\.?[0-9]*$")) {
+        if (cost.getText().equals("") || !cost.getText().matches("^[0-9]+\\.?[0-9]*$")) {
             errComponents.setVisible(true);
             return;
         }
         costD = Double.parseDouble(cost.getText());
-        if(amount.getText().equals("") || !amount.getText().matches("^[0-9]+$")) {
+        if (amount.getText().equals("") || !amount.getText().matches("^[0-9]+$")) {
             errComponents.setVisible(true);
             return;
         }
         amountI = Integer.parseInt(amount.getText());
 
-        if(componentS.equals("") || carTypeS.equals("")){
+        if (componentS.equals("") || carTypeS.equals(""))
             errComponents.setVisible(true);
-        }
-        else{
+        else {
             Components Ncompo = new Components();
             Ncompo.setName(componentS);
             Ncompo.setAmount(amountI);
@@ -537,10 +549,13 @@ public class MainController implements Initializable {
 
     }
 
-
     @FXML
-    private void loadCarSelection() throws IOException {
+    private void loadCarSelection() {
         stageManager.switchScene(FxmlView.CarSelection);
+        // keep selected language
+        if (global_lang.equals("eng")) carSel_changeToEnglishLang();
+        else carSel_changeToSlovakLang();
+
         modelColCar.setCellValueFactory(new PropertyValueFactory<>("Model"));
         typeColCar.setCellValueFactory(new PropertyValueFactory<>("Brand"));
         vinColCar.setCellValueFactory(new PropertyValueFactory<>("Vin"));
@@ -548,20 +563,17 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void FilterSeMechanic()
-    {
+    private void FilterSeMechanic() {
         nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameCol.setCellValueFactory(new PropertyValueFactory<>("Surname"));
         ObservableList<Mechanics> data = FXCollections.observableArrayList();
 
         List<Mechanics> mechanics = mechanicsService.getMechanics(overName.getText(),overSurname.getText());
-        if(mechanics.size() == 0){
+        if (mechanics.size() == 0)
             System.out.println("No result");
-        }
-        else{
+        else {
             for(Mechanics mech : mechanics) {
-                Mechanics mech1 = null;
-                mech1 = new Mechanics();
+                Mechanics mech1 = new Mechanics();
                 mech1.setName(mech.getName());
                 mech1.setSurname(mech.getSurname());
                 data.add(mech1);
@@ -571,25 +583,22 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void returnSeMechanic()
-    {
-        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
+    private void returnSeMechanic() {
+        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();
         String[] r = NameR.split("\\s+");
-        int originalQty=0;
+        int originalQty;
         double numOfDays=0;
         double sumOfDate=0;
         double avgOfDate=0;
 
         Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
-        originalQty= (int) mechanic.getMechanicId();
+        originalQty= mechanic.getMechanicId();
 
-        if(repairsService.GetNumberOfR(originalQty) != null)
+        if (repairsService.GetNumberOfR(originalQty) != null)
             numOfDays = Double.parseDouble(repairsService.GetNumberOfR(originalQty));
-
-        if(repairsService.total(originalQty) != null)
+        if (repairsService.total(originalQty) != null)
             sumOfDate = Double.parseDouble(repairsService.total(originalQty));
-
-        if(repairsService.AvgDate(originalQty) != null)
+        if (repairsService.AvgDate(originalQty) != null)
             avgOfDate = Double.parseDouble(repairsService.AvgDate(originalQty));
 
         String det = Double.toString(numOfDays);
@@ -608,21 +617,23 @@ public class MainController implements Initializable {
     public String SurnameAtOverviewR;
     public ObservableList<Mechanics> itemsMechanics;
 
-    public void LoadRepairD() throws IOException {
-        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
+    public void LoadRepairD() {
+        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();
         String[] r = NameR.split("\\s+");
-        int originalQty=0;
 
         Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
         IdM = mechanic.getMechanicId();
-        NameAtOverviewR = overName.getText().toString();
-        SurnameAtOverviewR = overSurname.getText().toString();
-        TotalNumberOfRepairs = TotalNumber.getText().toString();
-        AverageRepairTime = AveRepairT.getText().toString();
-        TotalRepairTime = TotalRepairT.getText().toString();
+        NameAtOverviewR = overName.getText();
+        SurnameAtOverviewR = overSurname.getText();
+        TotalNumberOfRepairs = TotalNumber.getText();
+        AverageRepairTime = AveRepairT.getText();
+        TotalRepairTime = TotalRepairT.getText();
         itemsMechanics = OverViewTable.getItems();
 
         stageManager.switchScene(FxmlView.RepairScene);
+        // keep selected language
+        if (global_lang.equals("eng")) repairScene_changeToEnglishLang();
+        else repairScene_changeToSlovakLang();
 
         RepairTextR.setCellValueFactory(new PropertyValueFactory<>("Repair"));
         StartDayR.setCellValueFactory(new PropertyValueFactory<>("Start_day"));
@@ -635,8 +646,7 @@ public class MainController implements Initializable {
             System.out.println("No result");
         else {
             for(Repairs re : repairs) {
-                Repairs repa = null;
-                repa = new Repairs();
+                Repairs repa = new Repairs();
                 repa.setRepair(re.getRepair());
                 repa.setStart_day(Date.valueOf(re.getStart_day()));
                 repa.setEnd_day(Date.valueOf(re.getEnd_day()));
@@ -666,8 +676,12 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void BackToAdminSceneRepair(ActionEvent e)throws IOException{
+    private void BackToAdminSceneRepair() {
         stageManager.switchScene(FxmlView.AdminScene);
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
+
         tabPane.getSelectionModel().select(overview_R_Tab);
         overName.setText(NameAtOverviewR);
         overSurname.setText(SurnameAtOverviewR);
@@ -680,7 +694,7 @@ public class MainController implements Initializable {
         OverViewTable.setItems(itemsMechanics);
     }
 
-    public void loadSelectedRepairInfo(int carId){
+    public void loadSelectedRepairInfo(int carId) {
         CarId = carId;
         startCol.setCellValueFactory(new PropertyValueFactory<>("Start_day"));
         finishCol.setCellValueFactory(new PropertyValueFactory<>("End_day"));
@@ -693,12 +707,11 @@ public class MainController implements Initializable {
             List<Repairs> r = repairsService.AllRepairs(carId);
             ObservableList<Repairs> data = FXCollections.observableArrayList();
 
-            if(r.size() == 0)
+            if (r.size() == 0)
                 System.out.println("No result");
             else {
                 for(Repairs rep : r) {
-                    Repairs rep1 = null;
-                    rep1 = new Repairs();
+                    Repairs rep1 = new Repairs();
                     Mechanics m = mechanicsService.findByMechanicId(rep.getMechanicId());
                     rep1.setRepair_id(rep.getRepair_id());
                     rep1.setMechanicId(rep.getMechanicId());
@@ -730,13 +743,11 @@ public class MainController implements Initializable {
         List<Customers> customers = customersService.getCustomers(nameText.getText(),surnameText.getText());
         ObservableList<Customers> data = FXCollections.observableArrayList();
 
-        if(customers.size() == 0){
+        if (customers.size() == 0)
             System.out.println("No result");
-        }
-        else{
+        else {
             for(Customers custo : customers) {
-                Customers cus = null;
-                cus = new Customers();
+                Customers cus = new Customers();
                 cus.setName(custo.getName());
                 cus.setSurname(custo.getSurname());
                 cus.setId(custo.getId());
@@ -748,16 +759,17 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void select(ActionEvent event) throws IOException {
+    private void select() {
         String SelectedUser="";
         int customerId=0;
 
-        if(customersTable.getSelectionModel().getSelectedItem() != null) {
+        if (customersTable.getSelectionModel().getSelectedItem() != null) {
             SelectedUser = customersTable.getSelectionModel().getSelectedItem().getName()+" "+customersTable.getSelectionModel().getSelectedItem().getSurname()+" "+customersTable.getSelectionModel().getSelectedItem().getId();
             customerId = (int)customersTable.getSelectionModel().getSelectedItem().getCustomerId();
         }
 
         stageManager.switchScene(FxmlView.CarScene);
+
         ObservableList<String> fuelTypeBox = FXCollections.observableArrayList();
         fuelTypeBox.add("");
         fuelTypeBox.add("Benzín");
@@ -771,21 +783,22 @@ public class MainController implements Initializable {
         fuelType.getSelectionModel().select(FuelTypeCarC);
         selectedCustomer.setText(SelectedUser);
         selectedCustomer.setUserData(customerId);
+
+        // keep selected language
+        if (global_lang.equals("eng")) carScene_changeToEnglishLang();
+        else carScene_changeToSlovakLang();
     }
 
     @FXML
-    private void filterMechanic()
-    {
+    private void filterMechanic() {
         List<Mechanics> mechanics = mechanicsService.getMechanics(nameTextReward.getText(),surnameTextReward.getText());
         ObservableList<Mechanics> data = FXCollections.observableArrayList();
 
-        if(mechanics.size() == 0){
+        if (mechanics.size() == 0)
             System.out.println("No result");
-        }
-        else{
-            for(Mechanics mech : mechanics) {
-                Mechanics mechanic = null;
-                mechanic = new Mechanics();
+        else {
+            for (Mechanics mech : mechanics) {
+                Mechanics mechanic = new Mechanics();
                 mechanic.setName(mech.getName());
                 mechanic.setSurname(mech.getSurname());
                 data.add(mechanic);
@@ -795,26 +808,29 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void returnMechanic(ActionEvent event)
-    {
-        String SelectedMechanic="";
+    private void returnMechanic() {
+        String SelectedMechanic;
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
 
         if(mechanicsTableR.getSelectionModel().getSelectedItem() != null) {
-            SelectedMechanic = mechanicsTableR.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTableR.getSelectionModel().getSelectedItem().getSurname();
+            SelectedMechanic = mechanicsTableR.getSelectionModel().getSelectedItem().getName() + " " + mechanicsTableR.getSelectionModel().getSelectedItem().getSurname();
             selectedMechanic.setText(SelectedMechanic);
         }
-        else
-            selectedMechanic.setText("Selected Mechanic");
+        else {
+            if (global_lang.equals("eng")) selectedMechanic.setText("Selected Mechanic");
+            else selectedMechanic.setText("Vybraný Mechanik");
+        }
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
 
         reward.setText(rewardForM);
         reasonReward.setText(reasonForRewardM);
     }
 
     @FXML
-    private void filterMechanicsPayout()
-    {
+    private void filterMechanicsPayout() {
         List<Mechanics> mechanics= mechanicsService.getMechanics(nameTextPay.getText(),surnameTextPay.getText());
         ObservableList<Mechanics> data = FXCollections.observableArrayList();
 
@@ -823,8 +839,7 @@ public class MainController implements Initializable {
         }
         else{
             for(Mechanics mech : mechanics) {
-                Mechanics mechanic = null;
-                mechanic = new Mechanics();
+                Mechanics mechanic = new Mechanics();
                 mechanic.setName(mech.getName());
                 mechanic.setSurname(mech.getSurname());
                 data.add(mechanic);
@@ -834,18 +849,23 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void returnMechanicPayout(ActionEvent event)
-    {
-        String SelectedMechanic="";
+    private void returnMechanicPayout() {
+        String SelectedMechanic;
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
+
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
 
         if(mechanicsTablePayout1.getSelectionModel().getSelectedItem() != null) {
             SelectedMechanic = mechanicsTablePayout1.getSelectionModel().getSelectedItem().getName()+" "+mechanicsTablePayout1.getSelectionModel().getSelectedItem().getSurname();
             selectedMechanic1.setText(SelectedMechanic);
         }
-        else
-            selectedMechanic1.setText("Selected Mechanic");
+        else {
+            if (global_lang.equals("eng")) selectedMechanic1.setText("Selected Mechanic");
+            else selectedMechanic1.setText("Vybraný Mechanik");
+        }
 
         payout_s.setText(payoutForM);
     }
@@ -860,8 +880,7 @@ public class MainController implements Initializable {
         }
         else{
             for(Cars model : Lcar) {
-                Cars car = null;
-                car = new Cars();
+                Cars car = new Cars();
                 car.setModel(model.getModel());
                 car.setBrand(model.getBrand());
                 car.setVin(model.getVin());
@@ -875,8 +894,13 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void selectCar(ActionEvent event){
+    private void selectCar() {
         stageManager.switchScene(FxmlView.AdminScene);
+
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
+
         tabPane.getSelectionModel().select(repairHistoryTab);
         if(carsTableCar.getSelectionModel().getSelectedItem() != null) {
             carSelection.setText(carsTableCar.getSelectionModel().getSelectedItem().getBrand() + " " + carsTableCar.getSelectionModel().getSelectedItem().getModel());
@@ -885,7 +909,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void generatePDF(ActionEvent event){
+    private void generatePDF() {
         tabPane.getSelectionModel().select(repairHistoryTab);
         if(repairHistTable != null && repairHistTable.getSelectionModel().getSelectedItem() != null &&
             carsTableCar != null && carsTableCar.getSelectionModel().getSelectedItem() != null) {
@@ -912,8 +936,10 @@ public class MainController implements Initializable {
 
             PDFSampleMain.main(parameters);
             SelectARepair.setVisible(false);
+            billGeneratedOK.setVisible(true);
         } else {
             SelectARepair.setVisible(true);
+            billGeneratedOK.setVisible(false);
         }
     }
 
@@ -923,21 +949,23 @@ public class MainController implements Initializable {
     @FXML private Button Login_btn;
 
     @FXML
-    private void changeToEnglishLang_LoginScreen(ActionEvent event) {
+    void changeToEnglishLang_LoginScreen() {
         // Login screen
         login_Username_label.setText("Username :");
         login_Password_label.setText("Password :");
         Login_btn.setText("Sign in");
         if (errMess != null) { errMess.setText("Wrong username or password!"); }
+        global_lang = "eng";
     }
 
     @FXML
-    private void changeToSlovakLang_LoginScreen(ActionEvent event) {
+    void changeToSlovakLang_LoginScreen() {
         // Login screen
         login_Username_label.setText("Meno :");
         login_Password_label.setText("Heslo :");
         Login_btn.setText("Prihlásiť sa");
         if (errMess != null) { errMess.setText("Chybné prisahlovacie údaje!"); }
+        global_lang = "svk";
     }
 
     // AdminMainScene - New customer tab
@@ -992,9 +1020,10 @@ public class MainController implements Initializable {
     @FXML private Label RHt_costComponents_label;
     @FXML private Button RHt_select_btn;
     @FXML private Button RHt_generateBill_btn;
+    @FXML private Label billGeneratedOK;
 
     @FXML
-    private void changeToEnglishLang(ActionEvent event) {
+    private void changeToEnglishLang() {
         // AdminMainScene - New customer tab
         New_customer_label.setText("New Customer");
         NCt_name_label.setText("Name :");
@@ -1003,7 +1032,8 @@ public class MainController implements Initializable {
         newCustomer_btn.setText("Add Customer");
         car_information_btn.setText("Add car information");
         New_customer_tab.setText("New customer");
-        if(invalidFormat != null){ invalidFormat.setText("Missing values!"); }
+        if (invalidFormat != null){ invalidFormat.setText("Missing values!"); }
+
         // AdminMainScene - Account management tab
         Acc_man_tab.setText("Account management");
         AMt_New_acc_label.setText("New account");
@@ -1015,6 +1045,8 @@ public class MainController implements Initializable {
         userTypeMechanic.setText("Mechanic");
         userTypeAdmin.setText("Administrator");
         AMt_newUser_btn.setText("Add");
+        if (newUserError != null) { newUserError.setText("Missing values!"); }
+
         // AdminMainScene - New component tab
         NCot_tab.setText("New component");
         NCot_component_label.setText("Component :");
@@ -1022,12 +1054,10 @@ public class MainController implements Initializable {
         NCot_cost_label.setText("Cost :");
         NCot_amount_label.setText("Amount :");
         NCot_addComponent_btn.setText("Add component");
+        if (errComponents != null) { errComponents.setText("Invalid values!"); }
+
         // AdminMainScene - Finance tab
-        if(invalidFormatR != null) { invalidFormatR.setText("Missing values!"); }
-        if(invalidFormatP != null) { invalidFormatP.setText("Missing values!"); }
         financeTab.setText("Finance");
-        if(selectedMechanic.getText().equals("Vybraný Mechanik")) { selectedMechanic.setText("Selected Mechanic"); }
-        if(selectedMechanic1.getText().equals("Vybraný Mechanik")) { selectedMechanic1.setText("Selected Mechanic"); }
         Ft_rewrads_label.setText("Rewards:");
         Ft_payouts_label.setText("Payouts:");
         Ft_rewardSize_label.setText("Fill in the size of the reward :");
@@ -1041,6 +1071,11 @@ public class MainController implements Initializable {
         Ft_updatePayout_btn.setText("update payout");
         Ft_addPayout_btn.setText("add payout");
         Ft_deletePayout_btn.setText("delete payout");
+        if (invalidFormatR != null) { invalidFormatR.setText("Missing values!"); }
+        if (invalidFormatP != null) { invalidFormatP.setText("Missing values!"); }
+        if (selectedMechanic.getText().equals("Vybraný Mechanik")) { selectedMechanic.setText("Selected Mechanic"); }
+        if (selectedMechanic1.getText().equals("Vybraný Mechanik")) { selectedMechanic1.setText("Selected Mechanic"); }
+
         // AdminMainScene - Overview of repairs tab
         overview_R_Tab.setText("Overview of repairs");
         showingRepairs.setText("Show the repairs");
@@ -1053,9 +1088,9 @@ public class MainController implements Initializable {
         OORt_avgRepTime_label.setText("Average repair time:");
         OORt_filter_btn.setText("Filter");
         OORt_showDetails_btn.setText("Show details");
+
         // AdminMainScene - Repair history tab
         repairHistoryTab.setText("Repair history");
-        if(carSelection.getText().equals("Vybrané auto")) { carSelection.setText("Selected car"); }
         repairCol.setText("Repair");
         costCol.setText("Cost");
         startCol.setText("Start");
@@ -1066,11 +1101,15 @@ public class MainController implements Initializable {
         RHt_costComponents_label.setText("Cost of components :");
         RHt_select_btn.setText("Select");
         RHt_generateBill_btn.setText("Generate bill");
-        if(SelectARepair != null) { SelectARepair.setText("Select a repair!"); }
+        if (carSelection.getText().equals("Vybrané auto")) { carSelection.setText("Selected car"); }
+        if (SelectARepair != null) { SelectARepair.setText("Select a repair!"); }
+        if (billGeneratedOK != null) { billGeneratedOK.setText("Bill generated!"); }
+
+        global_lang = "eng";
     }
 
     @FXML
-    private void changeToSlovakLang(ActionEvent event) {
+    private void changeToSlovakLang() {
         // AdminMainScene - Nový zákazník tab
         New_customer_label.setText("Nový zákazník");
         NCt_name_label.setText("Meno :");
@@ -1079,7 +1118,8 @@ public class MainController implements Initializable {
         newCustomer_btn.setText("Pridať zákazníka");
         car_information_btn.setText("Pridať auto");
         New_customer_tab.setText("Nový zákazník");
-        if(invalidFormat != null){ invalidFormat.setText("Chýbajúce hodnoty!"); }
+        if (invalidFormat != null){ invalidFormat.setText("Chýbajúce hodnoty!"); }
+
         // AdminMainScene - Správa účtov tab
         Acc_man_tab.setText("Správa účtov");
         AMt_New_acc_label.setText("Nový účet");
@@ -1091,6 +1131,8 @@ public class MainController implements Initializable {
         userTypeMechanic.setText("Mechanik");
         userTypeAdmin.setText("Administrátor");
         AMt_newUser_btn.setText("Pridať");
+        if (newUserError != null) { newUserError.setText("Chýbajúce hodnoty!"); }
+
         // AdminMainScene - Nový komponent tab
         NCot_tab.setText("Nový komponent");
         NCot_component_label.setText("Komponent :");
@@ -1098,12 +1140,10 @@ public class MainController implements Initializable {
         NCot_cost_label.setText("Cena :");
         NCot_amount_label.setText("Počet :");
         NCot_addComponent_btn.setText("Pridať komponent");
+        if (errComponents != null) { errComponents.setText("Neplatné hodnoty!"); }
+
         // AdminMainScene - Financie tab
-        if(invalidFormatR != null) { invalidFormatR.setText("Chýbajú hodnoty!"); }
-        if(invalidFormatP != null) { invalidFormatP.setText("Chýbajú hodnoty!"); }
         financeTab.setText("Financie");
-        if(selectedMechanic.getText().equals("Selected Mechanic")) { selectedMechanic.setText("Vybraný Mechanik"); }
-        if(selectedMechanic1.getText().equals("Selected Mechanic")) { selectedMechanic1.setText("Vybraný Mechanik"); }
         Ft_rewrads_label.setText("Odmeny :");
         Ft_payouts_label.setText("Výplaty :");
         Ft_rewardSize_label.setText("Vyplňte výšku odmeny :");
@@ -1117,6 +1157,11 @@ public class MainController implements Initializable {
         Ft_updatePayout_btn.setText("aktualizovať výplatu");
         Ft_addPayout_btn.setText("pridať výplatu");
         Ft_deletePayout_btn.setText("vymazať výplatu");
+        if (invalidFormatR != null) { invalidFormatR.setText("Chýbajú hodnoty!"); }
+        if (invalidFormatP != null) { invalidFormatP.setText("Chýbajú hodnoty!"); }
+        if (selectedMechanic.getText().equals("Selected Mechanic")) { selectedMechanic.setText("Vybraný Mechanik"); }
+        if (selectedMechanic1.getText().equals("Selected Mechanic")) { selectedMechanic1.setText("Vybraný Mechanik"); }
+
         // AdminMainScene - Prehľad opráv tab
         overview_R_Tab.setText("Prehľad opráv");
         showingRepairs.setText("Zobraziť opravy");
@@ -1129,6 +1174,7 @@ public class MainController implements Initializable {
         OORt_avgRepTime_label.setText("Priemerný čas opráv:");
         OORt_filter_btn.setText("Filtorvať");
         OORt_showDetails_btn.setText("Zobraziť detaily");
+
         // AdminMainScene - História opráv tab
         repairHistoryTab.setText("História opráv");
         carSelection.setText("Vybrané auto");
@@ -1142,30 +1188,36 @@ public class MainController implements Initializable {
         RHt_costComponents_label.setText("Cena komponentov :");
         RHt_select_btn.setText("Vybrať");
         RHt_generateBill_btn.setText("Vygenerovať faktúru");
-        if(SelectARepair != null) { SelectARepair.setText("Vyberte opravu!"); }
+        if (carSelection.getText().equals("Selected car")) { carSelection.setText("Vybrané auto"); }
+        if (SelectARepair != null) { SelectARepair.setText("Vyberte opravu!"); }
+        if (billGeneratedOK != null) { billGeneratedOK.setText("Faktúra OK!"); }
+
+        global_lang = "svk";
     }
 
     @FXML private Button repScene_back_btn;
     @FXML private Label repairsTitle_label;
 
     @FXML
-    private void repairScene_changeToEnglishLang(ActionEvent event) {
+    private void repairScene_changeToEnglishLang() {
         RepairTextR.setText("Repair");
         StartDayR.setText("Start");
         EndDayR.setText("End");
         DaysRR.setText("Days");
         repairsTitle_label.setText("Repairs");
         repScene_back_btn.setText("< Back");
+        global_lang = "eng";
     }
 
     @FXML
-    private void repairScene_changeToSlovakLang(ActionEvent event) {
+    private void repairScene_changeToSlovakLang() {
         RepairTextR.setText("Oprava");
         StartDayR.setText("Začiatok");
         EndDayR.setText("Koniec");
         DaysRR.setText("Počet dní");
         repairsTitle_label.setText("Opravy");
         repScene_back_btn.setText("< Späť");
+        global_lang = "svk";
     }
 
     @FXML private Label mechSelPayoutScene_title_label;
@@ -1176,7 +1228,7 @@ public class MainController implements Initializable {
     @FXML private Button mechSelPayoutScene_select_btn;
 
     @FXML
-    private void mechSelPayoutScene_changeToEnglishLang(ActionEvent event) {
+    private void mechSelPayoutScene_changeToEnglishLang() {
         mechSelPayoutScene_title_label.setText("Mechanic selection");
         mechSelPayoutScene_name_label.setText("Name :");
         mechSelPayoutScene_surname_label.setText("Surname :");
@@ -1185,10 +1237,11 @@ public class MainController implements Initializable {
         mechSelPayoutScene_select_btn.setText("Select");
         nameColPay.setText("Name");
         surnameColPay.setText("Surname");
+        global_lang = "eng";
     }
 
     @FXML
-    private void mechSelPayoutScene_changeToSlovakLang(ActionEvent event) {
+    private void mechSelPayoutScene_changeToSlovakLang() {
         mechSelPayoutScene_title_label.setText("Výber mechanika");
         mechSelPayoutScene_name_label.setText("Meno :");
         mechSelPayoutScene_surname_label.setText("Priezvisko :");
@@ -1197,6 +1250,7 @@ public class MainController implements Initializable {
         mechSelPayoutScene_select_btn.setText("Vybrať");
         nameColPay.setText("Meno");
         surnameColPay.setText("Priezvisko");
+        global_lang = "svk";
     }
 
     @FXML private Label mechSel_title_label;
@@ -1207,7 +1261,7 @@ public class MainController implements Initializable {
     @FXML private Button mechSel_select_btn;
 
     @FXML
-    private void mechSel_changeToEnglishLang(ActionEvent event) {
+    private void mechSel_changeToEnglishLang() {
         nameColM.setText("Name");
         surnameColM.setText("Surname");
         mechSel_title_label.setText("Mechanic selection");
@@ -1216,10 +1270,11 @@ public class MainController implements Initializable {
         mechSel_results_label.setText("Results :");
         mechSel_search_btn.setText("Search");
         mechSel_select_btn.setText("Select");
+        global_lang = "eng";
     }
 
     @FXML
-    private void mechSel_changeToSlovakLang(ActionEvent event) {
+    private void mechSel_changeToSlovakLang() {
         nameColM.setText("Meno");
         surnameColM.setText("Priezvisko");
         mechSel_title_label.setText("Výber mechanika");
@@ -1228,6 +1283,7 @@ public class MainController implements Initializable {
         mechSel_results_label.setText("Výsledky :");
         mechSel_search_btn.setText("Hľadať");
         mechSel_select_btn.setText("Vybrať");
+        global_lang = "svk";
     }
 
     @FXML private Label custSel_title_label;
@@ -1239,7 +1295,7 @@ public class MainController implements Initializable {
     @FXML private Button custSel_select_btn;
 
     @FXML
-    private void custSel_changeToEnglishLang(ActionEvent event) {
+    private void custSel_changeToEnglishLang() {
         custSel_title_label.setText("Customer selection");
         custSel_filterBy_label.setText("Filter by:");
         custSel_results_label.setText("Results:");
@@ -1247,10 +1303,11 @@ public class MainController implements Initializable {
         custSel_surname_label.setText("Surname :");
         custSel_filter_btn.setText("Filter");
         custSel_select_btn.setText("Select");
+        global_lang = "eng";
     }
 
     @FXML
-    private void custSel_changeToSlovakLang(ActionEvent event) {
+    private void custSel_changeToSlovakLang() {
         custSel_title_label.setText("Výber zákazníka");
         custSel_filterBy_label.setText("Filtorvať podľa:");
         custSel_results_label.setText("Výsledky:");
@@ -1258,6 +1315,7 @@ public class MainController implements Initializable {
         custSel_surname_label.setText("Priezvisko :");
         custSel_filter_btn.setText("Filtorvať");
         custSel_select_btn.setText("Vybrať");
+        global_lang = "svk";
     }
 
     @FXML private Label carSel_title_label;
@@ -1266,21 +1324,23 @@ public class MainController implements Initializable {
     @FXML private Button carSel_select_btn;
 
     @FXML
-    private void carSel_changeToEnglishLang(ActionEvent event) {
+    private void carSel_changeToEnglishLang() {
         typeColCar.setText("Brand");
         carSel_title_label.setText("Car selection");
         carSel_type_label.setText("Type :");
         carSel_filter_btn.setText("Filter");
         carSel_select_btn.setText("Select");
+        global_lang = "eng";
     }
 
     @FXML
-    private void carSel_changeToSlovakLang(ActionEvent event) {
+    private void carSel_changeToSlovakLang() {
         typeColCar.setText("Značka");
         carSel_title_label.setText("Výber auta");
         carSel_type_label.setText("Typ :");
         carSel_filter_btn.setText("Filtrovať");
         carSel_select_btn.setText("Vybrať");
+        global_lang = "svk";
     }
 
     @FXML private Label carScene_title_label;
@@ -1293,9 +1353,7 @@ public class MainController implements Initializable {
     @FXML private Button carScene_addCar_btn;
 
     @FXML
-    private void carScene_changeToEnglishLang(ActionEvent event) {
-        if(selectedCustomer.getText().equals("Vybraný Zákazník")) { selectedCustomer.setText("Selected Customer"); }
-        if(emptyFieldsError != null) { emptyFieldsError.setText("Some fields are missing!"); }
+    private void carScene_changeToEnglishLang() {
         carScene_title_label.setText("Car information");
         carScene_brand_label.setText("Brand :");
         carScene_VIN_label.setText("VIN number :");
@@ -1304,12 +1362,13 @@ public class MainController implements Initializable {
         carScene_back_btn.setText("< Back");
         carScene_selectCustomer_btn.setText("Select a customer");
         carScene_addCar_btn.setText("Add car");
+        if (selectedCustomer.getText().equals("Vybraný Zákazník")) { selectedCustomer.setText("Selected Customer"); }
+        if (emptyFieldsError != null) { emptyFieldsError.setText("Some fields are missing!"); }
+        global_lang = "eng";
     }
 
     @FXML
-    private void carScene_changeToSlovakLang(ActionEvent event) {
-        if(selectedCustomer.getText().equals("Selected Customer")) { selectedCustomer.setText("Vybraný Zákazník"); }
-        if(emptyFieldsError != null) { emptyFieldsError.setText("Chýbajú niektoré hodnoty!"); }
+    private void carScene_changeToSlovakLang() {
         carScene_title_label.setText("Informácie o aute");
         carScene_brand_label.setText("Značka :");
         carScene_VIN_label.setText("VIN číslo :");
@@ -1318,5 +1377,8 @@ public class MainController implements Initializable {
         carScene_back_btn.setText("< Späť");
         carScene_selectCustomer_btn.setText("Vybrať zákazníka");
         carScene_addCar_btn.setText("Pridať auto");
+        if (selectedCustomer.getText().equals("Selected Customer")) { selectedCustomer.setText("Vybraný Zákazník"); }
+        if (emptyFieldsError != null) { emptyFieldsError.setText("Chýbajú niektoré hodnoty!"); }
+        global_lang = "svk";
     }
 }

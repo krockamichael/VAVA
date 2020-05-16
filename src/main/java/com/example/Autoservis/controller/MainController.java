@@ -10,22 +10,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -448,7 +443,7 @@ public class MainController implements Initializable {
     private void addNewPayout(){
 
         String NameR1 = selectedMechanic1.getText();
-        String r1[] =NameR1.split("\\s+");
+        String[] r1 =NameR1.split("\\s+");
         int sd1=0;
         String number = payout_s.getText();
         int originalQty1=0;
@@ -480,7 +475,7 @@ public class MainController implements Initializable {
     private void UpdatePayout()
     {
         String NameR1 = selectedMechanic1.getText();
-        String r1[] =NameR1.split("\\s+");
+        String[] r1 =NameR1.split("\\s+");
         int sd1=0;
         String number = payout_s.getText();
 
@@ -507,13 +502,12 @@ public class MainController implements Initializable {
     private void DeletePayout()
     {
         String NameR1 = selectedMechanic1.getText();
-        String r1[] =NameR1.split("\\s+");
+        String[] r1 =NameR1.split("\\s+");
         int originalQty1=0;
 
         invalidFormatP.setVisible(false);
         if(r1[0].equals("") || r1[1].equals("")){
             invalidFormatP.setVisible(true);
-            return;
         }
         else
         {
@@ -528,7 +522,7 @@ public class MainController implements Initializable {
     private void addNewReward() throws SQLException {
 
         String NameR = selectedMechanic.getText();
-        String r[] =NameR.split("\\s+");
+        String[] r =NameR.split("\\s+");
         int sd = 0;
         String number = reward.getText();
         String reasonfor = reasonReward.getText();
@@ -708,7 +702,7 @@ public class MainController implements Initializable {
     private void returnSeMechanic()
     {
         String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
-        String r[] = NameR.split("\\s+");
+        String[] r = NameR.split("\\s+");
         int originalQty=0;
         double numOfDays=0;
         double sumOfDate=0;
@@ -718,13 +712,13 @@ public class MainController implements Initializable {
         originalQty= (int) mechanic.getMechanicId();
 
         if(repairsService.GetNumberOfR(originalQty) != null)
-            numOfDays = Double.valueOf(repairsService.GetNumberOfR(originalQty));
+            numOfDays = Double.parseDouble(repairsService.GetNumberOfR(originalQty));
 
         if(repairsService.total(originalQty) != null)
-            sumOfDate = Double.valueOf(repairsService.total(originalQty));
+            sumOfDate = Double.parseDouble(repairsService.total(originalQty));
 
         if(repairsService.AvgDate(originalQty) != null)
-            avgOfDate = Double.valueOf(repairsService.AvgDate(originalQty));
+            avgOfDate = Double.parseDouble(repairsService.AvgDate(originalQty));
 
         String det = Double.toString(numOfDays);
         String det1 = Double.toString(sumOfDate);
@@ -744,7 +738,7 @@ public class MainController implements Initializable {
 
     public void LoadRepairD() throws IOException {
         String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();;
-        String r[] = NameR.split("\\s+");
+        String[] r = NameR.split("\\s+");
         int originalQty=0;
 
         Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);

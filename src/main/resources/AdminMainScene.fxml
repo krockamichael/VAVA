@@ -21,6 +21,8 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
+            <Button fx:id="english_lang" mnemonicParsing="false" style="-fx-background-color: #23272a;" text="EN" textFill="#99aab5" />
+            <Button fx:id="slovak_lang" layoutX="31.0" mnemonicParsing="false" style="-fx-background-color: #23272a;" text="SK" textFill="#99aab5" />
             </children></Pane>
         <Pane layoutY="25.0" prefHeight="375.0" prefWidth="603.0" style="-fx-background-color: #3e4247;">
             <children>
@@ -216,6 +218,21 @@
                                  </GridPane.margin>
                               </TextField>
                                     </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
                             </content>
                         </Tab>
@@ -285,12 +302,9 @@
                                                 <Insets left="478.0" top="-80.0" />
                                             </GridPane.margin>
                                         </Label>
-                                        <Button mnemonicParsing="false" onAction="#generatePDF"
-                                                style="-fx-background-color: #23272a;" text="Generate bill"
-                                                textFill="#99aab5" GridPane.halignment="RIGHT" GridPane.rowIndex="3"
-                                                GridPane.valignment="BASELINE">
+                                        <Button mnemonicParsing="false" onAction="#generatePDF" style="-fx-background-color: #23272a;" text="Generate bill" textFill="#99aab5" GridPane.halignment="RIGHT" GridPane.rowIndex="3" GridPane.valignment="BASELINE">
                                             <GridPane.margin>
-                                                <Insets right="22.0" top="150.0"/>
+                                                <Insets right="22.0" top="150.0" />
                                             </GridPane.margin>
                                         </Button>
                                         <Label fx:id="repairCost" layoutX="479.0" layoutY="126.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
@@ -303,13 +317,12 @@
                                                 <Insets left="29.0" top="10" />
                                             </GridPane.margin>
                                         </TextField>
-                                        <Label fx:id="SelectARepair" text="Select a repair!" textFill="#e83c3c"
-                                               visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
+                                        <Label fx:id="SelectARepair" text="Select a repair!" textFill="#e83c3c" visible="false" GridPane.halignment="RIGHT" GridPane.rowIndex="3">
                                             <GridPane.margin>
-                                                <Insets right="15.0" top="160.0"/>
+                                                <Insets right="15.0" top="160.0" />
                                             </GridPane.margin>
                                             <font>
-                                                <Font name="System Bold" size="14.0"/>
+                                                <Font name="System Bold" size="14.0" />
                                             </font>
                                         </Label>
                                         <Label fx:id="componentCost" layoutX="479.0" layoutY="200.0" text="0" textFill="#99aab5" GridPane.rowIndex="3">
@@ -326,6 +339,15 @@
                                                 <Insets left="479.0" top="-11.0" />
                                             </GridPane.margin></Line>
                                     </children>
+                           <columnConstraints>
+                              <ColumnConstraints />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                              <RowConstraints />
+                           </rowConstraints>
                                 </GridPane>
                             </content>
                         </Tab>

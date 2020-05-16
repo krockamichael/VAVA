@@ -4,7 +4,6 @@ import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
 import com.example.Autoservis.view.FxmlView;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -16,10 +15,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -67,9 +64,10 @@ public class MechanicMainSceneController implements Initializable {
     }
 
     @FXML
-    protected void Logout(ActionEvent event) throws IOException {
+    protected void Logout() {
         stageManager.switchScene(FxmlView.Login);
-         // keep selected language
+
+         // TODO keep selected language
         MainController MC = new MainController();
         if (global_lang.equals("eng")) MC.changeToEnglishLang_LoginScreen();
         else MC.changeToSlovakLang_LoginScreen();
@@ -81,7 +79,7 @@ public class MechanicMainSceneController implements Initializable {
     }
 
     @FXML
-    protected void filter() throws SQLException {
+    protected void filter() {
         ObservableList<Cars> data = FXCollections.observableArrayList();
         List<Cars> Lcar = carsService.getCarsmaybe(carModel.getText(), carType.getText(), carVIN.getText());
 
@@ -131,7 +129,7 @@ public class MechanicMainSceneController implements Initializable {
                 Nrepair.setMechanicId(mechId);
                 Nrepair.setRepair(rep);
                 Nrepair.setCost(cost);
-                Repairs saveRepair = repairsService.save(Nrepair);
+                repairsService.save(Nrepair);
             } else {
                 Repairs Nrepair = new Repairs();
                 Nrepair.setCarId(carId);
@@ -217,7 +215,7 @@ public class MechanicMainSceneController implements Initializable {
     }
 
     @FXML
-    private void selectC(ActionEvent event) {
+    private void selectC() {
         stageManager.switchScene(FxmlView.MechanicScene);
 
         // keep selected language

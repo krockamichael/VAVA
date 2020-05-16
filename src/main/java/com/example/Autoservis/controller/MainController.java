@@ -82,9 +82,9 @@ public class MainController implements Initializable {
     @FXML private TextField carSelection;
     @FXML private TextField selectedMechanic;
     @FXML private TextField selectedMechanic1;
-    @FXML public Button showingRepairs;
     @FXML private Label invalidFormatR;
     @FXML private Label invalidFormatP;
+    @FXML public Button showingRepairs;
 
     @FXML private TableView<Repairs> repairHistTable;
     @FXML private TableColumn<Repairs,String> startCol;
@@ -93,7 +93,7 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Repairs,String> repairCol;
     @FXML private TableColumn<Repairs,Double> costCol;
 
-    ///////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Customers> customersTable;
     @FXML private TableColumn<Customers,String> nameCol1;
     @FXML private TableColumn<Customers,String> surnameCol1;
@@ -101,9 +101,9 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Customers,String> elementIdCol;
     @FXML private TextField nameText;
     @FXML private TextField surnameText;
-    ///////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Mechanics> mechanicsTableR;
     @FXML private TableColumn<Mechanics,String> nameColM;
     @FXML private TableColumn<Mechanics,String> surnameColM;
@@ -111,15 +111,15 @@ public class MainController implements Initializable {
     @FXML private TextField nameTextReward;
     /////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Mechanics> mechanicsTablePayout1;
     @FXML private TableColumn<Mechanics,String> nameColPay;
     @FXML private TableColumn<Mechanics,String> surnameColPay;
     @FXML private TextField nameTextPay;
     @FXML private TextField surnameTextPay;
-    //////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
-    ///////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @FXML private TextField carModelCar;
     @FXML private TextField carTypeCar;
     @FXML private TextField carVINCar;
@@ -128,16 +128,16 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Cars,String> typeColCar;
     @FXML private TableColumn<Cars,String> vinColCar;
     @FXML private TableColumn<Cars,String> carIdColCar;
-    ////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
-    //////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Repairs> RepairsTableR;
     @FXML private TableColumn<Repairs,String> RepairTextR;
     @FXML private TableColumn<Repairs,String> StartDayR;
     @FXML private TableColumn<Repairs,String> EndDayR;
     @FXML private TableColumn<Repairs,String> DaysRR;
     @FXML private Label SelectARepair;
-    ///////////////////////////////////////////////////
+    /////////////////////////////////////////////////////////////////
 
     private Thread loadThread = null;
     int repairOffset = 0;
@@ -159,7 +159,6 @@ public class MainController implements Initializable {
     @FXML public Tab overview_R_Tab;
     @FXML public Tab repairHistoryTab;
     @FXML public GridPane RepairGrid;
-
     @Lazy @Autowired private StageManager stageManager;
 
     @Override

@@ -397,7 +397,7 @@ public class MainController implements Initializable {
         String[] r1 =NameR1.split("\\s+");
 
         invalidFormatP.setVisible(false);
-        if (r1[0].equals("") || r1[1].equals(""))
+        if ((r1[0].equals("") || r1[1].equals("")) || (r1[0].equals("Selected") || r1[0].equals("Mechanic")))
             invalidFormatP.setVisible(true);
         else {
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
@@ -592,30 +592,39 @@ public class MainController implements Initializable {
 
     @FXML
     private void returnSeMechanic() {
-        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();
-        String[] r = NameR.split("\\s+");
-        int originalQty;
-        double numOfDays=0;
-        double sumOfDate=0;
-        double avgOfDate=0;
+        String[] r = null;
 
-        Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
-        originalQty= mechanic.getMechanicId();
+        if (OverViewTable.getSelectionModel().getSelectedItem() != null) {
+            String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName() + " " + OverViewTable.getSelectionModel().getSelectedItem().getSurname();
+            r = NameR.split("\\s+");
+        }
 
-        if (repairsService.GetNumberOfR(originalQty) != null)
-            numOfDays = Double.parseDouble(repairsService.GetNumberOfR(originalQty));
-        if (repairsService.total(originalQty) != null)
-            sumOfDate = Double.parseDouble(repairsService.total(originalQty));
-        if (repairsService.AvgDate(originalQty) != null)
-            avgOfDate = Double.parseDouble(repairsService.AvgDate(originalQty));
+        if (r != null) {
+            int originalQty;
+            double numOfDays=0;
+            double sumOfDate=0;
+            double avgOfDate=0;
 
-        String det = Double.toString(numOfDays);
-        String det1 = Double.toString(sumOfDate);
-        String det2 = Double.toString(avgOfDate);
+            Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0], r[1]);
+            originalQty = mechanic.getMechanicId();
 
-        TotalNumber.setText(det);
-        TotalRepairT.setText(det1);
-        AveRepairT.setText(det2);
+            if (repairsService.GetNumberOfR(originalQty) != null)
+                numOfDays = Double.parseDouble(repairsService.GetNumberOfR(originalQty));
+            if (repairsService.total(originalQty) != null)
+                sumOfDate = Double.parseDouble(repairsService.total(originalQty));
+            if (repairsService.AvgDate(originalQty) != null)
+                avgOfDate = Double.parseDouble(repairsService.AvgDate(originalQty));
+
+            String det = Double.toString(numOfDays);
+            String det1 = Double.toString(sumOfDate);
+            String det2 = Double.toString(avgOfDate);
+
+            TotalNumber.setText(det);
+            TotalRepairT.setText(det1);
+            AveRepairT.setText(det2);
+            OORt_selectArepair_label.setVisible(false);
+        } else
+            OORt_selectArepair_label.setVisible(true);
     }
 
     public String TotalNumberOfRepairs;
@@ -626,61 +635,69 @@ public class MainController implements Initializable {
     public ObservableList<Mechanics> itemsMechanics;
 
     public void LoadRepairD() {
-        String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName()+" "+OverViewTable.getSelectionModel().getSelectedItem().getSurname();
-        String[] r = NameR.split("\\s+");
+        String[] r = null;
 
-        Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0],r[1]);
-        IdM = mechanic.getMechanicId();
-        NameAtOverviewR = overName.getText();
-        SurnameAtOverviewR = overSurname.getText();
-        TotalNumberOfRepairs = TotalNumber.getText();
-        AverageRepairTime = AveRepairT.getText();
-        TotalRepairTime = TotalRepairT.getText();
-        itemsMechanics = OverViewTable.getItems();
-
-        stageManager.switchScene(FxmlView.RepairScene);
-        // keep selected language
-        if (global_lang.equals("eng")) repairScene_changeToEnglishLang();
-        else repairScene_changeToSlovakLang();
-
-        RepairTextR.setCellValueFactory(new PropertyValueFactory<>("Repair"));
-        StartDayR.setCellValueFactory(new PropertyValueFactory<>("Start_day"));
-        EndDayR.setCellValueFactory(new PropertyValueFactory<>("End_day"));
-        DaysRR.setCellValueFactory(new PropertyValueFactory<>("Days"));
-
-        List<Repairs> repairs = repairsService.getWorkDetails(IdM);
-        ObservableList<Repairs> data = FXCollections.observableArrayList();
-        if(repairs.size() == 0)
-            System.out.println("No result");
-        else {
-            for(Repairs re : repairs) {
-                Repairs repa = new Repairs();
-                repa.setRepair(re.getRepair());
-                repa.setStart_day(Date.valueOf(re.getStart_day()));
-                repa.setEnd_day(Date.valueOf(re.getEnd_day()));
-
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                java.util.Date firstDate = null;
-                try {
-                    firstDate = sdf.parse(re.getEnd_day());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                java.util.Date secondDate = null;
-                try {
-                    secondDate = sdf.parse(re.getStart_day());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-
-                long diffInMillies = Math.abs(firstDate.getTime() - secondDate.getTime());
-                long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-                repa.setDays((int) diff);
-                data.add(repa);
-            }
-            RepairsTableR.setItems(data);
+        if (OverViewTable.getSelectionModel().getSelectedItem() != null) {
+            String NameR = OverViewTable.getSelectionModel().getSelectedItem().getName() + " " + OverViewTable.getSelectionModel().getSelectedItem().getSurname();
+            r = NameR.split("\\s+");
         }
+
+        if (r != null) {
+            Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0], r[1]);
+            IdM = mechanic.getMechanicId();
+            NameAtOverviewR = overName.getText();
+            SurnameAtOverviewR = overSurname.getText();
+            TotalNumberOfRepairs = TotalNumber.getText();
+            AverageRepairTime = AveRepairT.getText();
+            TotalRepairTime = TotalRepairT.getText();
+            itemsMechanics = OverViewTable.getItems();
+
+            stageManager.switchScene(FxmlView.RepairScene);
+            // keep selected language
+            if (global_lang.equals("eng")) repairScene_changeToEnglishLang();
+            else repairScene_changeToSlovakLang();
+
+            RepairTextR.setCellValueFactory(new PropertyValueFactory<>("Repair"));
+            StartDayR.setCellValueFactory(new PropertyValueFactory<>("Start_day"));
+            EndDayR.setCellValueFactory(new PropertyValueFactory<>("End_day"));
+            DaysRR.setCellValueFactory(new PropertyValueFactory<>("Days"));
+
+            List<Repairs> repairs = repairsService.getWorkDetails(IdM);
+            ObservableList<Repairs> data = FXCollections.observableArrayList();
+            if (repairs.size() == 0)
+                System.out.println("No result");
+            else {
+                for (Repairs re : repairs) {
+                    Repairs repa = new Repairs();
+                    repa.setRepair(re.getRepair());
+                    repa.setStart_day(Date.valueOf(re.getStart_day()));
+                    repa.setEnd_day(Date.valueOf(re.getEnd_day()));
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date firstDate = null;
+                    try {
+                        firstDate = sdf.parse(re.getEnd_day());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    java.util.Date secondDate = null;
+                    try {
+                        secondDate = sdf.parse(re.getStart_day());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    long diffInMillies = Math.abs(firstDate.getTime() - secondDate.getTime());
+                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                    repa.setDays((int) diff);
+                    data.add(repa);
+                }
+                RepairsTableR.setItems(data);
+                OORt_selectArepair_label.setVisible(false);
+            }
+        } else
+            OORt_selectArepair_label.setVisible(true);
     }
 
     @FXML
@@ -1020,6 +1037,7 @@ public class MainController implements Initializable {
     @FXML private Label OORt_totalNumOfRep_label;
     @FXML private Label OORt_totalRepTime_label;
     @FXML private Label OORt_avgRepTime_label;
+    @FXML private Label OORt_selectArepair_label;
     @FXML private Button OORt_filter_btn;
     @FXML private Button OORt_showDetails_btn;
     // AdminMainScene - Repair history tab
@@ -1096,6 +1114,7 @@ public class MainController implements Initializable {
         OORt_avgRepTime_label.setText("Average repair time:");
         OORt_filter_btn.setText("Filter");
         OORt_showDetails_btn.setText("Show details");
+        if (OORt_selectArepair_label != null) { OORt_selectArepair_label.setText("Select a repair!"); }
 
         // AdminMainScene - Repair history tab
         repairHistoryTab.setText("Repair history");
@@ -1182,6 +1201,7 @@ public class MainController implements Initializable {
         OORt_avgRepTime_label.setText("Priemerný čas opráv:");
         OORt_filter_btn.setText("Filtorvať");
         OORt_showDetails_btn.setText("Zobraziť detaily");
+        if (OORt_selectArepair_label != null) { OORt_selectArepair_label.setText("Vyerte opravu!"); }
 
         // AdminMainScene - História opráv tab
         repairHistoryTab.setText("História opráv");

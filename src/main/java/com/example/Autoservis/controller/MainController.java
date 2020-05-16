@@ -32,6 +32,8 @@ import java.util.concurrent.TimeUnit;
 public class MainController implements Initializable {
     public static int UID;
     public static int IdM;
+    public Button english_lang;
+    public Button slovak_lang;
 
     @FXML
     private TextField Username;

@@ -8,6 +8,10 @@ public enum FxmlView {
             return "/LoginScene.fxml";
         }
     },
+    LoginSVK {
+        @Override
+        public String getFxmlFile() { return "/LoginSceneSVK.fxml"; }
+    },
     CarScene {
         @Override
         public String getFxmlFile() {
@@ -57,11 +61,14 @@ public enum FxmlView {
         }
     },
     MechanicScene {
-
         @Override
         public String getFxmlFile() {
             return "/MechanicMainScene.fxml";
         }
+    },
+    MechanicSceneSVK {
+        @Override
+        public String getFxmlFile() { return "/MechanicMainSceneSVK.fxml"; }
     };
 
     public abstract String getFxmlFile();

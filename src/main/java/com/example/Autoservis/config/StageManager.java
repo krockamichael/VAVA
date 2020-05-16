@@ -2,7 +2,6 @@ package com.example.Autoservis.config;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import java.util.Objects;
-
 import com.example.Autoservis.view.FxmlView;
 import org.slf4j.Logger;
 import javafx.application.Platform;
@@ -14,7 +13,6 @@ import javafx.stage.Stage;
  * Manages switching Scenes on the Primary Stage
  */
 public class StageManager {
-
     private static final Logger LOG = getLogger(StageManager.class);
     private final Stage primaryStage;
     private final SpringFXMLLoader springFXMLLoader;
@@ -38,7 +36,7 @@ public class StageManager {
         try {
             primaryStage.show();
         } catch (Exception exception) {
-            logAndExit ("Unable to show scene ", exception);
+            logAndExit ("Unable to show scene.", exception);
         }
     }
 

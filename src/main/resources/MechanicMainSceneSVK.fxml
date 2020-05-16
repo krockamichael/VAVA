@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.Autoservis.controller.MechanicMainSceneController">
+    <children>
+        <Pane prefHeight="25.0" prefWidth="603.0" style="-fx-background-color: #23272a;">
+            <children>
+                <Label layoutX="268.0" layoutY="4.0" text="Autoservis IS" textFill="#99aab5" />
+                <Button layoutX="571.0" mnemonicParsing="false" onAction="#closeStageAction" style="-fx-background-color: #23272a;" text="X" textFill="#99aab5">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+                <Button layoutX="546.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="24.0" style="-fx-background-color: #23272a;" text="^" textFill="#99aab5">
+                    <font>
+                        <Font name="System Bold" size="12.0" />
+                    </font>
+                </Button>
+            <Button mnemonicParsing="false" onAction="#mechanicMainScene_changeToEnglishLang" style="-fx-background-color: #23272a;" text="EN" textFill="#99aab5" />
+            <Button layoutX="31.0" mnemonicParsing="false" onAction="#mechanicMainScene_changeToSlovakLang" style="-fx-background-color: #23272a;" text="SK" textFill="#99aab5" />
+            </children></Pane>
+        <Pane layoutY="25.0" prefHeight="375.0" prefWidth="603.0" style="-fx-background-color: #3e4247;">
+            <children>
+                <TabPane prefHeight="375.0" prefWidth="603.0" tabClosingPolicy="UNAVAILABLE">
+                    <tabs>
+                        <Tab fx:id="newRepair_tab" text="Nová oprava">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                    <children>
+                                        <TableView fx:id="carsTable" layoutX="14.0" layoutY="73.0" prefHeight="249.0" prefWidth="316.0">
+                                            <columns>
+                                                <TableColumn fx:id="modelCol" prefWidth="103.0" text="Model" />
+                                                <TableColumn fx:id="typeCol" prefWidth="97.0" text="Značka" />
+                                                <TableColumn fx:id="vinCol" prefWidth="115.0" text="VIN" />
+                                                <TableColumn fx:id="carIdCol" prefWidth="75.0" text="carId" visible="false" />
+                                            </columns>
+                                        </TableView>
+                                        <DatePicker fx:id="startDate" layoutX="356.0" layoutY="90.0" />
+                                        <Label fx:id="mechMainScene_startDate_label" layoutX="355.0" layoutY="73.0" text="Dátum začiatku :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_repair_label" layoutX="354.0" layoutY="223.0" text="Opis opravy :" textFill="#99aab5" />
+                                        <TextField fx:id="repairCost" layoutX="356.0" layoutY="35.0" prefHeight="25.0" prefWidth="174.0" />
+                                        <TextArea fx:id="repair" layoutX="356.0" layoutY="240.0" prefHeight="45.0" prefWidth="176.0" />
+                                        <Button fx:id="mechMainScene_addRepair_btn" layoutX="358.0" layoutY="296.0" mnemonicParsing="false" onAction="#addNewRepair" style="-fx-background-color: #23272a;" text="Pridať opravu" textFill="#99aab5" />
+                                        <TextField fx:id="carModel" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="68.0" />
+                                        <TextField fx:id="carType" layoutX="93.0" layoutY="35.0" prefHeight="25.0" prefWidth="68.0" />
+                                        <TextField fx:id="carVIN" layoutX="169.0" layoutY="35.0" prefHeight="25.0" prefWidth="103.0" />
+                                        <Label fx:id="mechMainScene_model_label" layoutX="14.0" layoutY="14.0" text="Model :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_brand_label" layoutX="93.0" layoutY="14.0" text="Značka :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_VIN_label" layoutX="172.0" layoutY="14.0" text="VIN čislo :" textFill="#99aab5" />
+                                        <Button fx:id="mechMainScene_filter_btn" layoutX="287.0" layoutY="35.0" mnemonicParsing="false" onAction="#filter" style="-fx-background-color: #23272a;" text="Filtrovať" textFill="#99aab5" />
+                                        <DatePicker fx:id="finishDate" layoutX="356.0" layoutY="141.0" />
+                                        <Label fx:id="mechMainScene_finishDate_label" layoutX="355.0" layoutY="124.0" text="Dátum konca :" textFill="#99aab5" />
+                                        <ProgressIndicator fx:id="loadingIndicator" layoutX="340.0" layoutY="35.0" prefHeight="25.0" prefWidth="24.0" visible="false" />
+                                        <Label fx:id="mechMainScene_componentUsed_label" layoutX="355.0" layoutY="173.0" text="Použitý komponent :" textFill="#99aab5" />
+                                        <Button fx:id="componentSelection" layoutX="356.0" layoutY="191.0" mnemonicParsing="false" onAction="#loadComponentSelection" prefHeight="25.0" prefWidth="175.0" text="Vyberte komponent" />
+                                        <Label fx:id="repairAdded" layoutX="439.0" layoutY="298.0" text="Opravy pridané!" textFill="#99aab5" visible="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="errorMess" layoutX="448.0" layoutY="300.0" prefHeight="20.0" prefWidth="120.0" text="Chýbajúce hodnoty!" textFill="#e43737" visible="false">
+                                            <font>
+                                                <Font size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="mechMainScene_repairCost_label" layoutX="356.0" layoutY="14.0" text="Cena opravy :" textFill="#99aab5" />
+
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </Tab>
+                    </tabs>
+                </TabPane>
+            </children></Pane>
+    </children>
+</AnchorPane>

@@ -10,11 +10,16 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Pane;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -166,6 +171,13 @@ public class MainController implements Initializable {
 
     }
 
+    void initData(String lang) {
+        this.global_lang = lang;
+        // keep selected language
+        if (global_lang.equals("eng")) changeToEnglishLang();
+        else changeToSlovakLang();
+    }
+
     //closes the login window on click
     @FXML
     protected void closeStageAction(ActionEvent event){
@@ -174,7 +186,7 @@ public class MainController implements Initializable {
 
     //login
     @FXML
-    protected void LoginAction() {
+    protected void LoginAction() throws IOException {
         String Name,password;
         Name = Username.getText();
         password = Password.getText();
@@ -188,13 +200,10 @@ public class MainController implements Initializable {
             else changeToSlovakLang();
         }
         else if (userType == 2) {
-            stageManager.switchScene(FxmlView.MechanicScene);
+            // keep selected language
+            if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.MechanicScene);
+            else stageManager.switchScene(FxmlView.MechanicSceneSVK);
             UID = UID-1;
-
-            // TODO keep selected language
-            MechanicMainSceneController MMSC = new MechanicMainSceneController();
-            if (global_lang.equals("eng")) MMSC.mechanicMainScene_changeToEnglishLang();
-            else MMSC.mechanicMainScene_changeToSlovakLang();
         } else
             errMess.setVisible(true);
     }

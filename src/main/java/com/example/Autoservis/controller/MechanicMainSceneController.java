@@ -4,10 +4,12 @@ import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
 import com.example.Autoservis.view.FxmlView;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -65,12 +67,9 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     protected void Logout() {
-        stageManager.switchScene(FxmlView.Login);
-
-         // TODO keep selected language
-        MainController MC = new MainController();
-        if (global_lang.equals("eng")) MC.changeToEnglishLang_LoginScreen();
-        else MC.changeToSlovakLang_LoginScreen();
+        // keep selected language
+        if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.Login);
+        else stageManager.switchScene(FxmlView.LoginSVK);
     }
 
     @FXML
@@ -277,7 +276,7 @@ public class MechanicMainSceneController implements Initializable {
         mechMainScene_repairCost_label.setText("Cena opravy :");
         mechMainScene_startDate_label.setText("Dátum začiatku :");
         mechMainScene_finishDate_label.setText("Dátum konca :");
-        mechMainScene_componentUsed_label.setText("Použité komponenty :");
+        mechMainScene_componentUsed_label.setText("Použitý komponent :");
         mechMainScene_repair_label.setText("Opis opravy :");
         mechMainScene_filter_btn.setText("Filtrovať");
         mechMainScene_addRepair_btn.setText("Pridať opravu");

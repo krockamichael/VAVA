@@ -13,11 +13,13 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Label layoutX="169.0" layoutY="5.0" text="Repairs" textFill="#99aab5" />
+                <Label fx:id="repairsTitle_label" layoutX="200.0" layoutY="5.0" text="Repairs" textFill="#99aab5" />
+            <Button fx:id="repair_scene_en_btn" layoutY="1.0" mnemonicParsing="false" onAction="#repairScene_changeToEnglishLang" style="-fx-background-color: #23272a;" text="EN" textFill="#99aab5" />
+            <Button fx:id="repair_scene_sk_btn" layoutX="31.0" layoutY="1.0" mnemonicParsing="false" onAction="#repairScene_changeToSlovakLang" style="-fx-background-color: #23272a;" text="SK" textFill="#99aab5" />
             </children></Pane>
         <Pane layoutY="27.0" prefHeight="375.0" prefWidth="445.0" style="-fx-background-color: #3e4247;">
             <children>
-                <Button layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#BackToAdminSceneRepair" style="-fx-background-color: #3e4247; -fx-border-color: #000000;" text="&lt; Back" textFill="#99aab5" />
+                <Button fx:id="repScene_back_btn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#BackToAdminSceneRepair" style="-fx-background-color: #3e4247; -fx-border-color: #000000;" text="&lt; Back" textFill="#99aab5" />
                 <TableView fx:id="RepairsTableR" layoutX="29.0" layoutY="66.0" prefHeight="280.0" prefWidth="380.0">
                     <columns>
                         <TableColumn fx:id="RepairTextR" prefWidth="90.0" text="Repair" />

@@ -19,12 +19,14 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
+            <Button mnemonicParsing="false" onAction="#mechanicMainScene_changeToEnglishLang" style="-fx-background-color: #23272a;" text="EN" textFill="#99aab5" />
+            <Button layoutX="31.0" mnemonicParsing="false" onAction="#mechanicMainScene_changeToSlovakLang" style="-fx-background-color: #23272a;" text="SK" textFill="#99aab5" />
             </children></Pane>
         <Pane layoutY="25.0" prefHeight="375.0" prefWidth="603.0" style="-fx-background-color: #3e4247;">
             <children>
                 <TabPane prefHeight="375.0" prefWidth="603.0" tabClosingPolicy="UNAVAILABLE">
                     <tabs>
-                        <Tab text="New repair">
+                        <Tab fx:id="newRepair_tab" text="New repair">
                             <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                     <children>
@@ -37,22 +39,22 @@
                                             </columns>
                                         </TableView>
                                         <DatePicker fx:id="startDate" layoutX="356.0" layoutY="90.0" />
-                                        <Label layoutX="355.0" layoutY="73.0" text="Starting date : " textFill="#99aab5" />
-                                        <Label layoutX="354.0" layoutY="223.0" text="Repair :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_startDate_label" layoutX="355.0" layoutY="73.0" text="Starting date : " textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_repair_label" layoutX="354.0" layoutY="223.0" text="Repair :" textFill="#99aab5" />
                                         <TextField fx:id="repairCost" layoutX="356.0" layoutY="35.0" prefHeight="25.0" prefWidth="174.0" />
                                         <TextArea fx:id="repair" layoutX="356.0" layoutY="240.0" prefHeight="45.0" prefWidth="176.0" />
-                                        <Button layoutX="358.0" layoutY="296.0" mnemonicParsing="false" onAction="#addNewRepair" style="-fx-background-color: #23272a;" text="Add repair" textFill="#99aab5" />
+                                        <Button fx:id="mechMainScene_addRepair_btn" layoutX="358.0" layoutY="296.0" mnemonicParsing="false" onAction="#addNewRepair" style="-fx-background-color: #23272a;" text="Add repair" textFill="#99aab5" />
                                         <TextField fx:id="carModel" layoutX="14.0" layoutY="35.0" prefHeight="25.0" prefWidth="68.0" />
                                         <TextField fx:id="carType" layoutX="93.0" layoutY="35.0" prefHeight="25.0" prefWidth="68.0" />
                                         <TextField fx:id="carVIN" layoutX="169.0" layoutY="35.0" prefHeight="25.0" prefWidth="103.0" />
-                                        <Label layoutX="14.0" layoutY="14.0" text="Model :" textFill="#99aab5" />
-                                        <Label layoutX="93.0" layoutY="14.0" text="Brand :" textFill="#99aab5" />
-                                        <Label layoutX="172.0" layoutY="14.0" text="VIN number :" textFill="#99aab5" />
-                                        <Button layoutX="287.0" layoutY="35.0" mnemonicParsing="false" onAction="#filter" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_model_label" layoutX="14.0" layoutY="14.0" text="Model :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_brand_label" layoutX="93.0" layoutY="14.0" text="Brand :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_VIN_label" layoutX="172.0" layoutY="14.0" text="VIN number :" textFill="#99aab5" />
+                                        <Button fx:id="mechMainScene_filter_btn" layoutX="287.0" layoutY="35.0" mnemonicParsing="false" onAction="#filter" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" />
                                         <DatePicker fx:id="finishDate" layoutX="356.0" layoutY="141.0" />
-                                        <Label layoutX="355.0" layoutY="124.0" text="Finish date : " textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_finishDate_label" layoutX="355.0" layoutY="124.0" text="Finish date : " textFill="#99aab5" />
                                         <ProgressIndicator fx:id="loadingIndicator" layoutX="340.0" layoutY="35.0" prefHeight="25.0" prefWidth="24.0" visible="false" />
-                                        <Label layoutX="355.0" layoutY="173.0" text="Component used : " textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_componentUsed_label" layoutX="355.0" layoutY="173.0" text="Component used : " textFill="#99aab5" />
                                         <Button fx:id="componentSelection" layoutX="356.0" layoutY="191.0" mnemonicParsing="false" onAction="#loadComponentSelection" prefHeight="25.0" prefWidth="175.0" text="Select a component" />
                                         <Label fx:id="repairAdded" layoutX="439.0" layoutY="298.0" text="Repair added!" textFill="#99aab5" visible="false">
                                             <font>
@@ -64,7 +66,7 @@
                                                 <Font size="14.0" />
                                             </font>
                                         </Label>
-                                        <Label layoutX="356.0" layoutY="14.0" text="Repair cost :" textFill="#99aab5" />
+                                        <Label fx:id="mechMainScene_repairCost_label" layoutX="356.0" layoutY="14.0" text="Repair cost :" textFill="#99aab5" />
 
                                     </children>
                                 </AnchorPane>

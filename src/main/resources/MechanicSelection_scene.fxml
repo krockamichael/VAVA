@@ -13,7 +13,9 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Label layoutX="169.0" layoutY="5.0" text="Mechanic selection" textFill="#99aab5" />
+                <Label fx:id="mechSel_title_label" layoutX="169.0" layoutY="5.0" text="Mechanic selection" textFill="#99aab5" />
+            <Button layoutY="1.0" mnemonicParsing="false" onAction="#mechSel_changeToEnglishLang" style="-fx-background-color: #23272a;" text="EN" textFill="#99aab5" />
+            <Button layoutX="31.0" layoutY="1.0" mnemonicParsing="false" onAction="#mechSel_changeToSlovakLang" style="-fx-background-color: #23272a;" text="SK" textFill="#99aab5" />
             </children></Pane>
         <Pane layoutY="27.0" prefHeight="375.0" prefWidth="445.0" style="-fx-background-color: #3e4247;">
             <children>
@@ -23,13 +25,13 @@
                         <TableColumn fx:id="surnameColM" prefWidth="140.0" text="Surname" />
                     </columns>
                 </TableView>
-                <Button fx:id="search" layoutX="335.0" layoutY="26.0" mnemonicParsing="false" onAction="#filterMechanic" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Search" textFill="#99aab5" />
-                <Button fx:id="select" layoutX="335.0" layoutY="66.0" mnemonicParsing="false" onAction="#returnMechanic" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
-                <Label layoutX="176.0" layoutY="10.0" text="Surname :" textFill="#99aab5" />
-                <Label layoutX="29.0" layoutY="10.0" text="Name :" textFill="#99aab5" />
+                <Button fx:id="mechSel_search_btn" layoutX="335.0" layoutY="26.0" mnemonicParsing="false" onAction="#filterMechanic" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Search" textFill="#99aab5" />
+                <Button fx:id="mechSel_select_btn" layoutX="335.0" layoutY="66.0" mnemonicParsing="false" onAction="#returnMechanic" prefWidth="80.0" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
+                <Label fx:id="mechSel_surname_label" layoutX="176.0" layoutY="10.0" text="Surname :" textFill="#99aab5" />
+                <Label fx:id="mechSel_name_label" layoutX="29.0" layoutY="10.0" text="Name :" textFill="#99aab5" />
                 <TextField fx:id="nameTextReward" layoutX="29.0" layoutY="26.0" prefHeight="25.0" prefWidth="125.0" />
                 <TextField fx:id="surnameTextReward" layoutX="176.0" layoutY="26.0" prefHeight="25.0" prefWidth="125.0" />
-            <Label layoutX="29.0" layoutY="64.0" text="Results :" textFill="#99aab5" />
+            <Label fx:id="mechSel_results_label" layoutX="29.0" layoutY="64.0" text="Results :" textFill="#99aab5" />
             </children></Pane>
     </children>
 </AnchorPane>

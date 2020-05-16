@@ -26,78 +26,37 @@ import java.util.ResourceBundle;
 @Controller
 public class MechanicMainSceneController implements Initializable {
 
-    @FXML
-    private TableView<Cars> carsTable;
-    @FXML
-    private TableColumn<Cars,String> modelCol;
-    @FXML
-    private TableColumn<Cars,String> typeCol;
-    @FXML
-    private TableColumn<Cars,String> vinCol;
-    @FXML
-    private TableColumn<Cars,String> carIdCol;
-    @FXML
-    private DatePicker startDate;
-    @FXML
-    private DatePicker finishDate;
-    @FXML
-    private TextArea repair;
-    @FXML
-    private TextField carModel;
-    @FXML
-    private TextField carType;
-    @FXML
-    private TextField carVIN;
-    @FXML
-    private Label repairAdded;
-    @FXML
-    public Button componentSelection;
-    @FXML
-    private Label errorMess;
-    @FXML
-    private TextField repairCost;
+    @FXML private TableView<Cars> carsTable;
+    @FXML private TableColumn<Cars,String> modelCol;
+    @FXML private TableColumn<Cars,String> typeCol;
+    @FXML private TableColumn<Cars,String> vinCol;
+    @FXML private TableColumn<Cars,String> carIdCol;
+    @FXML private DatePicker startDate;
+    @FXML private DatePicker finishDate;
+    @FXML private TextArea repair;
+    @FXML private TextField carModel;
+    @FXML private TextField carType;
+    @FXML private TextField carVIN;
+    @FXML private Label repairAdded;
+    @FXML public Button componentSelection;
+    @FXML private Label errorMess;
+    @FXML private TextField repairCost;
 
     //////////////////////////////////////////////////
-    @FXML
-    private TableView<Components> componentsTableC;
-
-    @FXML
-    private TableColumn<Components,String> componentColC;
-
-    @FXML
-    private TableColumn<Components,String> carTypeColC;
-
-    @FXML
-    private TableColumn<Components,String> amountColC;
-
-    @FXML
-    private TableColumn<Components,String> IdColC;
-
-    @FXML
-    private TextField nameTextC;
-
-    @FXML
-    private TextField carTypeTextC;
+    @FXML private TableView<Components> componentsTableC;
+    @FXML private TableColumn<Components,String> componentColC;
+    @FXML private TableColumn<Components,String> carTypeColC;
+    @FXML private TableColumn<Components,String> amountColC;
+    @FXML private TableColumn<Components,String> IdColC;
+    @FXML private TextField nameTextC;
+    @FXML private TextField carTypeTextC;
     ////////////////////////////////////////////////////////
-
-    @Autowired
-    private CarsService carsService;
-
-    @Autowired
-    private RepairsService repairsService;
-
-    @Autowired
-    private ComponentService componentService;
-
-    @Autowired
-    private ComponentsService componentsService;
-
-    @Autowired
-    private MechanicsService mechanicsService;
-
-    @Lazy
-    @Autowired
-    private StageManager stageManager;
+    @Autowired private CarsService carsService;
+    @Autowired private RepairsService repairsService;
+    @Autowired private ComponentService componentService;
+    @Autowired private ComponentsService componentsService;
+    @Autowired private MechanicsService mechanicsService;
+    @Lazy @Autowired private StageManager stageManager;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -110,9 +69,8 @@ public class MechanicMainSceneController implements Initializable {
 
 
     @FXML
-    protected void Logout(ActionEvent event) throws IOException {
-        stageManager.switchScene(FxmlView.Login);
-    }
+    protected void Logout(ActionEvent event) throws IOException { stageManager.switchScene(FxmlView.Login); }
+
     @FXML
     protected void closeStageAction(ActionEvent event){
         ((Node)(event.getSource())).getScene().getWindow().hide();
@@ -128,7 +86,7 @@ public class MechanicMainSceneController implements Initializable {
         }
         else{
             for(Cars model : Lcar) {
-                Cars car = null;
+                Cars car;
                 car = new Cars();
                 car.setModel(model.getModel());
                 car.setBrand(model.getBrand());
@@ -142,7 +100,7 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     protected void addNewRepair(){
-        int carId = 0;
+        int carId;
         repairAdded.setVisible(false);
         errorMess.setVisible(false);
         if(carsTable.getSelectionModel().getSelectedItem()==null){
@@ -154,7 +112,7 @@ public class MechanicMainSceneController implements Initializable {
         LocalDate finish = finishDate.getValue();
         int mechId = MainController.UID;
         System.out.println("mechId je: "+mechId);
-        if(repairCost.getText() == ""){
+        if(repairCost.getText().equals("")){
             errorMess.setVisible(true);
             return;
         }
@@ -202,9 +160,7 @@ public class MechanicMainSceneController implements Initializable {
             }
             repairAdded.setVisible(true);
         }
-        else{
-            errorMess.setVisible(true);
-        }
+        else{ errorMess.setVisible(true); }
 
     }
 
@@ -219,13 +175,13 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     protected void loadComponentSelection() throws IOException {
-        RepairCostM = repairCost.getText().toString();
+        RepairCostM = repairCost.getText();
         StartingDateM = startDate.getValue();
         FinishDateM = finishDate.getValue();
-        RepairTextM = repair.getText().toString();
-        ModelCarM = carModel.getText().toString();
-        ModelTypeM = carType.getText().toString();
-        ModelVinM = carVIN.getText().toString();
+        RepairTextM = repair.getText();
+        ModelCarM = carModel.getText();
+        ModelTypeM = carType.getText();
+        ModelVinM = carVIN.getText();
         items = carsTable.getItems();
 
         stageManager.switchScene(FxmlView.ComponentSelection);
@@ -245,7 +201,7 @@ public class MechanicMainSceneController implements Initializable {
         }
         else{
             for(Components compo : components) {
-                Components com = null;
+                Components com;
                 com = new Components();
                 com.setName(compo.getName());
                 com.setAmount(compo.getAmount());
@@ -259,7 +215,6 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     private void selectC(ActionEvent event){
-        ObservableList<Cars> data = FXCollections.observableArrayList();
         stageManager.switchScene(FxmlView.MechanicScene);
 
         repairCost.setText(RepairCostM);
@@ -269,12 +224,94 @@ public class MechanicMainSceneController implements Initializable {
         carModel.setText(ModelCarM);
         carType.setText(ModelTypeM);
         carVIN.setText(ModelVinM);
-
         carsTable.setItems(items);
 
         if(componentsTableC.getSelectionModel().getSelectedItem() != null) {
             componentSelection.setText(componentsTableC.getSelectionModel().getSelectedItem().getName() + " " + componentsTableC.getSelectionModel().getSelectedItem().getCarType());
             componentSelection.setUserData(componentsTableC.getSelectionModel().getSelectedItem().getComponentId());
         }
+    }
+
+    @FXML private Tab newRepair_tab;
+    @FXML private Label mechMainScene_brand_label;
+    @FXML private Label mechMainScene_VIN_label;
+    @FXML private Label mechMainScene_repairCost_label;
+    @FXML private Label mechMainScene_startDate_label;
+    @FXML private Label mechMainScene_finishDate_label;
+    @FXML private Label mechMainScene_componentUsed_label;
+    @FXML private Label mechMainScene_repair_label;
+    @FXML private Button mechMainScene_filter_btn;
+    @FXML private Button mechMainScene_addRepair_btn;
+
+    @FXML
+    private void mechanicMainScene_changeToEnglishLang(ActionEvent event) {
+        typeCol.setText("Brand");
+        componentSelection.setText("Select a component");
+        newRepair_tab.setText("New repair");
+        mechMainScene_brand_label.setText("Brand :");
+        mechMainScene_VIN_label.setText("VIN number :");
+        mechMainScene_repairCost_label.setText("Repair cost :");
+        mechMainScene_startDate_label.setText("Starting date :");
+        mechMainScene_finishDate_label.setText("Finish date :");
+        mechMainScene_componentUsed_label.setText("Components used :");
+        mechMainScene_repair_label.setText("Repair :");
+        mechMainScene_filter_btn.setText("Filter");
+        mechMainScene_addRepair_btn.setText("Add repair");
+        if(repairAdded != null) { repairAdded.setText("Repair added!"); }
+        if(errorMess != null) { errorMess.setText("Missing fields!"); }
+    }
+
+    @FXML
+    private void mechanicMainScene_changeToSlovakLang(ActionEvent event) {
+        typeCol.setText("Značka");
+        componentSelection.setText("Vyberte komponent");
+        newRepair_tab.setText("Nová oprava");
+        mechMainScene_brand_label.setText("Značka :");
+        mechMainScene_VIN_label.setText("VIN číslo :");
+        mechMainScene_repairCost_label.setText("Cena opravy :");
+        mechMainScene_startDate_label.setText("Dátum začiatku :");
+        mechMainScene_finishDate_label.setText("Dátum konca :");
+        mechMainScene_componentUsed_label.setText("Použité komponenty :");
+        mechMainScene_repair_label.setText("Opis opravy :");
+        mechMainScene_filter_btn.setText("Filtrovať");
+        mechMainScene_addRepair_btn.setText("Pridať opravu");
+        if(repairAdded != null) { repairAdded.setText("Opravy pridané!"); }
+        if(errorMess != null) { errorMess.setText("Chýbajúce hodnoty!"); }
+    }
+
+    @FXML private Label compSel_title_label;
+    @FXML private Label compSel_filterBy_label;
+    @FXML private Label compSel_results_label;
+    @FXML private Label compSel_component_label;
+    @FXML private Label compSel_carBrand_label;
+    @FXML private Button compSel_filter_btn;
+    @FXML private Button compSel_select_btn;
+
+    @FXML
+    private void compSel_changeToEnglishLang(ActionEvent event) {
+        componentColC.setText("Component");
+        carTypeColC.setText("Car Brand");
+        amountColC.setText("Amount");
+        compSel_title_label.setText("Component selection");
+        compSel_filterBy_label.setText("Filter by:");
+        compSel_results_label.setText("Results:");
+        compSel_component_label.setText("Component :");
+        compSel_carBrand_label.setText("Car brand :");
+        compSel_filter_btn.setText("Filter");
+        compSel_select_btn.setText("Select");
+    }
+
+    @FXML
+    private void compSel_changeToSlovakLang(ActionEvent event) {
+        componentColC.setText("Komponent");
+        carTypeColC.setText("Značka auta");
+        amountColC.setText("Počet");
+        compSel_title_label.setText("Výber komponentu");
+        compSel_filterBy_label.setText("Filtrovať podľa:");
+        compSel_results_label.setText("Výsledky:");
+        compSel_component_label.setText("Komponent :");
+        compSel_carBrand_label.setText("Car brand :");
+        compSel_filter_btn.setText("Filtrovať");
+        compSel_select_btn.setText("Vybrať");
     }
 }

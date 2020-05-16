@@ -35,208 +35,108 @@ public class MainController implements Initializable {
     public Button english_lang;
     public Button slovak_lang;
 
-    @FXML
-    private TextField Username;
-    @FXML
-    private PasswordField Password;
-    @FXML
-    private Label errMess;
-    @FXML
-    private TextField newUserName;
-    @FXML
-    private TextField newUserPass;
-    @FXML
-    private RadioButton userTypeMechanic;
-    @FXML
-    private RadioButton userTypeAdmin;
-    @FXML
-    private TextField Customer_name;
-    @FXML
-    private TextField Customer_surname;
-    @FXML
-    private TextField Customer_phone;
-    @FXML
-    private TextField Customer_email;
-    @FXML
-    private TextField Car_brand;
-    @FXML
-    private TextField Car_model;
-    @FXML
-    private TextField Car_vin;
-    @FXML
-    private Label carAddedMess;
-    @FXML
-    private Label invalidFormat;
+    @FXML private TextField Username;
+    @FXML private PasswordField Password;
+    @FXML private Label errMess;
+    @FXML private TextField newUserName;
+    @FXML private TextField newUserPass;
+    @FXML private RadioButton userTypeMechanic;
+    @FXML private RadioButton userTypeAdmin;
+    @FXML private TextField Customer_name;
+    @FXML private TextField Customer_surname;
+    @FXML private TextField Customer_phone;
+    @FXML private TextField Customer_email;
+    @FXML private TextField Car_brand;
+    @FXML private TextField Car_model;
+    @FXML private TextField Car_vin;
+    @FXML private Label carAddedMess;
+    @FXML private Label invalidFormat;
 
-    @FXML
-    private TextField customerIdNum;
-    @FXML
-    private TextField reward;
-    @FXML
-    private TextField payout_s;
-    @FXML
-    private TextField reasonReward;
-    @FXML
-    private ChoiceBox fuelType;
-    @FXML
-    private Label emptyFieldsError;
-    @FXML
-    private TextField mechanicName;
-    @FXML
-    private TextField mechanicSurname;
-    @FXML
-    private TextField component;
-    @FXML
-    private TextField carType;
-    @FXML
-    private TextField cost;
-    @FXML
-    private TextField amount;
-    @FXML
-    private TextField selectedCustomer;
-    @FXML
-    private Label errComponents;
-    @FXML
-    private Label newUserError;
-    @FXML
-    private Label repairCost;
-    @FXML
-    private Label componentCost;
+    @FXML private TextField customerIdNum;
+    @FXML private TextField reward;
+    @FXML private TextField payout_s;
+    @FXML private TextField reasonReward;
+    @FXML private ChoiceBox fuelType;
+    @FXML private Label emptyFieldsError;
+    @FXML private TextField mechanicName;
+    @FXML private TextField mechanicSurname;
+    @FXML private TextField component;
+    @FXML private TextField carType;
+    @FXML private TextField cost;
+    @FXML private TextField amount;
+    @FXML private TextField selectedCustomer;
+    @FXML private Label errComponents;
+    @FXML private Label newUserError;
+    @FXML private Label repairCost;
+    @FXML private Label componentCost;
 
-    @FXML
-    private TableView<Mechanics> OverViewTable;
-    @FXML
-    private TableColumn<Mechanics,String> nameCol;
-    @FXML
-    private TableColumn<Mechanics,String> surnameCol;
-    @FXML
-    private ProgressIndicator loadingIndicator;
-    @FXML
-    private TextField TotalRepairT;
-    @FXML
-    private TextField AveRepairT;
-    @FXML
-    private TextField TotalNumber;
-    @FXML
-    private TextField overName;
-    @FXML
-    private TextField overSurname;
-    @FXML
-    private TextField carSelection;
-    @FXML
-    private TextField selectedMechanic;
-    @FXML
-    private TextField selectedMechanic1;
-    @FXML
-    public Button showingRepairs;
-    @FXML
-    private Label invalidFormatR;
-    @FXML
-    private Label invalidFormatP;
+    @FXML private TableView<Mechanics> OverViewTable;
+    @FXML private TableColumn<Mechanics,String> nameCol;
+    @FXML private TableColumn<Mechanics,String> surnameCol;
+    @FXML private ProgressIndicator loadingIndicator;
+    @FXML private TextField TotalRepairT;
+    @FXML private TextField AveRepairT;
+    @FXML private TextField TotalNumber;
+    @FXML private TextField overName;
+    @FXML private TextField overSurname;
+    @FXML private TextField carSelection;
+    @FXML private TextField selectedMechanic;
+    @FXML private TextField selectedMechanic1;
+    @FXML public Button showingRepairs;
+    @FXML private Label invalidFormatR;
+    @FXML private Label invalidFormatP;
 
-    @FXML
-    private TableView<Repairs> repairHistTable;
-    @FXML
-    private TableColumn<Repairs,String> startCol;
-    @FXML
-    private TableColumn<Repairs,String> finishCol;
-    @FXML
-    private TableColumn<Repairs,String> donebyCol;
-    @FXML
-    private TableColumn<Repairs,String> repairCol;
-    @FXML
-    private TableColumn<Repairs,Double> costCol;
+    @FXML private TableView<Repairs> repairHistTable;
+    @FXML private TableColumn<Repairs,String> startCol;
+    @FXML private TableColumn<Repairs,String> finishCol;
+    @FXML private TableColumn<Repairs,String> donebyCol;
+    @FXML private TableColumn<Repairs,String> repairCol;
+    @FXML private TableColumn<Repairs,Double> costCol;
 
     ///////////////////////////////////////////////////////////////////
-    @FXML
-    private TableView<Customers> customersTable;
-
-    @FXML
-    private TableColumn<Customers,String> nameCol1;
-
-    @FXML
-    private TableColumn<Customers,String> surnameCol1;
-
-    @FXML
-    private TableColumn<Customers,String> idCol;
-
-    @FXML
-    private TableColumn<Customers,String> elementIdCol;
-
-
-    @FXML
-    private TextField nameText;
-
-    @FXML
-    private TextField surnameText;
+    @FXML private TableView<Customers> customersTable;
+    @FXML private TableColumn<Customers,String> nameCol1;
+    @FXML private TableColumn<Customers,String> surnameCol1;
+    @FXML private TableColumn<Customers,String> idCol;
+    @FXML private TableColumn<Customers,String> elementIdCol;
+    @FXML private TextField nameText;
+    @FXML private TextField surnameText;
     ///////////////////////////////////////////////////////////////////////
 
     /////////////////////////////////////////////////////////////////////
-    @FXML
-    private TableView<Mechanics> mechanicsTableR;
-
-    @FXML
-    private TableColumn<Mechanics,String> nameColM;
-
-    @FXML
-    private TableColumn<Mechanics,String> surnameColM;
-
-    @FXML
-    private TextField surnameTextReward;
-
-    @FXML
-    private TextField nameTextReward;
+    @FXML private TableView<Mechanics> mechanicsTableR;
+    @FXML private TableColumn<Mechanics,String> nameColM;
+    @FXML private TableColumn<Mechanics,String> surnameColM;
+    @FXML private TextField surnameTextReward;
+    @FXML private TextField nameTextReward;
     /////////////////////////////////////////////////////////////////
 
     ///////////////////////////////////
-    @FXML
-    private TableView<Mechanics> mechanicsTablePayout1;
-
-    @FXML
-    private TableColumn<Mechanics,String> nameColPay;
-
-    @FXML
-    private TableColumn<Mechanics,String> surnameColPay;
-
-    @FXML
-    private TextField nameTextPay;
-
-    @FXML
-    private TextField surnameTextPay;
+    @FXML private TableView<Mechanics> mechanicsTablePayout1;
+    @FXML private TableColumn<Mechanics,String> nameColPay;
+    @FXML private TableColumn<Mechanics,String> surnameColPay;
+    @FXML private TextField nameTextPay;
+    @FXML private TextField surnameTextPay;
     //////////////////////////////////////////////
 
     ///////////////////////////////////////////
-    @FXML
-    private TextField carModelCar;
-    @FXML
-    private TextField carTypeCar;
-    @FXML
-    private TextField carVINCar;
-    @FXML
-    private TableView<Cars> carsTableCar;
-    @FXML
-    private TableColumn<Cars,String> modelColCar;
-    @FXML
-    private TableColumn<Cars,String> typeColCar;
-    @FXML
-    private TableColumn<Cars,String> vinColCar;
-    @FXML
-    private TableColumn<Cars,String> carIdColCar;
+    @FXML private TextField carModelCar;
+    @FXML private TextField carTypeCar;
+    @FXML private TextField carVINCar;
+    @FXML private TableView<Cars> carsTableCar;
+    @FXML private TableColumn<Cars,String> modelColCar;
+    @FXML private TableColumn<Cars,String> typeColCar;
+    @FXML private TableColumn<Cars,String> vinColCar;
+    @FXML private TableColumn<Cars,String> carIdColCar;
     ////////////////////////////////////////////
 
     //////////////////////////////////////////////////
-    @FXML
-    private TableView<Repairs> RepairsTableR;
-    @FXML
-    private TableColumn<Repairs,String> RepairTextR;
-    @FXML
-    private TableColumn<Repairs,String> StartDayR;
-    @FXML
-    private TableColumn<Repairs,String> EndDayR;
-    @FXML
-    private TableColumn<Repairs,String> DaysRR;
-    @FXML
-    private Label SelectARepair;
+    @FXML private TableView<Repairs> RepairsTableR;
+    @FXML private TableColumn<Repairs,String> RepairTextR;
+    @FXML private TableColumn<Repairs,String> StartDayR;
+    @FXML private TableColumn<Repairs,String> EndDayR;
+    @FXML private TableColumn<Repairs,String> DaysRR;
+    @FXML private Label SelectARepair;
     ///////////////////////////////////////////////////
 
     private Thread loadThread = null;
@@ -245,54 +145,24 @@ public class MainController implements Initializable {
     int repairOffset = 0;
     static long CarId;
 
-    @Autowired
-    private UsersService usersService;
+    @Autowired private UsersService usersService;
+    @Autowired private MechanicsService mechanicsService;
+    @Autowired private CustomersService customersService;
+    @Autowired private PayoutsService payoutsService;
+    @Autowired private RewardsService rewardsService;
+    @Autowired private CarsService carsService;
+    @Autowired private ComponentsService componentsService;
+    @Autowired private RepairsService repairsService;
 
-    @Autowired
-    private MechanicsService mechanicsService;
+    @FXML public GridPane FinanceGrid;
+    @FXML public GridPane CarGrid;
+    @FXML public TabPane tabPane;
+    @FXML public Tab financeTab;
+    @FXML public Tab overview_R_Tab;
+    @FXML public Tab repairHistoryTab;
+    @FXML public GridPane RepairGrid;
 
-    @Autowired
-    private CustomersService customersService;
-
-    @Autowired
-    private PayoutsService payoutsService;
-
-    @Autowired
-    private RewardsService rewardsService;
-
-    @Autowired
-    private CarsService carsService;
-
-    @Autowired
-    private ComponentsService componentsService;
-
-    @Autowired
-    private RepairsService repairsService;
-
-    @FXML
-    public GridPane FinanceGrid;
-
-    @FXML
-    public GridPane CarGrid;
-
-    @FXML
-    public TabPane tabPane;
-
-    @FXML
-    public Tab financeTab;
-
-    @FXML
-    public Tab overview_R_Tab;
-
-    @FXML
-    public Tab repairHistoryTab;
-
-    @FXML
-    public GridPane RepairGrid;
-
-    @Lazy
-    @Autowired
-    private StageManager stageManager;
+    @Lazy @Autowired private StageManager stageManager;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -1045,5 +915,408 @@ public class MainController implements Initializable {
         } else {
             SelectARepair.setVisible(true);
         }
+    }
+
+    // Login screen
+    @FXML private Label login_Username_label;
+    @FXML private Label login_Password_label;
+    @FXML private Button Login_btn;
+
+    @FXML
+    private void changeToEnglishLang_LoginScreen(ActionEvent event) {
+        // Login screen
+        login_Username_label.setText("Username :");
+        login_Password_label.setText("Password :");
+        Login_btn.setText("Sign in");
+        if (errMess != null) { errMess.setText("Wrong username or password!"); }
+    }
+
+    @FXML
+    private void changeToSlovakLang_LoginScreen(ActionEvent event) {
+        // Login screen
+        login_Username_label.setText("Meno :");
+        login_Password_label.setText("Heslo :");
+        Login_btn.setText("Prihlásiť sa");
+        if (errMess != null) { errMess.setText("Chybné prisahlovacie údaje!"); }
+    }
+
+    // AdminMainScene - New customer tab
+    @FXML private Tab New_customer_tab;
+    @FXML private Label New_customer_label;
+    @FXML private Label NCt_name_label;
+    @FXML private Label NCt_surname_label;
+    @FXML private Label NCt_phone_num_label;
+    @FXML private Button newCustomer_btn;
+    @FXML private Button car_information_btn;
+    // AdminMainScene - Account management tab
+    @FXML private Tab Acc_man_tab;
+    @FXML private Label AMt_New_acc_label;
+    @FXML private Label AMt_username_label;
+    @FXML private Label AMt_password_label;
+    @FXML private Label AMt_name_label;
+    @FXML private Label AMt_surname_label;
+    @FXML private Label AMt_type_label;
+    @FXML private Button AMt_newUser_btn;
+    // AdminMainScene - New component tab
+    @FXML private Tab NCot_tab;
+    @FXML private Label NCot_component_label;
+    @FXML private Label NCot_carType_label;
+    @FXML private Label NCot_cost_label;
+    @FXML private Label NCot_amount_label;
+    @FXML private Button NCot_addComponent_btn;
+    // AdminMainScene - Finance tab
+    @FXML private Label Ft_rewrads_label;
+    @FXML private Label Ft_payouts_label;
+    @FXML private Label Ft_rewardSize_label;
+    @FXML private Label Ft_payoutSize_label;
+    @FXML private Label Ft_rewardReason_label;
+    @FXML private Label Ft_selectMechanic_label;
+    @FXML private Label Ft_selectMechanic_label1;
+    @FXML private Button Ft_selectMechanic_btn;
+    @FXML private Button Ft_selectMechanic_btn1;
+    @FXML private Button Ft_addReward_btn;
+    @FXML private Button Ft_updatePayout_btn;
+    @FXML private Button Ft_addPayout_btn;
+    @FXML private Button Ft_deletePayout_btn;
+    // AdminMainScene - Overview of repairs tab
+    @FXML private Label OORt_name_label;
+    @FXML private Label OORt_surname_label;
+    @FXML private Label OORt_totalNumOfRep_label;
+    @FXML private Label OORt_totalRepTime_label;
+    @FXML private Label OORt_avgRepTime_label;
+    @FXML private Button OORt_filter_btn;
+    @FXML private Button OORt_showDetails_btn;
+    // AdminMainScene - Repair history tab
+    @FXML private Label RHt_selectCar_label;
+    @FXML private Label RHt_costRepairs_label;
+    @FXML private Label RHt_costComponents_label;
+    @FXML private Button RHt_select_btn;
+    @FXML private Button RHt_generateBill_btn;
+
+    @FXML
+    private void changeToEnglishLang(ActionEvent event) {
+        // AdminMainScene - New customer tab
+        New_customer_label.setText("New Customer");
+        NCt_name_label.setText("Name :");
+        NCt_surname_label.setText("Surname :");
+        NCt_phone_num_label.setText("Phone number :");
+        newCustomer_btn.setText("Add Customer");
+        car_information_btn.setText("Add car information");
+        New_customer_tab.setText("New customer");
+        if(invalidFormat != null){ invalidFormat.setText("Missing values!"); }
+        // AdminMainScene - Account management tab
+        Acc_man_tab.setText("Account management");
+        AMt_New_acc_label.setText("New account");
+        AMt_username_label.setText("Username :");
+        AMt_password_label.setText("Password :");
+        AMt_name_label.setText("Name :");
+        AMt_surname_label.setText("Surname :");
+        AMt_type_label.setText("Type");
+        userTypeMechanic.setText("Mechanic");
+        userTypeAdmin.setText("Administrator");
+        AMt_newUser_btn.setText("Add");
+        // AdminMainScene - New component tab
+        NCot_tab.setText("New component");
+        NCot_component_label.setText("Component :");
+        NCot_carType_label.setText("Car type :");
+        NCot_cost_label.setText("Cost :");
+        NCot_amount_label.setText("Amount :");
+        NCot_addComponent_btn.setText("Add component");
+        // AdminMainScene - Finance tab
+        if(invalidFormatR != null) { invalidFormatR.setText("Missing values!"); }
+        if(invalidFormatP != null) { invalidFormatP.setText("Missing values!"); }
+        financeTab.setText("Finance");
+        if(selectedMechanic.getText().equals("Vybraný Mechanik")) { selectedMechanic.setText("Selected Mechanic"); }
+        if(selectedMechanic1.getText().equals("Vybraný Mechanik")) { selectedMechanic1.setText("Selected Mechanic"); }
+        Ft_rewrads_label.setText("Rewards:");
+        Ft_payouts_label.setText("Payouts:");
+        Ft_rewardSize_label.setText("Fill in the size of the reward :");
+        Ft_payoutSize_label.setText("Fill in the size of the payout :");
+        Ft_rewardReason_label.setText("Fill in the reason for reward :");
+        Ft_selectMechanic_label.setText("Select a mechanic :");
+        Ft_selectMechanic_label1.setText("Select a mechanic :");
+        Ft_selectMechanic_btn.setText("select a mechanic");
+        Ft_selectMechanic_btn1.setText("select a mechanic");
+        Ft_addReward_btn.setText("add reward");
+        Ft_updatePayout_btn.setText("update payout");
+        Ft_addPayout_btn.setText("add payout");
+        Ft_deletePayout_btn.setText("delete payout");
+        // AdminMainScene - Overview of repairs tab
+        overview_R_Tab.setText("Overview of repairs");
+        showingRepairs.setText("Show the repairs");
+        nameCol.setText("Name");
+        surnameCol.setText("Surname");
+        OORt_name_label.setText("Name :");
+        OORt_surname_label.setText("Surname :");
+        OORt_totalNumOfRep_label.setText("Total number of repairs:");
+        OORt_totalRepTime_label.setText("Total repair time:");
+        OORt_avgRepTime_label.setText("Average repair time:");
+        OORt_filter_btn.setText("Filter");
+        OORt_showDetails_btn.setText("Show details");
+        // AdminMainScene - Repair history tab
+        repairHistoryTab.setText("Repair history");
+        if(carSelection.getText().equals("Vybrané auto")) { carSelection.setText("Selected car"); }
+        repairCol.setText("Repair");
+        costCol.setText("Cost");
+        startCol.setText("Start");
+        finishCol.setText("Finish");
+        donebyCol.setText("Mechanic");
+        RHt_selectCar_label.setText("Select a car :");
+        RHt_costRepairs_label.setText("Cost of repairs :");
+        RHt_costComponents_label.setText("Cost of components :");
+        RHt_select_btn.setText("Select");
+        RHt_generateBill_btn.setText("Generate bill");
+        if(SelectARepair != null) { SelectARepair.setText("Select a repair!"); }
+    }
+
+    @FXML
+    private void changeToSlovakLang(ActionEvent event) {
+        // AdminMainScene - Nový zákazník tab
+        New_customer_label.setText("Nový zákazník");
+        NCt_name_label.setText("Meno :");
+        NCt_surname_label.setText("Priezvisko :");
+        NCt_phone_num_label.setText("Telefónne číslo :");
+        newCustomer_btn.setText("Pridať zákazníka");
+        car_information_btn.setText("Pridať auto");
+        New_customer_tab.setText("Nový zákazník");
+        if(invalidFormat != null){ invalidFormat.setText("Chýbajúce hodnoty!"); }
+        // AdminMainScene - Správa účtov tab
+        Acc_man_tab.setText("Správa účtov");
+        AMt_New_acc_label.setText("Nový účet");
+        AMt_username_label.setText("Používateľské meno :");
+        AMt_password_label.setText("Heslo :");
+        AMt_name_label.setText("Meno :");
+        AMt_surname_label.setText("Priezvisko :");
+        AMt_type_label.setText("Typ");
+        userTypeMechanic.setText("Mechanik");
+        userTypeAdmin.setText("Administrátor");
+        AMt_newUser_btn.setText("Pridať");
+        // AdminMainScene - Nový komponent tab
+        NCot_tab.setText("Nový komponent");
+        NCot_component_label.setText("Komponent :");
+        NCot_carType_label.setText("Typ auta :");
+        NCot_cost_label.setText("Cena :");
+        NCot_amount_label.setText("Počet :");
+        NCot_addComponent_btn.setText("Pridať komponent");
+        // AdminMainScene - Financie tab
+        if(invalidFormatR != null) { invalidFormatR.setText("Chýbajú hodnoty!"); }
+        if(invalidFormatP != null) { invalidFormatP.setText("Chýbajú hodnoty!"); }
+        financeTab.setText("Financie");
+        if(selectedMechanic.getText().equals("Selected Mechanic")) { selectedMechanic.setText("Vybraný Mechanik"); }
+        if(selectedMechanic1.getText().equals("Selected Mechanic")) { selectedMechanic1.setText("Vybraný Mechanik"); }
+        Ft_rewrads_label.setText("Odmeny :");
+        Ft_payouts_label.setText("Výplaty :");
+        Ft_rewardSize_label.setText("Vyplňte výšku odmeny :");
+        Ft_payoutSize_label.setText("Vyplňte výšku výplaty :");
+        Ft_rewardReason_label.setText("Vyplňte dôvod odmeny :");
+        Ft_selectMechanic_label.setText("Vyberte mechanika :");
+        Ft_selectMechanic_label1.setText("Vyberte mechanika :");
+        Ft_selectMechanic_btn.setText("vyberte mechanika");
+        Ft_selectMechanic_btn1.setText("vyberte mechanika");
+        Ft_addReward_btn.setText("pridať odmenu");
+        Ft_updatePayout_btn.setText("aktualizovať výplatu");
+        Ft_addPayout_btn.setText("pridať výplatu");
+        Ft_deletePayout_btn.setText("vymazať výplatu");
+        // AdminMainScene - Prehľad opráv tab
+        overview_R_Tab.setText("Prehľad opráv");
+        showingRepairs.setText("Zobraziť opravy");
+        nameCol.setText("Meno");
+        surnameCol.setText("Priezvisko");
+        OORt_name_label.setText("Meno :");
+        OORt_surname_label.setText("Priezvisko :");
+        OORt_totalNumOfRep_label.setText("Celkový počet opráv:");
+        OORt_totalRepTime_label.setText("Celkový čas opráv:");
+        OORt_avgRepTime_label.setText("Priemerný čas opráv:");
+        OORt_filter_btn.setText("Filtorvať");
+        OORt_showDetails_btn.setText("Zobraziť detaily");
+        // AdminMainScene - História opráv tab
+        repairHistoryTab.setText("História opráv");
+        carSelection.setText("Vybrané auto");
+        repairCol.setText("Oprava");
+        costCol.setText("Cena");
+        startCol.setText("Začiatok");
+        finishCol.setText("Koniec");
+        donebyCol.setText("Mechanik");
+        RHt_selectCar_label.setText("Vyberte auto :");
+        RHt_costRepairs_label.setText("Cena opráv :");
+        RHt_costComponents_label.setText("Cena komponentov :");
+        RHt_select_btn.setText("Vybrať");
+        RHt_generateBill_btn.setText("Vygenerovať faktúru");
+        if(SelectARepair != null) { SelectARepair.setText("Vyberte opravu!"); }
+    }
+
+    @FXML private Button repScene_back_btn;
+    @FXML private Label repairsTitle_label;
+
+    @FXML
+    private void repairScene_changeToEnglishLang(ActionEvent event) {
+        RepairTextR.setText("Repair");
+        StartDayR.setText("Start");
+        EndDayR.setText("End");
+        DaysRR.setText("Days");
+        repairsTitle_label.setText("Repairs");
+        repScene_back_btn.setText("< Back");
+    }
+
+    @FXML
+    private void repairScene_changeToSlovakLang(ActionEvent event) {
+        RepairTextR.setText("Oprava");
+        StartDayR.setText("Začiatok");
+        EndDayR.setText("Koniec");
+        DaysRR.setText("Počet dní");
+        repairsTitle_label.setText("Opravy");
+        repScene_back_btn.setText("< Späť");
+    }
+
+    @FXML private Label mechSelPayoutScene_title_label;
+    @FXML private Label mechSelPayoutScene_name_label;
+    @FXML private Label mechSelPayoutScene_surname_label;
+    @FXML private Label mechSelPayoutScene_results_label;
+    @FXML private Button mechSelPayoutScene_search_btn;
+    @FXML private Button mechSelPayoutScene_select_btn;
+
+    @FXML
+    private void mechSelPayoutScene_changeToEnglishLang(ActionEvent event) {
+        mechSelPayoutScene_title_label.setText("Mechanic selection");
+        mechSelPayoutScene_name_label.setText("Name :");
+        mechSelPayoutScene_surname_label.setText("Surname :");
+        mechSelPayoutScene_results_label.setText("Results :");
+        mechSelPayoutScene_search_btn.setText("Search");
+        mechSelPayoutScene_select_btn.setText("Select");
+        nameColPay.setText("Name");
+        surnameColPay.setText("Surname");
+    }
+
+    @FXML
+    private void mechSelPayoutScene_changeToSlovakLang(ActionEvent event) {
+        mechSelPayoutScene_title_label.setText("Výber mechanika");
+        mechSelPayoutScene_name_label.setText("Meno :");
+        mechSelPayoutScene_surname_label.setText("Priezvisko :");
+        mechSelPayoutScene_results_label.setText("Výsledky :");
+        mechSelPayoutScene_search_btn.setText("Hľadať");
+        mechSelPayoutScene_select_btn.setText("Vybrať");
+        nameColPay.setText("Meno");
+        surnameColPay.setText("Priezvisko");
+    }
+
+    @FXML private Label mechSel_title_label;
+    @FXML private Label mechSel_name_label;
+    @FXML private Label mechSel_surname_label;
+    @FXML private Label mechSel_results_label;
+    @FXML private Button mechSel_search_btn;
+    @FXML private Button mechSel_select_btn;
+
+    @FXML
+    private void mechSel_changeToEnglishLang(ActionEvent event) {
+        nameColM.setText("Name");
+        surnameColM.setText("Surname");
+        mechSel_title_label.setText("Mechanic selection");
+        mechSel_name_label.setText("Name :");
+        mechSel_surname_label.setText("Surname :");
+        mechSel_results_label.setText("Results :");
+        mechSel_search_btn.setText("Search");
+        mechSel_select_btn.setText("Select");
+    }
+
+    @FXML
+    private void mechSel_changeToSlovakLang(ActionEvent event) {
+        nameColM.setText("Meno");
+        surnameColM.setText("Priezvisko");
+        mechSel_title_label.setText("Výber mechanika");
+        mechSel_name_label.setText("Meno :");
+        mechSel_surname_label.setText("Priezvisko :");
+        mechSel_results_label.setText("Výsledky :");
+        mechSel_search_btn.setText("Hľadať");
+        mechSel_select_btn.setText("Vybrať");
+    }
+
+    @FXML private Label custSel_title_label;
+    @FXML private Label custSel_filterBy_label;
+    @FXML private Label custSel_results_label;
+    @FXML private Label custSel_name_label;
+    @FXML private Label custSel_surname_label;
+    @FXML private Button custSel_filter_btn;
+    @FXML private Button custSel_select_btn;
+
+    @FXML
+    private void custSel_changeToEnglishLang(ActionEvent event) {
+        custSel_title_label.setText("Customer selection");
+        custSel_filterBy_label.setText("Filter by:");
+        custSel_results_label.setText("Results:");
+        custSel_name_label.setText("Name :");
+        custSel_surname_label.setText("Surname :");
+        custSel_filter_btn.setText("Filter");
+        custSel_select_btn.setText("Select");
+    }
+
+    @FXML
+    private void custSel_changeToSlovakLang(ActionEvent event) {
+        custSel_title_label.setText("Výber zákazníka");
+        custSel_filterBy_label.setText("Filtorvať podľa:");
+        custSel_results_label.setText("Výsledky:");
+        custSel_name_label.setText("Meno :");
+        custSel_surname_label.setText("Priezvisko :");
+        custSel_filter_btn.setText("Filtorvať");
+        custSel_select_btn.setText("Vybrať");
+    }
+
+    @FXML private Label carSel_title_label;
+    @FXML private Label carSel_type_label;
+    @FXML private Button carSel_filter_btn;
+    @FXML private Button carSel_select_btn;
+
+    @FXML
+    private void carSel_changeToEnglishLang(ActionEvent event) {
+        typeColCar.setText("Brand");
+        carSel_title_label.setText("Car selection");
+        carSel_type_label.setText("Type :");
+        carSel_filter_btn.setText("Filter");
+        carSel_select_btn.setText("Select");
+    }
+
+    @FXML
+    private void carSel_changeToSlovakLang(ActionEvent event) {
+        typeColCar.setText("Značka");
+        carSel_title_label.setText("Výber auta");
+        carSel_type_label.setText("Typ :");
+        carSel_filter_btn.setText("Filtrovať");
+        carSel_select_btn.setText("Vybrať");
+    }
+
+    @FXML private Label carScene_title_label;
+    @FXML private Label carScene_brand_label;
+    @FXML private Label carScene_VIN_label;
+    @FXML private Label carScene_customer_label;
+    @FXML private Label carScene_fuelType_label;
+    @FXML private Button carScene_back_btn;
+    @FXML private Button carScene_selectCustomer_btn;
+    @FXML private Button carScene_addCar_btn;
+
+    @FXML
+    private void carScene_changeToEnglishLang(ActionEvent event) {
+        if(selectedCustomer.getText().equals("Vybraný Zákazník")) { selectedCustomer.setText("Selected Customer"); }
+        if(emptyFieldsError != null) { emptyFieldsError.setText("Some fields are missing!"); }
+        carScene_title_label.setText("Car information");
+        carScene_brand_label.setText("Brand :");
+        carScene_VIN_label.setText("VIN number :");
+        carScene_customer_label.setText("Customer :");
+        carScene_fuelType_label.setText("Fuel type :");
+        carScene_back_btn.setText("< Back");
+        carScene_selectCustomer_btn.setText("Select a customer");
+        carScene_addCar_btn.setText("Add car");
+    }
+
+    @FXML
+    private void carScene_changeToSlovakLang(ActionEvent event) {
+        if(selectedCustomer.getText().equals("Selected Customer")) { selectedCustomer.setText("Vybraný Zákazník"); }
+        if(emptyFieldsError != null) { emptyFieldsError.setText("Chýbajú niektoré hodnoty!"); }
+        carScene_title_label.setText("Informácie o aute");
+        carScene_brand_label.setText("Značka :");
+        carScene_VIN_label.setText("VIN číslo :");
+        carScene_customer_label.setText("Zákazník :");
+        carScene_fuelType_label.setText("Typ paliva :");
+        carScene_back_btn.setText("< Späť");
+        carScene_selectCustomer_btn.setText("Vybrať zákazníka");
+        carScene_addCar_btn.setText("Pridať auto");
     }
 }

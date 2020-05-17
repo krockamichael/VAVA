@@ -9,12 +9,21 @@ public class Rewards {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "reward_id", updatable = false, nullable = false)
     private long reward_id;
-
     private String name;
     private String surname;
     private int amount;
     private String reason;
     private int mechanic_id; //foreign key
+
+    public Rewards() {}
+
+    public Rewards(String name, String surname, int amount, String reason, int mechanic_id) {
+        this.name = name;
+        this.surname = surname;
+        this.amount = amount;
+        this.reason = reason;
+        this.mechanic_id = mechanic_id;
+    }
 
     public long getReward_id() {
         return reward_id;

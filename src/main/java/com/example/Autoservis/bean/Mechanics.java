@@ -9,17 +9,16 @@ public class Mechanics {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "mechanic_id", updatable = false, nullable = false)
     private int mechanicId;
-
     private String name;
     private String surname;
     private int user_id;  //foreign key
 
-    public Mechanics(){}
+    public Mechanics() {}
 
-    public Mechanics(String name, String surname)
-    {
+    public Mechanics(String name, String surname, int user_id) {
         this.name = name;
         this.surname = surname;
+        this.user_id = user_id;
     }
 
     public int getMechanicId() {

@@ -20,7 +20,7 @@
         <Pane layoutY="27.0" prefHeight="375.0" prefWidth="445.0" style="-fx-background-color: #3e4247;">
             <children>
                 <Label layoutX="31.0" layoutY="25.0" text="Model : " textFill="#99aab5" />
-                <Label fx:id="carSel_type_label" layoutX="141.0" layoutY="25.0" text="Type :" textFill="#99aab5" />
+                <Label fx:id="carSel_type_label" layoutX="141.0" layoutY="25.0" text="Brand :" textFill="#99aab5" />
                 <Label layoutX="250.0" layoutY="25.0" text="VIN :" textFill="#99aab5" />
                 <TextField fx:id="carModelCar" layoutX="31.0" layoutY="50.0" prefHeight="25.0" prefWidth="90.0" />
                 <TextField fx:id="carTypeCar" layoutX="141.0" layoutY="50.0" prefHeight="25.0" prefWidth="90.0" />

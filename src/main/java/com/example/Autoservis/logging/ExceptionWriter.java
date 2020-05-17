@@ -14,7 +14,6 @@ public class ExceptionWriter extends PrintWriter {
 
     public String getExceptionAsString(Throwable throwable) {
         throwable.printStackTrace(this);
-
         String exception = super.out.toString();
 
         return (wrapAroundWithNewlines(exception));

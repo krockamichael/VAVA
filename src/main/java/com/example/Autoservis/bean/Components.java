@@ -9,12 +9,9 @@ public class Components {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "component_id", updatable = false, nullable = false)
     private long componentId;
-
     private double cost;
-
     @Column(name = "car_type")
     private String carType;
-
     private String name;
     private int amount;
 
@@ -25,6 +22,13 @@ public class Components {
         this.carType = CarType;
         this.amount = Amount;
         this.componentId = ID;
+    }
+
+    public Components(String name, String carType, int amount, double cost) {
+        this.name = name;
+        this.carType = carType;
+        this.amount = amount;
+        this.cost = cost;
     }
 
     public long getComponentId() {

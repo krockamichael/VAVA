@@ -9,9 +9,15 @@ public class Component {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "usedcomponent_id", updatable = false, nullable = false)
     private long usedcomponent_id;
-
     private int components_id;
     private int repair_id;
+
+    public Component() {}
+
+    public Component(int components_id, int repair_id) {
+        this.components_id = components_id;
+        this.repair_id = repair_id;
+    }
 
     public long getUsedcomponent_id() {
         return usedcomponent_id;

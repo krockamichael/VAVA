@@ -33,7 +33,7 @@
                         <TableColumn fx:id="idCol" minWidth="3.0" prefWidth="81.0" text="ID" />
                     </columns>
                 </TableView>
-                <Button fx:id="custSel_select_btn" layoutX="273.0" layoutY="336.0" mnemonicParsing="false" onAction="#select" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
+                <Button fx:id="custSel_select_btn" layoutX="273.0" layoutY="336.0" mnemonicParsing="false" onAction="#selectCustomer" style="-fx-background-color: #23272a;" text="Select" textFill="#99aab5" />
                 <Label fx:id="custSel_filterBy_label" layoutX="59.0" layoutY="14.0" text="Filter by:" textFill="#99aab5" />
             </children></Pane>
     </children>

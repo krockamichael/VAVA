@@ -10,7 +10,6 @@ public class Repairs {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "repair_id", updatable = false, nullable = false)
     private long repair_id;
-
     private double cost;
     private String repair;
     private Date start_day;
@@ -44,26 +43,31 @@ public class Repairs {
         this.days = days;
     }
 
-    public Repairs()
-    {
-        //      this.days = day;
-    }
+    public Repairs() {}
 
-    public Repairs(String repairT, Date startD, Date endD, int day)
-    {
+    public Repairs(String repairT, Date startD, Date endD, int day) {
         this.repair = repairT;
         this.start_day = startD;
         this.end_day = endD;
         this.days = day;
     }
 
-    public Repairs(String repairT, Date startD, Date endD, String MechanicName, Double Cost){
+    public Repairs(String repairT, Date startD, Date endD, String MechanicName, Double Cost) {
         this.repair = repairT;
         this.start_day = startD;
         this.end_day = endD;
         this.mechanic_name = MechanicName;
         this.cost = Cost;
 
+    }
+
+    public Repairs(int carId, Date start_day, Date end_day, int mechanicId, String repair, double cost) {
+        this.carId = carId;
+        this.start_day = start_day;
+        this.end_day = end_day;
+        this.mechanicId = mechanicId;
+        this.repair = repair;
+        this.cost = cost;
     }
 
     public long getRepair_id() {

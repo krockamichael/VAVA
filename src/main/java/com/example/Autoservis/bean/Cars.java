@@ -9,15 +9,10 @@ public class Cars {
     @GeneratedValue(strategy=GenerationType.AUTO)
     @Column(name = "car_id", updatable = false, nullable = false)
     private long car_id;
-
     private String model;
-
     private String brand;
-
     private String vin;
-
     private String fuel;
-
     private int owner_id;
 
     public int getOwner_id() {
@@ -30,11 +25,19 @@ public class Cars {
 
     public Cars(){}
 
-    public Cars(String Model, String Type, String VIN, int carId){
+    public Cars(String Model, String Type, String VIN, int carId) {
         this.model = Model;
         this.brand = Type;
         this.vin = VIN;
         this.car_id = carId;
+    }
+
+    public Cars(String model, String brand, String VIN, String fuel, int owner_id) {
+        this.model = model;
+        this.brand = brand;
+        this.vin = VIN;
+        this.fuel = fuel;
+        this.owner_id = owner_id;
     }
 
     public long getCar_id(){

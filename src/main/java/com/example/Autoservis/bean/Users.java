@@ -10,12 +10,17 @@ public class Users {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "user_id", updatable = false, nullable = false)
     private long user_id;
-
     private String username;
-
     private String password;
-
     private int type;
+
+    public Users() {}
+
+    public Users(String username, String password, int type) {
+        this.username = username;
+        this.password = password;
+        this.type = type;
+    }
 
     public long getUser_id() {
         return user_id;

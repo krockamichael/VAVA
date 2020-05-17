@@ -9,11 +9,19 @@ public class Payouts {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     @Column(name = "payout_id", updatable = false, nullable = false)
     private long payout_id;
-
     private String name;
     private String surname;
     private int amount;
     private int mechanic_id; //foreign key
+
+    public Payouts() {}
+
+    public Payouts(String name, String surname, int amount, int mechanic_id) {
+        this.name = name;
+        this.surname = surname;
+        this.amount = amount;
+        this.mechanic_id = mechanic_id;
+    }
 
     public long getPayout_id() {
         return payout_id;

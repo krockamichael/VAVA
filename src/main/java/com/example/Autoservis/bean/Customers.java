@@ -9,15 +9,10 @@ public class Customers {
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "customer_id", updatable = false, nullable = false)
     private long customerId;
-
     private String name;
-
     private String surname;
-
     private String email;
-
     private String phone_number;
-
     private String id;
 
     public Customers(){}
@@ -27,6 +22,14 @@ public class Customers {
         this.surname = surname;
         this.id = id;
         this.customerId = ElementID;
+    }
+
+    public Customers(String name, String surname, String email, String phone_number, String id) {
+        this.name = name;
+        this.surname = surname;
+        this.email = email;
+        this.phone_number = phone_number;
+        this.id = id;
     }
 
     //@OneToOne(mappedBy = "customerModel")

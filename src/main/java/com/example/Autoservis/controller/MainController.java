@@ -56,7 +56,7 @@ public class MainController implements Initializable {
     @FXML private TextField reward;
     @FXML private TextField payout_s;
     @FXML private TextField reasonReward;
-    @FXML private ChoiceBox fuelType;
+    @FXML private ChoiceBox<String> fuelType;
     @FXML private Label emptyFieldsError;
     @FXML private TextField mechanicName;
     @FXML private TextField mechanicSurname;
@@ -92,7 +92,6 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Repairs,String> repairCol;
     @FXML private TableColumn<Repairs,Double> costCol;
 
-    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Customers> customersTable;
     @FXML private TableColumn<Customers,String> nameCol1;
     @FXML private TableColumn<Customers,String> surnameCol1;
@@ -100,25 +99,19 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Customers,String> elementIdCol;
     @FXML private TextField nameText;
     @FXML private TextField surnameText;
-    /////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Mechanics> mechanicsTableR;
     @FXML private TableColumn<Mechanics,String> nameColM;
     @FXML private TableColumn<Mechanics,String> surnameColM;
     @FXML private TextField surnameTextReward;
     @FXML private TextField nameTextReward;
-    /////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Mechanics> mechanicsTablePayout1;
     @FXML private TableColumn<Mechanics,String> nameColPay;
     @FXML private TableColumn<Mechanics,String> surnameColPay;
     @FXML private TextField nameTextPay;
     @FXML private TextField surnameTextPay;
-    /////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////
     @FXML private TextField carModelCar;
     @FXML private TextField carTypeCar;
     @FXML private TextField carVINCar;
@@ -127,16 +120,13 @@ public class MainController implements Initializable {
     @FXML private TableColumn<Cars,String> typeColCar;
     @FXML private TableColumn<Cars,String> vinColCar;
     @FXML private TableColumn<Cars,String> carIdColCar;
-    /////////////////////////////////////////////////////////////////
 
-    /////////////////////////////////////////////////////////////////
     @FXML private TableView<Repairs> RepairsTableR;
     @FXML private TableColumn<Repairs,String> RepairTextR;
     @FXML private TableColumn<Repairs,String> StartDayR;
     @FXML private TableColumn<Repairs,String> EndDayR;
     @FXML private TableColumn<Repairs,String> DaysRR;
     @FXML private Label SelectARepair;
-    /////////////////////////////////////////////////////////////////
 
     private Thread loadThread = null;
 
@@ -346,10 +336,10 @@ public class MainController implements Initializable {
     @FXML
     private void addNewPayout() {
         // get values from text fields, split mechanic name into first name and surname
-        String number = payout_s.getText();
         String[] r1 = selectedMechanic1.getText().split("\\s+");
-        invalidFormatP.setVisible(false);
+        String number = payout_s.getText();
 
+        invalidFormatP.setVisible(false);
         // check if all values are set
         if (r1[0].equals("") || r1[1].equals("")) {
             invalidFormatP.setVisible(true);
@@ -1399,6 +1389,7 @@ public class MainController implements Initializable {
         carScene_addCar_btn.setText("Add car");
         if (selectedCustomer.getText().equals("Vybraný Zákazník")) { selectedCustomer.setText("Selected Customer"); }
         if (emptyFieldsError != null) { emptyFieldsError.setText("Some fields are missing!"); }
+        if (carAddedMess != null) { carAddedMess.setText("New car added"); }
         global_lang = "eng";
     }
 
@@ -1414,6 +1405,7 @@ public class MainController implements Initializable {
         carScene_addCar_btn.setText("Pridať auto");
         if (selectedCustomer.getText().equals("Selected Customer")) { selectedCustomer.setText("Vybraný Zákazník"); }
         if (emptyFieldsError != null) { emptyFieldsError.setText("Chýbajú niektoré hodnoty!"); }
+        if (carAddedMess != null) { carAddedMess.setText("Nové auto pridané"); }
         global_lang = "svk";
     }
 }

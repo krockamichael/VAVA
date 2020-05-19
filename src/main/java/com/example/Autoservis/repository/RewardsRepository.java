@@ -14,5 +14,5 @@ public interface RewardsRepository extends JpaRepository<Rewards, Long> {
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM Rewards R WHERE R.mechanic_id = ?1 AND R.name = ?2 AND R.surname = ?3")
-    void DeleteRewardMechanic(int mechanic_id,String name, String surname);
+    void deleteRewardMechanic(int mechanic_id,String name, String surname);
 }

@@ -15,10 +15,10 @@ public interface PayoutsRepository extends JpaRepository<Payouts, Long> {
     @Transactional
     @Modifying
     @Query(value = "DELETE FROM Payouts P WHERE P.mechanic_id = ?1 AND P.name = ?2 AND P.surname = ?3")
-    void DeletePayoutMechanic(int mechanic_id,String name, String surname);
+    void deletePayoutMechanic(int mechanic_id,String name, String surname);
 
     @Transactional
     @Modifying
     @Query(value = "UPDATE Payouts P SET P.amount = ?1 WHERE P.mechanic_id = ?2 AND P.name = ?3 AND P.surname = ?4")
-    void UpdatePayoutMechanic(int amount, int mechanic_id,String name, String surname);
+    void updatePayoutMechanic(int amount, int mechanic_id,String name, String surname);
 }

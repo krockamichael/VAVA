@@ -7,10 +7,13 @@ import com.example.Autoservis.controller.MainController;
 import com.example.Autoservis.repository.UsersRepository;
 import com.example.Autoservis.services.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UsersServiceImpl implements UsersService {
+
+    MainController mainController = new MainController();
 
     @Autowired
     private UsersRepository usersRepository;
@@ -53,7 +56,7 @@ public class UsersServiceImpl implements UsersService {
             return 3;
         }else{
             if(password.equals(user.getPassword())) {
-                MainController.UID = (int) user.getUser_id();
+                mainController.setUid((int) user.getUser_id());
                 return user.getType();
             }
             else return 3;

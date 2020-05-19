@@ -63,8 +63,8 @@ public class RepairsServiceImpl implements RepairsService {
     }
 
     @Override
-    public String AvgDate(int mechanic_id) {
-        return repairsRepository.AvgDate(mechanic_id);
+    public String avgDate(int mechanic_id) {
+        return repairsRepository.avgDate(mechanic_id);
     }
 
     @Override
@@ -73,8 +73,8 @@ public class RepairsServiceImpl implements RepairsService {
     }
 
     @Override
-    public String GetNumberOfR(int mechanic_id) {
-        return repairsRepository.GetNumberOfR(mechanic_id);
+    public String getNumberOfR(int mechanic_id) {
+        return repairsRepository.getNumberOfR(mechanic_id);
     }
 
     @Override
@@ -90,7 +90,7 @@ public class RepairsServiceImpl implements RepairsService {
     }
 
     @Override
-    public List<Repairs> AllRepairs(int car_id) {
+    public List<Repairs> allRepairs(int car_id) {
         TypedQuery<Repairs> query = entityManager.createQuery(
                 "SELECT r FROM Repairs r WHERE r.carId = ?1", Repairs.class);
         query.setParameter(1, car_id);

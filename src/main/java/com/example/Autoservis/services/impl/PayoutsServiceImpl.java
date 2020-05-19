@@ -20,13 +20,13 @@ public class PayoutsServiceImpl implements PayoutsService {
     }
 
     @Override
-    public void DeletePayoutMechanic(int mechanic_id, String name, String surname) {
-        payoutsRepository.DeletePayoutMechanic(mechanic_id, name, surname);
+    public void deletePayoutMechanic(int mechanic_id, String name, String surname) {
+        payoutsRepository.deletePayoutMechanic(mechanic_id, name, surname);
     }
 
     @Override
-    public void UpdatePayoutMechanic(int amount, int mechanic_id, String name, String surname) {
-        payoutsRepository.UpdatePayoutMechanic(amount, mechanic_id, name, surname);
+    public void updatePayoutMechanic(int amount, int mechanic_id, String name, String surname) {
+        payoutsRepository.updatePayoutMechanic(amount, mechanic_id, name, surname);
     }
 
     @Override

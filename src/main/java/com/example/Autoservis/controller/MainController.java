@@ -19,15 +19,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import java.net.URL;
+import java.sql.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Controller
 public class MainController implements Initializable {
-    public static int UID;
-    public static int IdM;
-    public Button english_lang;
-    public Button slovak_lang;
+    protected static int uid;
+    private static int idM;
     private String global_lang = "eng";
+    private long carId;
 
     @FXML private TextField Username;
     @FXML private PasswordField Password;
@@ -133,7 +139,6 @@ public class MainController implements Initializable {
     /////////////////////////////////////////////////////////////////
 
     private Thread loadThread = null;
-    static long CarId;
 
     @Autowired private UsersService usersService;
     @Autowired private MechanicsService mechanicsService;
@@ -153,6 +158,16 @@ public class MainController implements Initializable {
     @FXML public GridPane RepairGrid;
     @Lazy @Autowired private StageManager stageManager;
 
+    Logger logger = Logger.getLogger(MainController.class.getName());
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {}
 
@@ -164,32 +179,33 @@ public class MainController implements Initializable {
 
     //login
     @FXML
-    protected void LoginAction() {
+    protected void loginAction() {
         // get the user type based on username and password
         int userType = usersService.checkCredentials(Username.getText(), Password.getText());
 
         // if user is type 1, he is an admin
         if(userType == 1) {
             stageManager.switchScene(FxmlView.AdminScene);
-
             // keep selected language
             if (global_lang.equals("eng")) changeToEnglishLang();
             else changeToSlovakLang();
+            logger.log(Level.INFO,"Creditians checked, Admin is logged in");
         }
         // if user is type 2, he is a mechanic
         else if (userType == 2) {
             // keep selected language
             if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.MechanicScene);
             else stageManager.switchScene(FxmlView.MechanicSceneSVK);
-            UID = UID-1;
+            logger.log(Level.INFO,"Creditians checked, Mechanic is logged in");
+            uid = uid-1;
         } else
             errMess.setVisible(true); // if user doesn't exist, generate error message
     }
 
     @FXML
-    protected void Logout() {
+    protected void logout() {
         stageManager.switchScene(FxmlView.Login);
-
+        logger.log(Level.INFO,"User was logged out");
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang_LoginScreen();
         else changeToSlovakLang_LoginScreen();
@@ -198,15 +214,15 @@ public class MainController implements Initializable {
     @FXML
     private void addNewUser() {
         // get values from text fields
-        int Type;
+        int type;
         newUserError.setVisible(false);
-        String Name = newUserName.getText();
-        String Password = newUserPass.getText();
-        String MechName = mechanicName.getText();
-        String MechSurname = mechanicSurname.getText();
+        String name = newUserName.getText();
+        String password = newUserPass.getText();
+        String mechName = mechanicName.getText();
+        String mechSurname = mechanicSurname.getText();
 
         // check if all values are entered
-        if (Name.equals("") || Password.equals("") || MechName.equals("") || MechSurname.equals("")) {
+        if (name.equals("") || Password.equals("") || mechName.equals("") || mechSurname.equals("")) {
             newUserError.setVisible(true);
             return;
         }
@@ -214,18 +230,20 @@ public class MainController implements Initializable {
         // set user type, admin=1, mechanic=2
         if (userTypeMechanic.isSelected()) {
             // new mechanic is created and is saved to database
-            Type = 2;
+            type = 2;
             // create new user object always and save it to database
-            Users user = new Users(Name, Password, Type);
+            Users user = new Users(name, password, type);
             usersService.save(user);
-            Mechanics mechanic = new Mechanics(MechName, MechSurname, (int) usersService.getID(Name, Password));
+            Mechanics mechanic = new Mechanics(mechName, mechSurname, (int) usersService.getID(name, password));
             mechanicsService.save(mechanic);
+            logger.log(Level.INFO,"New mechanic added to databases Users and Mechanics");
         }
         else if (userTypeAdmin.isSelected()) {
-            Type = 1;
+            type = 1;
             // create new user object always and save it to database
-            Users user = new Users(Name, Password, Type);
+            Users user = new Users(name, password, type);
             usersService.save(user);
+            logger.log(Level.INFO,"New admin added to database Users");
         }
         else {
             // if neither is selected generate error message
@@ -355,7 +373,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void UpdatePayout() {
+    private void updatePayout() {
         // get text field values, mechanic name and surname, payout
         String[] r1 = selectedMechanic1.getText().split("\\s+");
         String number = payout_s.getText();
@@ -373,7 +391,7 @@ public class MainController implements Initializable {
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0], r1[1]);
             System.out.println("name: " + r1[0]);
             // update payout
-            payoutsService.UpdatePayoutMechanic(Integer.parseInt(number), mechanic.getMechanicId(), r1[0], r1[1]);
+            payoutsService.updatePayoutMechanic(Integer.parseInt(number), mechanic.getMechanicId(), r1[0], r1[1]);
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
@@ -383,7 +401,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void DeletePayout() {
+    private void deletePayout() {
         // get mechanic name and surname
         String[] r1 = selectedMechanic1.getText().split("\\s+");
 
@@ -395,8 +413,8 @@ public class MainController implements Initializable {
             // get mechanic object by name and surname
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
             // delete reward and payout
-            payoutsService.DeletePayoutMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
-            rewardsService.DeleteRewardMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
+            payoutsService.deletePayoutMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
+            rewardsService.deleteRewardMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
             // reset text field
             selectedMechanic1.setText("");
         }
@@ -435,7 +453,7 @@ public class MainController implements Initializable {
             else {
                 // if a payout object exists, update it
                 int newAmount = oldPayout.getAmount() + sd;
-                payoutsService.UpdatePayoutMechanic(newAmount, mechanic.getMechanicId(), r[0], r[1]);
+                payoutsService.updatePayoutMechanic(newAmount, mechanic.getMechanicId(), r[0], r[1]);
             }
 
             // reset text fields
@@ -485,18 +503,18 @@ public class MainController implements Initializable {
         else changeToSlovakLang();
     }
 
-    public String VINCarC;
-    public String BrandCarC;
-    public String ModelCarC;
-    public int FuelTypeCarC;
+    public String vinCarC;
+    public String brandCarC;
+    public String modelCarC;
+    public int fuelTypeCarC;
 
     @FXML
     private void loadCustomerSelection() {
         // save entered values so they can be re-entered when changing scenes
-        VINCarC = Car_vin.getText();
-        BrandCarC = Car_brand.getText();
-        ModelCarC = Car_model.getText();
-        FuelTypeCarC = fuelType.getSelectionModel().getSelectedIndex();
+        vinCarC = Car_vin.getText();
+        brandCarC = Car_brand.getText();
+        modelCarC = Car_model.getText();
+        fuelTypeCarC = fuelType.getSelectionModel().getSelectedIndex();
 
         stageManager.switchScene(FxmlView.CustomerSelection);
         // keep selected language
@@ -564,7 +582,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void FilterSeMechanic() {
+    private void filterSeMechanic() {
         // set the table
         nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
         surnameCol.setCellValueFactory(new PropertyValueFactory<>("Surname"));
@@ -600,12 +618,12 @@ public class MainController implements Initializable {
             originalQty = mechanic.getMechanicId();
 
             // calculate metrics of the mechanic
-            if (repairsService.GetNumberOfR(originalQty) != null)
-                numOfDays = Double.parseDouble(repairsService.GetNumberOfR(originalQty)); // total number of repairs
+            if (repairsService.getNumberOfR(originalQty) != null)
+                numOfDays = Double.parseDouble(repairsService.getNumberOfR(originalQty)); // total number of repairs
             if (repairsService.total(originalQty) != null)
                 sumOfDate = Double.parseDouble(repairsService.total(originalQty)); // total days of repairs
-            if (repairsService.AvgDate(originalQty) != null)
-                avgOfDate = Double.parseDouble(repairsService.AvgDate(originalQty)); // average day for repair
+            if (repairsService.avgDate(originalQty) != null)
+                avgOfDate = Double.parseDouble(repairsService.avgDate(originalQty)); // average day for repair
 
             String det = Double.toString(numOfDays);
             String det1 = Double.toString(sumOfDate);
@@ -620,14 +638,14 @@ public class MainController implements Initializable {
             OORt_selectArepair_label.setVisible(true); // if no mechanic is selected generate error message
     }
 
-    public String TotalNumberOfRepairs;
-    public String AverageRepairTime;
-    public String TotalRepairTime;
-    public String NameAtOverviewR;
-    public String SurnameAtOverviewR;
+    public String totalNumberOfRepairs;
+    public String averageRepairTime;
+    public String totalRepairTime;
+    public String nameAtOverviewR;
+    public String surnameAtOverviewR;
     public ObservableList<Mechanics> itemsMechanics;
 
-    public void LoadRepairD() {
+    public void loadRepairD() {
         String[] r = null;
 
         // get the name of the selected mechanic
@@ -639,14 +657,14 @@ public class MainController implements Initializable {
         if (r != null) {
             // get mechanic object by name and surname
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r[0], r[1]);
-            IdM = mechanic.getMechanicId();
+            idM = mechanic.getMechanicId();
 
             // save text field (and table) values so they don't vanish during scene change
-            NameAtOverviewR = overName.getText();
-            SurnameAtOverviewR = overSurname.getText();
-            TotalNumberOfRepairs = TotalNumber.getText();
-            AverageRepairTime = AveRepairT.getText();
-            TotalRepairTime = TotalRepairT.getText();
+            nameAtOverviewR = overName.getText();
+            surnameAtOverviewR = overSurname.getText();
+            totalNumberOfRepairs = TotalNumber.getText();
+            averageRepairTime = AveRepairT.getText();
+            totalRepairTime = TotalRepairT.getText();
             itemsMechanics = OverViewTable.getItems();
 
             stageManager.switchScene(FxmlView.RepairScene);
@@ -661,11 +679,39 @@ public class MainController implements Initializable {
             DaysRR.setCellValueFactory(new PropertyValueFactory<>("Days"));
 
             // get list of repairs
-            ObservableList<Repairs> repairs = FXCollections.observableArrayList(repairsService.getWorkDetails(IdM));
-            if (repairs.isEmpty())
+            List<Repairs> repairs = repairsService.getWorkDetails(idM);
+            ObservableList<Repairs> data = FXCollections.observableArrayList();
+            if(repairs.size() == 0)
                 System.out.println("No result");
             else {
-                RepairsTableR.setItems(repairs); // set repairs to table
+                for(Repairs re : repairs) {
+                    Repairs repa = null;
+                    repa = new Repairs();
+                    repa.setRepair(re.getRepair());
+                    repa.setStart_day(Date.valueOf(re.getStart_day()));
+                    repa.setEnd_day(Date.valueOf(re.getEnd_day()));
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    java.util.Date firstDate = null;
+                    try {
+                        firstDate = sdf.parse(re.getEnd_day());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    java.util.Date secondDate = null;
+                    try {
+                        secondDate = sdf.parse(re.getStart_day());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    long diffInMillies = Math.abs(firstDate.getTime() - secondDate.getTime());
+                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
+
+                    repa.setDays((int) diff+1);
+                    data.add(repa);
+                }
+                RepairsTableR.setItems(data); // set repairs to table
                 OORt_selectArepair_label.setVisible(false);
             }
         } else
@@ -673,7 +719,7 @@ public class MainController implements Initializable {
     }
 
     @FXML
-    private void BackToAdminSceneRepair() {
+    private void backToAdminSceneRepair() {
         stageManager.switchScene(FxmlView.AdminScene);
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang();
@@ -681,11 +727,11 @@ public class MainController implements Initializable {
 
         // make sure the entered values don't disappear when changing scene
         tabPane.getSelectionModel().select(overview_R_Tab);
-        overName.setText(NameAtOverviewR);
-        overSurname.setText(SurnameAtOverviewR);
-        TotalNumber.setText(TotalNumberOfRepairs);
-        AveRepairT.setText(AverageRepairTime);
-        TotalRepairT.setText(TotalRepairTime);
+        overName.setText(nameAtOverviewR);
+        overSurname.setText(surnameAtOverviewR);
+        TotalNumber.setText(totalNumberOfRepairs);
+        AveRepairT.setText(averageRepairTime);
+        TotalRepairT.setText(totalRepairTime);
 
         // set the table
         nameCol.setCellValueFactory(new PropertyValueFactory<>("Name"));
@@ -693,8 +739,8 @@ public class MainController implements Initializable {
         OverViewTable.setItems(itemsMechanics);
     }
 
-    public void loadSelectedRepairInfo(int carId) {
-        CarId = carId;
+    public void loadSelectedRepairInfo(int carId1) {
+        carId = carId1;
         // set the table
         startCol.setCellValueFactory(new PropertyValueFactory<>("Start_day"));
         finishCol.setCellValueFactory(new PropertyValueFactory<>("End_day"));
@@ -704,16 +750,32 @@ public class MainController implements Initializable {
 
         loadThread = new Thread(() -> {
             // get list of repairs done on the car
-            ObservableList<Repairs> r = FXCollections.observableArrayList(repairsService.AllRepairs(carId));
+            List<Repairs> r = repairsService.allRepairs(carId1);
+            ObservableList<Repairs> data = FXCollections.observableArrayList();
 
-            if (r.isEmpty())
+            if(r.size() == 0)
                 System.out.println("No result");
-            else
-                repairHistTable.setItems(r); // set repairs to table
+            else {
+                for(Repairs rep : r) {
+                    Repairs rep1 = null;
+                    rep1 = new Repairs();
+                    Mechanics m = mechanicsService.findByMechanicId(rep.getMechanicId());
+                    rep1.setRepair(rep.getRepair());
+                    rep1.setStart_day(Date.valueOf(rep.getStart_day()));
+                    rep1.setEnd_day(Date.valueOf(rep.getEnd_day()));
+                    rep1.setCost(rep.getCost());
+                    rep1.setMechanic_name(m.getName()+" "+m.getSurname());
+                    rep1.setMechanicId(rep.getMechanicId());
+                    data.add(rep1);
+                }
+                repairHistTable.setItems(data); // set repairs to table
+            }
 
             // get repair cost and component and show it
-            String[] rCosts = repairsService.getCostSum(carId).split(",");
-            System.out.println(rCosts[0] + " " + rCosts[1]);
+            String rCost= repairsService.getCostSum(carId1);
+            String[] rCosts = rCost.split(",");
+            System.out.println(rCosts[0]+" "+rCosts[1]);
+
             Platform.runLater(() -> {
                 repairCost.setText(rCosts[0]);
                 componentCost.setText(rCosts[1]);
@@ -736,12 +798,12 @@ public class MainController implements Initializable {
 
     @FXML
     private void selectCustomer() {
-        String SelectedUser = "";
+        String selectedUser = "";
         int customerId = 0;
 
         // get name, surname and ID of customer
         if (customersTable.getSelectionModel().getSelectedItem() != null) {
-            SelectedUser = customersTable.getSelectionModel().getSelectedItem().getName() + " " +
+            selectedUser = customersTable.getSelectionModel().getSelectedItem().getName() + " " +
                            customersTable.getSelectionModel().getSelectedItem().getSurname() + " " +
                            customersTable.getSelectionModel().getSelectedItem().getId();
             customerId = (int) customersTable.getSelectionModel().getSelectedItem().getCustomerId();
@@ -754,11 +816,11 @@ public class MainController implements Initializable {
         fuelType.setItems(fuelTypeBox);
 
         // set values that were entered before
-        Car_vin.setText(VINCarC);
-        Car_brand.setText(BrandCarC);
-        Car_model.setText(ModelCarC);
-        fuelType.getSelectionModel().select(FuelTypeCarC);
-        selectedCustomer.setText(SelectedUser);
+        Car_vin.setText(vinCarC);
+        Car_brand.setText(brandCarC);
+        Car_model.setText(modelCarC);
+        fuelType.getSelectionModel().select(fuelTypeCarC);
+        selectedCustomer.setText(selectedUser);
         selectedCustomer.setUserData(customerId);
 
         // keep selected language
@@ -779,16 +841,16 @@ public class MainController implements Initializable {
 
     @FXML
     private void returnMechanic() {
-        String SelectedMechanic;
+        String selectedMechanicS;
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
 
         // check if a mechanic was selected
         if (mechanicsTableR.getSelectionModel().getSelectedItem() != null) {
             // set text field to his name and surname
-            SelectedMechanic = mechanicsTableR.getSelectionModel().getSelectedItem().getName() + " " +
+            selectedMechanicS = mechanicsTableR.getSelectionModel().getSelectedItem().getName() + " " +
                                mechanicsTableR.getSelectionModel().getSelectedItem().getSurname();
-            selectedMechanic.setText(SelectedMechanic);
+            selectedMechanic.setText(selectedMechanicS);
         }
         else {
             // set text field to match language selection
@@ -816,7 +878,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void returnMechanicPayout() {
-        String SelectedMechanic;
+        String selectedMechanic;
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
 
@@ -827,9 +889,9 @@ public class MainController implements Initializable {
         // check if a mechanic was selected
         if (mechanicsTablePayout1.getSelectionModel().getSelectedItem() != null) {
             // set text field to his name and surname
-            SelectedMechanic = mechanicsTablePayout1.getSelectionModel().getSelectedItem().getName() + " " +
+            selectedMechanic = mechanicsTablePayout1.getSelectionModel().getSelectedItem().getName() + " " +
                                mechanicsTablePayout1.getSelectionModel().getSelectedItem().getSurname();
-            selectedMechanic1.setText(SelectedMechanic);
+            selectedMechanic1.setText(selectedMechanic);
         }
         else {
             // set text field to match language selection
@@ -846,12 +908,12 @@ public class MainController implements Initializable {
     @FXML
     protected void filterCar() {
         // get cars based on car model, brand and VIN number and set them to table
-        ObservableList<Cars> Lcar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModelCar.getText(), carTypeCar.getText(), carVINCar.getText()));
+        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModelCar.getText(), carTypeCar.getText(), carVINCar.getText()));
 
-        if (Lcar.isEmpty())
+        if (lCar.isEmpty())
             System.out.println("No result");
         else
-            carsTableCar.setItems(Lcar);
+            carsTableCar.setItems(lCar);
     }
 
     @FXML
@@ -1012,7 +1074,7 @@ public class MainController implements Initializable {
         AMt_password_label.setText("Password :");
         AMt_name_label.setText("Name :");
         AMt_surname_label.setText("Surname :");
-        AMt_type_label.setText("Type");
+        AMt_type_label.setText("type");
         userTypeMechanic.setText("Mechanic");
         userTypeAdmin.setText("Administrator");
         AMt_newUser_btn.setText("Add");

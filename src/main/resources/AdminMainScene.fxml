@@ -16,7 +16,7 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Button layoutX="546.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="24.0" style="-fx-background-color: #23272a;" text="^" textFill="#99aab5">
+                <Button layoutX="546.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="24.0" style="-fx-background-color: #23272a;" text="^" textFill="#99aab5">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>
@@ -156,12 +156,12 @@
                                                 <Insets left="490.0" top="5.0" />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="Ft_updatePayout_btn" layoutX="380.0" layoutY="226.0" mnemonicParsing="false" onAction="#UpdatePayout" style="-fx-background-color: #23272a;" text="update payout" textFill="#99aab5" GridPane.rowIndex="8">
+                                        <Button fx:id="Ft_updatePayout_btn" layoutX="380.0" layoutY="226.0" mnemonicParsing="false" onAction="#updatePayout" style="-fx-background-color: #23272a;" text="update payout" textFill="#99aab5" GridPane.rowIndex="8">
                                             <GridPane.margin>
                                                 <Insets left="365.0" top="5.0" />
                                             </GridPane.margin>
                                         </Button>
-                                        <Button fx:id="Ft_deletePayout_btn" layoutX="430.0" layoutY="266.0" mnemonicParsing="false" onAction="#DeletePayout" style="-fx-background-color: #23272a;" text="delete payout" textFill="#99aab5" GridPane.rowIndex="9">
+                                        <Button fx:id="Ft_deletePayout_btn" layoutX="430.0" layoutY="266.0" mnemonicParsing="false" onAction="#deletePayout" style="-fx-background-color: #23272a;" text="delete payout" textFill="#99aab5" GridPane.rowIndex="9">
                                             <GridPane.margin>
                                                 <Insets left="425.0" top="5.0" />
                                             </GridPane.margin>
@@ -262,9 +262,9 @@
                                         <TextField fx:id="overSurname" layoutX="176.0" layoutY="35.0" prefHeight="25.0" prefWidth="125.0" />
                                         <Label fx:id="OORt_name_label" layoutX="14.0" layoutY="14.0" text="Name :" textFill="#99aab5" />
                                         <Label fx:id="OORt_surname_label" layoutX="176.0" layoutY="14.0" text="Surname :" textFill="#99aab5" />
-                                        <Button fx:id="OORt_filter_btn" layoutX="338.0" layoutY="35.0" mnemonicParsing="false" onAction="#FilterSeMechanic" prefWidth="100.0" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" AnchorPane.leftAnchor="355.0" />
+                                        <Button fx:id="OORt_filter_btn" layoutX="338.0" layoutY="35.0" mnemonicParsing="false" onAction="#filterSeMechanic" prefWidth="100.0" style="-fx-background-color: #23272a;" text="Filter" textFill="#99aab5" AnchorPane.leftAnchor="355.0" />
                                         <Button fx:id="OORt_showDetails_btn" layoutX="460.0" layoutY="35.0" mnemonicParsing="false" onAction="#returnSeMechanic" prefWidth="100.0" style="-fx-background-color: #23272a;" text="Show details" textFill="#99aab5" AnchorPane.leftAnchor="466.0" />
-                                        <Button fx:id="showingRepairs" layoutX="357.0" layoutY="256.0" mnemonicParsing="false" onAction="#LoadRepairD" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #23272a;" text="Show the repairs" textFill="#99aab5" />
+                                        <Button fx:id="showingRepairs" layoutX="357.0" layoutY="256.0" mnemonicParsing="false" onAction="#loadRepairD" prefHeight="25.0" prefWidth="149.0" style="-fx-background-color: #23272a;" text="Show the repairs" textFill="#99aab5" />
 
                                         <ProgressIndicator fx:id="loadingIndicator" layoutX="340.0" layoutY="35.0" prefHeight="25.0" prefWidth="24.0" visible="false" />
                               <Label fx:id="OORt_selectArepair_label" alignment="CENTER" layoutX="359.0" layoutY="291.0" prefHeight="17.0" prefWidth="146.0" text="Select a repair!" textFill="#e83c3c" visible="false">

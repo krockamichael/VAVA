@@ -12,9 +12,9 @@ public interface RepairsService extends GenericService<Repairs> {
     Repairs findByMechanicId (int mechanic_id);
     Repairs findByCarId(int car_id);
     String total(int mechanic_id);
-    String AvgDate(int mechanic_id);
+    String avgDate(int mechanic_id);
     String getCostSum(int car_id);
-    String GetNumberOfR(int mechanic_id);
+    String getNumberOfR(int mechanic_id);
     List<Repairs> getWorkDetails(int mechnic_id);
-    List<Repairs> AllRepairs(int car_id);
+    List<Repairs> allRepairs(int car_id);
 }

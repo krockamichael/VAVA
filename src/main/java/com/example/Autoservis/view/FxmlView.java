@@ -15,7 +15,7 @@ public enum FxmlView {
     CarScene {
         @Override
         public String getFxmlFile() {
-            return "/Car_scene.fxml";
+            return "/CarScene.fxml";
         }
     },
     CarSelection {
@@ -33,7 +33,7 @@ public enum FxmlView {
     MechanicSelectionScene{
         @Override
         public String getFxmlFile() {
-            return "/MechanicSelection_scene.fxml";
+            return "/MechanicSelectionScene.fxml";
         }
     },
     CustomerSelection {

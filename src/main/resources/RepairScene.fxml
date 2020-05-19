@@ -19,7 +19,7 @@
             </children></Pane>
         <Pane layoutY="27.0" prefHeight="375.0" prefWidth="445.0" style="-fx-background-color: #3e4247;">
             <children>
-                <Button fx:id="repScene_back_btn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#BackToAdminSceneRepair" style="-fx-background-color: #3e4247; -fx-border-color: #000000;" text="&lt; Back" textFill="#99aab5" />
+                <Button fx:id="repScene_back_btn" layoutX="14.0" layoutY="16.0" mnemonicParsing="false" onAction="#backToAdminSceneRepair" style="-fx-background-color: #3e4247; -fx-border-color: #000000;" text="&lt; Back" textFill="#99aab5" />
                 <TableView fx:id="RepairsTableR" layoutX="29.0" layoutY="66.0" prefHeight="280.0" prefWidth="380.0">
                     <columns>
                         <TableColumn fx:id="RepairTextR" prefWidth="90.0" text="Repair" />

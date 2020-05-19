@@ -56,6 +56,8 @@ public class MechanicMainSceneController implements Initializable {
     @Autowired private ComponentsService componentsService;
     @Lazy @Autowired private StageManager stageManager;
 
+    MainController mainController = new MainController();
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -66,7 +68,7 @@ public class MechanicMainSceneController implements Initializable {
     }
 
     @FXML
-    protected void Logout() {
+    protected void logout() {
         // keep selected language
         if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.Login);
         else stageManager.switchScene(FxmlView.LoginSVK);
@@ -80,12 +82,12 @@ public class MechanicMainSceneController implements Initializable {
     @FXML
     protected void filter() {
         // get cars based on car model, brand and VIN number and set them to table
-        ObservableList<Cars> Lcar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModel.getText(), carType.getText(), carVIN.getText()));
+        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModel.getText(), carType.getText(), carVIN.getText()));
 
-        if (Lcar.isEmpty())
+        if (lCar.isEmpty())
             System.out.println("No result");
         else
-            carsTable.setItems(Lcar);
+            carsTable.setItems(lCar);
     }
 
     @FXML
@@ -108,7 +110,7 @@ public class MechanicMainSceneController implements Initializable {
         double cost = Double.parseDouble(repairCost.getText());
 
         int carId = (int) carsTable.getSelectionModel().getSelectedItem().getCar_id();
-        int mechId = MainController.UID;
+        int mechId = MainController.uid;
         System.out.println("mechId je: " + mechId);
 
         String rep = repair.getText();
@@ -119,21 +121,24 @@ public class MechanicMainSceneController implements Initializable {
 
             // check if a component is selected
             if (componentSelection.getUserData() == null) {
-                Repairs Nrepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
-                repairsService.save(Nrepair);
+                Repairs nRepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
+                repairsService.save(nRepair);
             } else {
-                Repairs Nrepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
-                Repairs saveRepair = repairsService.save(Nrepair);
+                Repairs nRepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
+                Repairs saveRepair = repairsService.save(nRepair);
+
+                String cId = componentSelection.getUserData().toString();
 
                 // add component to database
-                int Cid = Integer.parseInt(componentSelection.getUserData().toString());
-                Component Ncomponent= new Component((int) saveRepair.getRepair_id(), Cid);
-                componentService.save(Ncomponent);
+                Component nComponent = new Component();
+                nComponent.setComponents_id(Integer.parseInt(cId));
+                nComponent.setRepair_id((int) saveRepair.getRepair_id());
+                componentService.save(nComponent);
 
                 // update the amount of componentSSS in database
-                Components AComponent = componentsService.findByComponentId(Cid);
-                AComponent.setAmount(AComponent.getAmount() - 1);
-                componentsService.update(AComponent);
+                Components aComponent = componentsService.findByComponentId(Integer.parseInt(cId));
+                aComponent.setAmount(aComponent.getAmount() - 1);
+                componentsService.update(aComponent);
             }
             repairAdded.setVisible(true);
         }
@@ -141,25 +146,25 @@ public class MechanicMainSceneController implements Initializable {
             errorMess.setVisible(true); // if some fields are not filled, generate error message
     }
 
-    public String RepairCostM;
-    public String RepairTextM;
-    public String ModelCarM;
-    public String ModelTypeM;
-    public String ModelVinM;
-    public LocalDate StartingDateM;
-    public LocalDate FinishDateM;
+    public String repairCostM;
+    public String repairTextM;
+    public String modelCarM;
+    public String modelTypeM;
+    public String modelVinM;
+    public LocalDate startingDateM;
+    public LocalDate finishDateM;
     public ObservableList<Cars> items;
 
     @FXML
     protected void loadComponentSelection() {
         // save text field values so they don't disappear when changing scenes
-        RepairCostM = repairCost.getText();
-        StartingDateM = startDate.getValue();
-        FinishDateM = finishDate.getValue();
-        RepairTextM = repair.getText();
-        ModelCarM = carModel.getText();
-        ModelTypeM = carType.getText();
-        ModelVinM = carVIN.getText();
+        repairCostM = repairCost.getText();
+        startingDateM = startDate.getValue();
+        finishDateM = finishDate.getValue();
+        repairTextM = repair.getText();
+        modelCarM = carModel.getText();
+        modelTypeM = carType.getText();
+        modelVinM = carVIN.getText();
         items = carsTable.getItems();
         stageManager.switchScene(FxmlView.ComponentSelection);
 
@@ -194,13 +199,13 @@ public class MechanicMainSceneController implements Initializable {
         else mechanicMainScene_changeToSlovakLang();
 
         // set text field values
-        repairCost.setText(RepairCostM);
-        startDate.setValue(StartingDateM);
-        finishDate.setValue(FinishDateM);
-        repair.setText(RepairTextM);
-        carModel.setText(ModelCarM);
-        carType.setText(ModelTypeM);
-        carVIN.setText(ModelVinM);
+        repairCost.setText(repairCostM);
+        startDate.setValue(startingDateM);
+        finishDate.setValue(finishDateM);
+        repair.setText(repairTextM);
+        carModel.setText(modelCarM);
+        carType.setText(modelTypeM);
+        carVIN.setText(modelVinM);
         carsTable.setItems(items);
 
         // check if a component was selected

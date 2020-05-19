@@ -14,7 +14,7 @@
                         <Font name="System Bold" size="12.0" />
                     </font>
                 </Button>
-                <Button layoutX="546.0" mnemonicParsing="false" onAction="#Logout" prefHeight="25.0" prefWidth="24.0" style="-fx-background-color: #23272a;" text="^" textFill="#99aab5">
+                <Button layoutX="546.0" mnemonicParsing="false" onAction="#logout" prefHeight="25.0" prefWidth="24.0" style="-fx-background-color: #23272a;" text="^" textFill="#99aab5">
                     <font>
                         <Font name="System Bold" size="12.0" />
                     </font>

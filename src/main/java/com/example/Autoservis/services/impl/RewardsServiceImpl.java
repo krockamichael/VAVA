@@ -20,8 +20,8 @@ public class RewardsServiceImpl implements RewardsService {
     }
 
     @Override
-    public void DeleteRewardMechanic(int mechanic_id, String name, String surname) {
-        rewardsRepository.DeleteRewardMechanic(mechanic_id, name, surname);
+    public void deleteRewardMechanic(int mechanic_id, String name, String surname) {
+        rewardsRepository.deleteRewardMechanic(mechanic_id, name, surname);
     }
 
     @Override

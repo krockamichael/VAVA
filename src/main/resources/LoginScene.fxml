@@ -11,7 +11,7 @@
             <children>
                 <Label fx:id="login_Username_label" layoutX="50.0" layoutY="100.0" text="Username : " textFill="#99aab5" />
                 <Label fx:id="login_Password_label" layoutX="51.0" layoutY="177.0" text="Password : " textFill="#99aab5" />
-                <Button fx:id="Login_btn" layoutX="109.0" layoutY="275.0" mnemonicParsing="false" onAction="#LoginAction" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #2c2f33;" text="Sign in" textFill="#f2f2f2" />
+                <Button fx:id="Login_btn" layoutX="109.0" layoutY="275.0" mnemonicParsing="false" onAction="#loginAction" prefHeight="25.0" prefWidth="86.0" style="-fx-background-color: #2c2f33;" text="Sign in" textFill="#f2f2f2" />
                 <TextField fx:id="Username" layoutX="124.0" layoutY="95.0" style="-fx-background-color: #3e4247; -fx-text-fill: #99aab5;" />
                 <PasswordField fx:id="Password" layoutX="124.0" layoutY="173.0" style="-fx-background-color: #3e4247; -fx-text-fill: #99aab5;" />
                 <Label fx:id="errMess" layoutX="70.0" layoutY="300.0" prefHeight="25.0" prefWidth="163.0" text="Wrong username or password!" textFill="#f50303" visible="false" />

@@ -6,14 +6,16 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.draw.VerticalPositionMark;
-import java.awt.*;
 import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.stream.Stream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class PDFSampleMain {
+    private static final Logger logger = Logger.getLogger(PDFSampleMain.class.getName());
 
     public static void main(String[] args) {
         try {
@@ -49,7 +51,7 @@ public class PDFSampleMain {
             document.close();
             System.out.println("Generated PDF.");
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "PDF failed generating - aborting", e);
         }
     }
 

@@ -50,18 +50,18 @@ public class AutoservisApplication extends Application {
 	}
 
 	@Override
-	public void init() throws Exception {
+	public void init() {
 		springContext = springBootApplicationContext();
 	}
 
 	@Override
-	public void start(Stage stage) throws Exception {
+	public void start(Stage stage) {
 		stageManager = springContext.getBean(StageManager.class, stage);
 		displayInitialScene();
 	}
 
 	@Override
-	public void stop() throws Exception {
+	public void stop() {
 		springContext.close();
 	}
 
@@ -72,7 +72,7 @@ public class AutoservisApplication extends Application {
 
 	private ConfigurableApplicationContext springBootApplicationContext() {
 		SpringApplicationBuilder builder = new SpringApplicationBuilder(AutoservisApplication.class);
-		String[] args = getParameters().getRaw().stream().toArray(String[]::new);
+		String[] args = getParameters().getRaw().toArray(new String[0]);
 		return builder.run(args);
 	}
 }

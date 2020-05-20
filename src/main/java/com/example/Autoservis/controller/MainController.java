@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
 import java.net.URL;
-import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -148,7 +145,7 @@ public class MainController implements Initializable {
     @FXML public GridPane RepairGrid;
     @Lazy @Autowired private StageManager stageManager;
 
-    Logger logger = Logger.getLogger(MainController.class.getName());
+    private static final Logger logger = Logger.getLogger(MainController.class.getName());
 
     public int getUid() {
         return uid;
@@ -179,17 +176,20 @@ public class MainController implements Initializable {
             // keep selected language
             if (global_lang.equals("eng")) changeToEnglishLang();
             else changeToSlovakLang();
-            logger.log(Level.INFO,"Creditians checked, Admin is logged in");
+            logger.log(Level.INFO,"Credentials checked, Admin is logged in");
         }
         // if user is type 2, he is a mechanic
         else if (userType == 2) {
             // keep selected language
             if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.MechanicScene);
             else stageManager.switchScene(FxmlView.MechanicSceneSVK);
-            logger.log(Level.INFO,"Creditians checked, Mechanic is logged in");
+            logger.log(Level.INFO,"Credentials checked, Mechanic is logged in");
             uid = uid-1;
-        } else
+        }
+        else {
+            logger.log(Level.WARNING, "Unsuccessful login attempted");
             errMess.setVisible(true); // if user doesn't exist, generate error message
+        }
     }
 
     @FXML
@@ -204,7 +204,6 @@ public class MainController implements Initializable {
     @FXML
     private void addNewUser() {
         // get values from text fields
-        int type;
         newUserError.setVisible(false);
         String name = newUserName.getText();
         String password = newUserPass.getText();
@@ -212,30 +211,34 @@ public class MainController implements Initializable {
         String mechSurname = mechanicSurname.getText();
 
         // check if all values are entered
-        if (name.equals("") || Password.equals("") || mechName.equals("") || mechSurname.equals("")) {
+        if (name.equals("") || Password.toString().equals("") || mechName.equals("") || mechSurname.equals("")) {
+            logger.log(Level.WARNING,"Add new user - missing values - aborting");
             newUserError.setVisible(true);
             return;
         }
 
-        // set user type, admin=1, mechanic=2
+        // set user type
+        // mechanic = 2
+        // admin = 1
         if (userTypeMechanic.isSelected()) {
-            // new mechanic is created and is saved to database
-            type = 2;
             // create new user object always and save it to database
-            Users user = new Users(name, password, type);
+            Users user = new Users(name, password, 2);
             usersService.save(user);
+
+            // new mechanic is created and is saved to database
             Mechanics mechanic = new Mechanics(mechName, mechSurname, (int) usersService.getID(name, password));
             mechanicsService.save(mechanic);
+
             logger.log(Level.INFO,"New mechanic added to databases Users and Mechanics");
         }
         else if (userTypeAdmin.isSelected()) {
-            type = 1;
             // create new user object always and save it to database
-            Users user = new Users(name, password, type);
+            Users user = new Users(name, password, 1);
             usersService.save(user);
             logger.log(Level.INFO,"New admin added to database Users");
         }
         else {
+            logger.log(Level.WARNING,"Add new user - undefined user type - aborting");
             // if neither is selected generate error message
             newUserError.setVisible(true);
             return;
@@ -260,6 +263,7 @@ public class MainController implements Initializable {
 
         // check if all values are entered
         if (custo_Email.equals("") || custo_IdNum.equals("") || custo_Name.equals("") || custo_Phone.equals("")) {
+            logger.log(Level.WARNING,"Add new customer - missing values - aborting");
             invalidFormat.setVisible(true);
             return;
         }
@@ -268,6 +272,7 @@ public class MainController implements Initializable {
             // create new customer object and save it to database
             Customers customer = new Customers(custo_Name, custo_Surname, custo_Email, custo_Phone, custo_IdNum);
             customersService.save(customer);
+            logger.log(Level.INFO,"New customer added to database Customers");
 
             // reset text fields
             Customer_name.setText("");
@@ -276,8 +281,10 @@ public class MainController implements Initializable {
             customerIdNum.setText("");
             Customer_surname.setText("");
         }
-        else
+        else {
+            logger.log(Level.WARNING, "Add new customer - invalid phone number - aborting");
             invalidFormat.setVisible(true); // if phone number is incorrect generate error message
+        }
     }
 
     @FXML
@@ -342,6 +349,7 @@ public class MainController implements Initializable {
         invalidFormatP.setVisible(false);
         // check if all values are set
         if (r1[0].equals("") || r1[1].equals("")) {
+            logger.log(Level.WARNING,"Add new payout - missing values - aborting");
             invalidFormatP.setVisible(true);
             return;
         }
@@ -354,12 +362,15 @@ public class MainController implements Initializable {
             // create new payouts object and save it to database
             Payouts payout = new Payouts(r1[0], r1[1], Integer.parseInt(number), mechanic.getMechanicId());
             payoutsService.save(payout);
+            logger.log(Level.INFO,"New payout added to database Payouts");
 
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
-        } else
+        } else {
+            logger.log(Level.WARNING, "Add new payout - invalid payout - aborting");
             invalidFormatP.setVisible(true); // if number is not a number, generate error message
+        }
     }
 
     @FXML
@@ -371,6 +382,7 @@ public class MainController implements Initializable {
         invalidFormatP.setVisible(false);
         // check if mechanic is valid
         if (r1[0].equals("") || r1[1].equals("")) {
+            logger.log(Level.WARNING,"Update payout - missing values - aborting");
             invalidFormatP.setVisible(true);
             return;
         }
@@ -382,12 +394,15 @@ public class MainController implements Initializable {
             System.out.println("name: " + r1[0]);
             // update payout
             payoutsService.updatePayoutMechanic(Integer.parseInt(number), mechanic.getMechanicId(), r1[0], r1[1]);
+            logger.log(Level.INFO,"A mechniac's payout was updated");
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
         }
-        else
+        else {
+            logger.log(Level.WARNING, "Update payout - invalid payout - aborting");
             invalidFormatP.setVisible(true); // if number is not a number, generate error message
+        }
     }
 
     @FXML
@@ -397,14 +412,17 @@ public class MainController implements Initializable {
 
         invalidFormatP.setVisible(false);
         // check if a proper mechanic is selected
-        if ((r1[0].equals("") || r1[1].equals("")) || (r1[0].equals("Selected") || r1[0].equals("Mechanic")))
+        if ((r1[0].equals("") || r1[1].equals("")) || (r1[0].equals("Selected") || r1[0].equals("Mechanic"))) {
+            logger.log(Level.WARNING, "Delete payout - missing values - aborting");
             invalidFormatP.setVisible(true);
+        }
         else {
             // get mechanic object by name and surname
             Mechanics mechanic = mechanicsService.findByNameAndSurname(r1[0],r1[1]);
             // delete reward and payout
             payoutsService.deletePayoutMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
             rewardsService.deleteRewardMechanic(mechanic.getMechanicId(),r1[0],r1[1]);
+            logger.log(Level.INFO,"A reward and a payout was deleted");
             // reset text field
             selectedMechanic1.setText("");
         }
@@ -420,6 +438,7 @@ public class MainController implements Initializable {
         invalidFormatR.setVisible(false);
         // check if mechanic is selcted
         if (r[0].equals("") || r[1].equals("")) {
+            logger.log(Level.WARNING,"Add new reward - missing values - aborting");
             invalidFormatR.setVisible(true);
             return;
         }
@@ -432,6 +451,7 @@ public class MainController implements Initializable {
             // create new rewards object and save it to database
             Rewards rewardsM = new Rewards(r[0], r[1], Integer.parseInt(number), reasonfor, mechanic.getMechanicId());
             rewardsService.save(rewardsM);
+            logger.log(Level.INFO,"New reward added to database Rewards");
 
             // get a payout object
             Payouts oldPayout = payoutsService.findByNameAndSurname(r[0],r[1]);
@@ -439,6 +459,7 @@ public class MainController implements Initializable {
                 // create a new payout object if it doesn't exist and save it to database
                 Payouts payout = new Payouts(r[0], r[1], sd, mechanic.getMechanicId());
                 payoutsService.save(payout);
+                logger.log(Level.INFO,"New payout added to database Payouts");
             }
             else {
                 // if a payout object exists, update it
@@ -451,8 +472,10 @@ public class MainController implements Initializable {
             reward.setText("");
             reasonReward.setText("");
         }
-        else
+        else {
+            logger.log(Level.WARNING, "Add new reward - invalid reward - aborting");
             invalidFormatR.setVisible(true); // if the number is invalid, generate error message
+        }
     }
 
     @FXML
@@ -461,17 +484,20 @@ public class MainController implements Initializable {
         String brand = Car_brand.getText();
         String model = Car_model.getText();
         String vin = Car_vin.getText();
-        String fuel = fuelType.getSelectionModel().getSelectedItem().toString();
+        String fuel = fuelType.getSelectionModel().getSelectedItem();
 
         // check if they are all set, if not generate error message
-        if (brand.equals("") || model.equals("") || vin.equals("") || fuel.equals("") || selectedCustomer.toString().equals(""))
+        if (brand.equals("") || model.equals("") || vin.equals("") || fuel.equals("") || selectedCustomer.toString().equals("")) {
+            logger.log(Level.WARNING, "Add new car - missing values - aborting");
             emptyFieldsError.setVisible(true);
+        }
 
         // if ALL values are set
         else {
             // create new car object and save it to database
             Cars car = new Cars(model, brand, vin, fuel, Integer.parseInt(selectedCustomer.getUserData().toString()));
             carsService.save(car);
+            logger.log(Level.INFO,"New car added to database Cars");
 
             // reset all text fields
             carAddedMess.setVisible(true);
@@ -528,6 +554,7 @@ public class MainController implements Initializable {
 
         // check if cost is not null or whether cost value is not number
         if (cost.getText().equals("") || !cost.getText().matches("^[0-9]+\\.?[0-9]*$")) {
+            logger.log(Level.WARNING,"Add new component - missing values - aborting");
             errComponents.setVisible(true);
             return;
         }
@@ -535,18 +562,22 @@ public class MainController implements Initializable {
 
         // check if amount is not null or whether amount value is not number
         if (amount.getText().equals("") || !amount.getText().matches("^[0-9]+$")) {
+            logger.log(Level.WARNING,"Add new component - invalid amount - aborting");
             errComponents.setVisible(true);
             return;
         }
         amountI = Integer.parseInt(amount.getText());
 
         // check if component attributes are set
-        if (componentS.equals("") || carTypeS.equals(""))
+        if (componentS.equals("") || carTypeS.equals("")) {
+            logger.log(Level.WARNING, "Add new components - missing values - aborting");
             errComponents.setVisible(true);
+        }
         else {
             // if they are set, create new Components object and save it to database
-            Components Ncompo = new Components(componentS, carTypeS, amountI, costD);
-            componentsService.save(Ncompo);
+            Components nCompo = new Components(componentS, carTypeS, amountI, costD);
+            componentsService.save(nCompo);
+            logger.log(Level.INFO,"New component added to database Components");
 
             // reset text fields
             component.setText("");
@@ -554,7 +585,6 @@ public class MainController implements Initializable {
             cost.setText("");
             amount.setText("");
         }
-
     }
 
     @FXML
@@ -580,10 +610,9 @@ public class MainController implements Initializable {
         // get list of mechanics
         ObservableList<Mechanics> mechanics = FXCollections.observableArrayList(mechanicsService.getMechanics(overName.getText(),overSurname.getText()));
         if (mechanics.isEmpty())
-            System.out.println("No result");
-        else {
+            logger.log(Level.WARNING,"Mechanics list is empty");
+        else
             OverViewTable.setItems(mechanics); // add mechanics to table
-        }
     }
 
     @FXML
@@ -624,8 +653,10 @@ public class MainController implements Initializable {
             TotalRepairT.setText(det1);
             AveRepairT.setText(det2);
             OORt_selectArepair_label.setVisible(false);
-        } else
+        } else {
+            logger.log(Level.WARNING,"Select a mechanic to show statistics - no mechanic selected - aborting");
             OORt_selectArepair_label.setVisible(true); // if no mechanic is selected generate error message
+        }
     }
 
     public String totalNumberOfRepairs;
@@ -669,43 +700,31 @@ public class MainController implements Initializable {
             DaysRR.setCellValueFactory(new PropertyValueFactory<>("Days"));
 
             // get list of repairs
-            List<Repairs> repairs = repairsService.getWorkDetails(idM);
-            ObservableList<Repairs> data = FXCollections.observableArrayList();
-            if(repairs.size() == 0)
-                System.out.println("No result");
+            ObservableList<Repairs> repairs = FXCollections.observableArrayList(repairsService.getWorkDetails(idM));
+
+            if (repairs.isEmpty())
+                logger.log(Level.WARNING,"Repairs list is empty");
             else {
-                for(Repairs re : repairs) {
-                    Repairs repa = null;
-                    repa = new Repairs();
-                    repa.setRepair(re.getRepair());
-                    repa.setStart_day(Date.valueOf(re.getStart_day()));
-                    repa.setEnd_day(Date.valueOf(re.getEnd_day()));
-
+                for(Repairs re: repairs) {
                     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-                    java.util.Date firstDate = null;
                     try {
-                        firstDate = sdf.parse(re.getEnd_day());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
+                        java.util.Date firstDate = sdf.parse(re.getEnd_day());
+                        java.util.Date secondDate = sdf.parse(re.getStart_day());
+                        long diffInMillis = Math.abs(firstDate.getTime() - secondDate.getTime());
+                        long diff = TimeUnit.DAYS.convert(diffInMillis, TimeUnit.MILLISECONDS);
+                        re.setDays((int) diff + 1);
+                    } catch (Exception e) {
+                        logger.log(Level.SEVERE, "Date parsing failed", e);
                     }
-                    java.util.Date secondDate = null;
-                    try {
-                        secondDate = sdf.parse(re.getStart_day());
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    long diffInMillies = Math.abs(firstDate.getTime() - secondDate.getTime());
-                    long diff = TimeUnit.DAYS.convert(diffInMillies, TimeUnit.MILLISECONDS);
-
-                    repa.setDays((int) diff+1);
-                    data.add(repa);
                 }
-                RepairsTableR.setItems(data); // set repairs to table
+                RepairsTableR.setItems(repairs); // set repairs to table
                 OORt_selectArepair_label.setVisible(false);
             }
-        } else
+        }
+        else {
+            logger.log(Level.WARNING,"Select a mechanic to show repairs - no mechanic selected - aborting");
             OORt_selectArepair_label.setVisible(true); // if an error occurred (no item is selected), generate error message
+        }
     }
 
     @FXML
@@ -740,36 +759,25 @@ public class MainController implements Initializable {
 
         loadThread = new Thread(() -> {
             // get list of repairs done on the car
-            List<Repairs> r = repairsService.allRepairs(carId1);
-            ObservableList<Repairs> data = FXCollections.observableArrayList();
+            ObservableList<Repairs> repairs = FXCollections.observableArrayList(repairsService.allRepairs(carId1));
 
-            if(r.size() == 0)
-                System.out.println("No result");
+            if (repairs.isEmpty())
+                logger.log(Level.WARNING,"Repairs list is empty");
             else {
-                for(Repairs rep : r) {
-                    Repairs rep1 = null;
-                    rep1 = new Repairs();
-                    Mechanics m = mechanicsService.findByMechanicId(rep.getMechanicId());
-                    rep1.setRepair(rep.getRepair());
-                    rep1.setStart_day(Date.valueOf(rep.getStart_day()));
-                    rep1.setEnd_day(Date.valueOf(rep.getEnd_day()));
-                    rep1.setCost(rep.getCost());
-                    rep1.setMechanic_name(m.getName()+" "+m.getSurname());
-                    rep1.setMechanicId(rep.getMechanicId());
-                    data.add(rep1);
+                for (Repairs r: repairs) {
+                    // add mechanic name to the repair item
+                    Mechanics m = mechanicsService.findByMechanicId(r.getMechanicId());
+                    r.setMechanic_name(m.getName() + " " + m.getSurname());
                 }
-                repairHistTable.setItems(data); // set repairs to table
+                repairHistTable.setItems(repairs); // set repairs to table
+
+                // get repair cost and component and show it
+                String[] rCosts = repairsService.getCostSum(carId1).split(",");
+                Platform.runLater(() -> {
+                    repairCost.setText(rCosts[0]);
+                    componentCost.setText(rCosts[1]);
+                });
             }
-
-            // get repair cost and component and show it
-            String rCost= repairsService.getCostSum(carId1);
-            String[] rCosts = rCost.split(",");
-            System.out.println(rCosts[0]+" "+rCosts[1]);
-
-            Platform.runLater(() -> {
-                repairCost.setText(rCosts[0]);
-                componentCost.setText(rCosts[1]);
-            });
         });
         loadThread.start();
     }
@@ -781,7 +789,7 @@ public class MainController implements Initializable {
 
         // check if list is empty
         if (customers.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Customers list is empty");
         else
             customersTable.setItems(customers); // add customers to table
     }
@@ -824,7 +832,7 @@ public class MainController implements Initializable {
         ObservableList<Mechanics> mechanics = FXCollections.observableArrayList(mechanicsService.getMechanics(nameTextReward.getText(), surnameTextReward.getText()));
 
         if (mechanics.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Mechanics list is empty");
         else
             mechanicsTableR.setItems(mechanics);
     }
@@ -861,7 +869,7 @@ public class MainController implements Initializable {
         ObservableList<Mechanics> mechanics = FXCollections.observableArrayList(mechanicsService.getMechanics(nameTextPay.getText(), surnameTextPay.getText()));
 
         if (mechanics.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Mechanics list is empty");
         else
             mechanicsTablePayout1.setItems(mechanics);
     }
@@ -871,10 +879,6 @@ public class MainController implements Initializable {
         String selectedMechanic;
         stageManager.switchScene(FxmlView.AdminScene);
         tabPane.getSelectionModel().select(financeTab);
-
-        // keep selected language
-        if (global_lang.equals("eng")) changeToEnglishLang();
-        else changeToSlovakLang();
 
         // check if a mechanic was selected
         if (mechanicsTablePayout1.getSelectionModel().getSelectedItem() != null) {
@@ -901,7 +905,7 @@ public class MainController implements Initializable {
         ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModelCar.getText(), carTypeCar.getText(), carVINCar.getText()));
 
         if (lCar.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Cars list is empty");
         else
             carsTableCar.setItems(lCar);
     }
@@ -955,7 +959,9 @@ public class MainController implements Initializable {
             PDFSampleMain.main(parameters);
             SelectARepair.setVisible(false);
             billGeneratedOK.setVisible(true);
+            logger.log(Level.INFO, "Generate PDF - PDF generated correctly");
         } else {
+            logger.log(Level.WARNING, "Generate PDF - no repair is selected - aborting");
             SelectARepair.setVisible(true);  // if no repair is selected, generate error message
             billGeneratedOK.setVisible(false);
         }

@@ -4,12 +4,10 @@ import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
 import com.example.Autoservis.view.FxmlView;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -20,8 +18,9 @@ import org.springframework.stereotype.Controller;
 import java.net.URL;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Controller
 public class MechanicMainSceneController implements Initializable {
@@ -41,7 +40,7 @@ public class MechanicMainSceneController implements Initializable {
     @FXML private Label repairAdded;
     @FXML private Label errorMess;
     @FXML public Button componentSelection;
-    ////////////////////////////////////////////////////////
+
     @FXML private TableView<Components> componentsTableC;
     @FXML private TableColumn<Components,String> componentColC;
     @FXML private TableColumn<Components,String> carTypeColC;
@@ -49,13 +48,14 @@ public class MechanicMainSceneController implements Initializable {
     @FXML private TableColumn<Components,String> IdColC;
     @FXML private TextField nameTextC;
     @FXML private TextField carTypeTextC;
-    ////////////////////////////////////////////////////////
+
     @Autowired private CarsService carsService;
     @Autowired private RepairsService repairsService;
     @Autowired private ComponentService componentService;
     @Autowired private ComponentsService componentsService;
     @Lazy @Autowired private StageManager stageManager;
 
+    private static final Logger logger = Logger.getLogger(MechanicMainSceneController.class.getName());
     MainController mainController = new MainController();
 
     @Override
@@ -85,7 +85,7 @@ public class MechanicMainSceneController implements Initializable {
         ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModel.getText(), carType.getText(), carVIN.getText()));
 
         if (lCar.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Cars list is empty");
         else
             carsTable.setItems(lCar);
     }
@@ -98,12 +98,14 @@ public class MechanicMainSceneController implements Initializable {
 
         // show error if no car is selected
         if (carsTable.getSelectionModel().getSelectedItem() == null) {
+            logger.log(Level.WARNING,"Add new repair - no car selected - aborting");
             errorMess.setVisible(true);
             return;
         }
 
         // show error if repair cost is not specified
         if (repairCost.getText().equals("")) {
+            logger.log(Level.WARNING,"Add new repair - invalid cost - aborting");
             errorMess.setVisible(true);
             return;
         }
@@ -123,9 +125,11 @@ public class MechanicMainSceneController implements Initializable {
             if (componentSelection.getUserData() == null) {
                 Repairs nRepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
                 repairsService.save(nRepair);
+                logger.log(Level.INFO,"New repair added to database Repairs");
             } else {
                 Repairs nRepair = new Repairs(carId, start_date, finish_date, mechId, rep, cost);
                 Repairs saveRepair = repairsService.save(nRepair);
+                logger.log(Level.INFO,"New repair added to database Repairs");
 
                 String cId = componentSelection.getUserData().toString();
 
@@ -134,16 +138,20 @@ public class MechanicMainSceneController implements Initializable {
                 nComponent.setComponents_id(Integer.parseInt(cId));
                 nComponent.setRepair_id((int) saveRepair.getRepair_id());
                 componentService.save(nComponent);
+                logger.log(Level.INFO,"New component added to database Components");
 
                 // update the amount of componentSSS in database
                 Components aComponent = componentsService.findByComponentId(Integer.parseInt(cId));
                 aComponent.setAmount(aComponent.getAmount() - 1);
                 componentsService.update(aComponent);
+                logger.log(Level.INFO,"Component amount updated");
             }
             repairAdded.setVisible(true);
         }
-        else
+        else {
+            logger.log(Level.WARNING,"Add new repair - missing values - aborting");
             errorMess.setVisible(true); // if some fields are not filled, generate error message
+        }
     }
 
     public String repairCostM;
@@ -185,7 +193,7 @@ public class MechanicMainSceneController implements Initializable {
         ObservableList<Components> components = FXCollections.observableArrayList(componentsService.getComponents(nameTextC.getText(), carTypeTextC.getText()));
 
         if (components.isEmpty())
-            System.out.println("No result");
+            logger.log(Level.WARNING,"Components list is empty");
         else
             componentsTableC.setItems(components);
     }

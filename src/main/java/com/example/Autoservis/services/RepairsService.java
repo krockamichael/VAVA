@@ -1,11 +1,7 @@
 package com.example.Autoservis.services;
 
-import com.example.Autoservis.bean.Cars;
 import com.example.Autoservis.bean.Repairs;
 import com.example.Autoservis.generic.GenericService;
-import org.springframework.data.jpa.repository.Query;
-
-import java.sql.ResultSet;
 import java.util.List;
 
 public interface RepairsService extends GenericService<Repairs> {

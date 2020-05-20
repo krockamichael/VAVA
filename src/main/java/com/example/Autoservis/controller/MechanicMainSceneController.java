@@ -225,9 +225,12 @@ public class MechanicMainSceneController implements Initializable {
         }
     }
 
-    ///////////////////////////////////////////
-    // LANGUAGE FUNCTIONS - ENGLISH & SLOVAK //
-    ///////////////////////////////////////////
+    /**
+     LANGUAGE FUNCTIONS - ENGLISH & SLOVAK
+     - each screen has a specific set of labels, buttons and / or pre-filled text fields
+     - when changing scenes, language functions are called to keep the selected language
+     - language can be changed by clicking EN / SK language buttons in the application
+     */
 
     @FXML private Tab newRepair_tab;
     @FXML private Label mechMainScene_brand_label;

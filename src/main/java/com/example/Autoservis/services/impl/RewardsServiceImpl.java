@@ -6,8 +6,6 @@ import com.example.Autoservis.services.RewardsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class RewardsServiceImpl implements RewardsService {
 
@@ -32,20 +30,5 @@ public class RewardsServiceImpl implements RewardsService {
     @Override
     public Rewards update(Rewards entity) {
         return rewardsRepository.save(entity);
-    }
-
-    @Override
-    public void delete(Rewards entity) {
-        rewardsRepository.delete(entity);
-    }
-
-    @Override
-    public void delete(Long id) {
-        rewardsRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Rewards> findAll() {
-        return rewardsRepository.findAll();
     }
 }

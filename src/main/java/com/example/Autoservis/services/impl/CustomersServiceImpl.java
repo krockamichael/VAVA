@@ -1,12 +1,10 @@
 package com.example.Autoservis.services.impl;
 
-import com.example.Autoservis.bean.Components;
 import com.example.Autoservis.bean.Customers;
 import com.example.Autoservis.repository.CustomersRepository;
 import com.example.Autoservis.services.CustomersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -46,20 +44,5 @@ public class CustomersServiceImpl implements CustomersService {
     @Override
     public Customers update(Customers entity) {
         return customersRepository.save(entity);
-    }
-
-    @Override
-    public void delete(Customers entity) {
-        customersRepository.delete(entity);
-    }
-
-    @Override
-    public void delete(Long id) {
-        customersRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Customers> findAll() {
-        return customersRepository.findAll();
     }
 }

@@ -5,6 +5,7 @@ import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
 import com.example.Autoservis.view.FxmlView;
+import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
+import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -136,13 +138,11 @@ public class MainController implements Initializable {
     @Autowired private ComponentsService componentsService;
     @Autowired private RepairsService repairsService;
 
-    @FXML public GridPane FinanceGrid;
-    @FXML public GridPane CarGrid;
-    @FXML public TabPane tabPane;
-    @FXML public Tab financeTab;
-    @FXML public Tab overview_R_Tab;
-    @FXML public Tab repairHistoryTab;
-    @FXML public GridPane RepairGrid;
+    @FXML private TabPane tabPane;
+    @FXML private Tab financeTab;
+    @FXML private Tab overview_R_Tab;
+    @FXML private Tab repairHistoryTab;
+
     @Lazy @Autowired private StageManager stageManager;
 
     private static final Logger logger = Logger.getLogger(MainController.class.getName());
@@ -181,14 +181,24 @@ public class MainController implements Initializable {
         // if user is type 2, he is a mechanic
         else if (userType == 2) {
             // keep selected language
-            if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.MechanicScene);
-            else stageManager.switchScene(FxmlView.MechanicSceneSVK);
+            if (global_lang.equals("eng")){
+                MechanicMainSceneController.global_lang = "eng";
+                stageManager.switchScene(FxmlView.MechanicScene);
+            }
+            else{
+                MechanicMainSceneController.global_lang = "svk";
+                stageManager.switchScene(FxmlView.MechanicSceneSVK);
+            }
             logger.log(Level.INFO,"Credentials checked, Mechanic is logged in");
             uid = uid-1;
         }
         else {
             logger.log(Level.WARNING, "Unsuccessful login attempted");
-            errMess.setVisible(true); // if user doesn't exist, generate error message
+            // if user doesn't exist, generate error message
+            errMess.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errMess.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -214,6 +224,9 @@ public class MainController implements Initializable {
         if (name.equals("") || Password.toString().equals("") || mechName.equals("") || mechSurname.equals("")) {
             logger.log(Level.WARNING,"Add new user - missing values - aborting");
             newUserError.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newUserError.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -228,19 +241,33 @@ public class MainController implements Initializable {
             // new mechanic is created and is saved to database
             Mechanics mechanic = new Mechanics(mechName, mechSurname, (int) usersService.getID(name, password));
             mechanicsService.save(mechanic);
-
             logger.log(Level.INFO,"New mechanic added to databases Users and Mechanics");
+
+            //generate successful message
+            newAccountAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newAccountAddedLabel.setVisible(false));
+            visibleP.play();
         }
         else if (userTypeAdmin.isSelected()) {
             // create new user object always and save it to database
             Users user = new Users(name, password, 1);
             usersService.save(user);
             logger.log(Level.INFO,"New admin added to database Users");
+
+            //generate successful message
+            newAccountAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newAccountAddedLabel.setVisible(false));
+            visibleP.play();
         }
         else {
             logger.log(Level.WARNING,"Add new user - undefined user type - aborting");
             // if neither is selected generate error message
             newUserError.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newUserError.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -265,6 +292,9 @@ public class MainController implements Initializable {
         if (custo_Email.equals("") || custo_IdNum.equals("") || custo_Name.equals("") || custo_Phone.equals("")) {
             logger.log(Level.WARNING,"Add new customer - missing values - aborting");
             invalidFormat.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormat.setVisible(false));
+            visibleP.play();
             return;
         }
         // check if phone number is correct
@@ -280,10 +310,20 @@ public class MainController implements Initializable {
             Customer_phone.setText("");
             customerIdNum.setText("");
             Customer_surname.setText("");
+
+            //generate successful message
+            customerAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  customerAddedLabel.setVisible(false));
+            visibleP.play();
         }
         else {
             logger.log(Level.WARNING, "Add new customer - invalid phone number - aborting");
-            invalidFormat.setVisible(true); // if phone number is incorrect generate error message
+            // if phone number is incorrect generate error message
+            invalidFormat.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormat.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -305,9 +345,9 @@ public class MainController implements Initializable {
         fuelType.getSelectionModel().select(0);
     }
 
-    public String rewardForM;
-    public String reasonForRewardM;
-    public String payoutForM;
+    private String rewardForM;
+    private String reasonForRewardM;
+    private String payoutForM;
 
     @FXML
     private void selectMechanicReward() {
@@ -350,7 +390,11 @@ public class MainController implements Initializable {
         // check if all values are set
         if (r1[0].equals("") || r1[1].equals("")) {
             logger.log(Level.WARNING,"Add new payout - missing values - aborting");
+
             invalidFormatP.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatP.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -367,9 +411,19 @@ public class MainController implements Initializable {
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
+
+            //generate successful message
+            newPayoutAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newPayoutAddedLabel.setVisible(false));
+            visibleP.play();
         } else {
             logger.log(Level.WARNING, "Add new payout - invalid payout - aborting");
-            invalidFormatP.setVisible(true); // if number is not a number, generate error message
+            // if number is not a number, generate error message
+            invalidFormatP.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatP.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -384,6 +438,9 @@ public class MainController implements Initializable {
         if (r1[0].equals("") || r1[1].equals("")) {
             logger.log(Level.WARNING,"Update payout - missing values - aborting");
             invalidFormatP.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatP.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -398,10 +455,20 @@ public class MainController implements Initializable {
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
+
+            //generate successful message
+            payoutUpdatedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  payoutUpdatedLabel.setVisible(false));
+            visibleP.play();
         }
         else {
             logger.log(Level.WARNING, "Update payout - invalid payout - aborting");
-            invalidFormatP.setVisible(true); // if number is not a number, generate error message
+            // if number is not a number, generate error message
+            invalidFormatP.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatP.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -415,6 +482,9 @@ public class MainController implements Initializable {
         if ((r1[0].equals("") || r1[1].equals("")) || (r1[0].equals("Selected") || r1[0].equals("Mechanic"))) {
             logger.log(Level.WARNING, "Delete payout - missing values - aborting");
             invalidFormatP.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatP.setVisible(false));
+            visibleP.play();
         }
         else {
             // get mechanic object by name and surname
@@ -425,6 +495,12 @@ public class MainController implements Initializable {
             logger.log(Level.INFO,"A reward and a payout was deleted");
             // reset text field
             selectedMechanic1.setText("");
+
+            //generate successful message
+            payoutDeletedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  payoutDeletedLabel.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -440,6 +516,9 @@ public class MainController implements Initializable {
         if (r[0].equals("") || r[1].equals("")) {
             logger.log(Level.WARNING,"Add new reward - missing values - aborting");
             invalidFormatR.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatR.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -471,10 +550,19 @@ public class MainController implements Initializable {
             selectedMechanic.setText("");
             reward.setText("");
             reasonReward.setText("");
+
+            newRewardAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newRewardAddedLabel.setVisible(false));
+            visibleP.play();
         }
         else {
             logger.log(Level.WARNING, "Add new reward - invalid reward - aborting");
-            invalidFormatR.setVisible(true); // if the number is invalid, generate error message
+            // if the number is invalid, generate error message
+            invalidFormatR.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  invalidFormatR.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -490,6 +578,9 @@ public class MainController implements Initializable {
         if (brand.equals("") || model.equals("") || vin.equals("") || fuel.equals("") || selectedCustomer.toString().equals("")) {
             logger.log(Level.WARNING, "Add new car - missing values - aborting");
             emptyFieldsError.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  emptyFieldsError.setVisible(false));
+            visibleP.play();
         }
 
         // if ALL values are set
@@ -500,7 +591,6 @@ public class MainController implements Initializable {
             logger.log(Level.INFO,"New car added to database Cars");
 
             // reset all text fields
-            carAddedMess.setVisible(true);
             selectedCustomer.setText("");
             selectedCustomer.setUserData(null);
             emptyFieldsError.setVisible(false);
@@ -508,6 +598,11 @@ public class MainController implements Initializable {
             Car_brand.setText("");
             Car_model.setText("");
             Car_vin.setText("");
+
+            carAddedMess.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  carAddedMess.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -519,10 +614,10 @@ public class MainController implements Initializable {
         else changeToSlovakLang();
     }
 
-    public String vinCarC;
-    public String brandCarC;
-    public String modelCarC;
-    public int fuelTypeCarC;
+    private String vinCarC;
+    private String brandCarC;
+    private String modelCarC;
+    private int fuelTypeCarC;
 
     @FXML
     private void loadCustomerSelection() {
@@ -556,6 +651,9 @@ public class MainController implements Initializable {
         if (cost.getText().equals("") || !cost.getText().matches("^[0-9]+\\.?[0-9]*$")) {
             logger.log(Level.WARNING,"Add new component - missing values - aborting");
             errComponents.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errComponents.setVisible(false));
+            visibleP.play();
             return;
         }
         costD = Double.parseDouble(cost.getText());
@@ -564,6 +662,9 @@ public class MainController implements Initializable {
         if (amount.getText().equals("") || !amount.getText().matches("^[0-9]+$")) {
             logger.log(Level.WARNING,"Add new component - invalid amount - aborting");
             errComponents.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errComponents.setVisible(false));
+            visibleP.play();
             return;
         }
         amountI = Integer.parseInt(amount.getText());
@@ -572,6 +673,9 @@ public class MainController implements Initializable {
         if (componentS.equals("") || carTypeS.equals("")) {
             logger.log(Level.WARNING, "Add new components - missing values - aborting");
             errComponents.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errComponents.setVisible(false));
+            visibleP.play();
         }
         else {
             // if they are set, create new Components object and save it to database
@@ -584,6 +688,11 @@ public class MainController implements Initializable {
             carType.setText("");
             cost.setText("");
             amount.setText("");
+
+            newComponentAddedLabel.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  newComponentAddedLabel.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -655,16 +764,20 @@ public class MainController implements Initializable {
             OORt_selectArepair_label.setVisible(false);
         } else {
             logger.log(Level.WARNING,"Select a mechanic to show statistics - no mechanic selected - aborting");
-            OORt_selectArepair_label.setVisible(true); // if no mechanic is selected generate error message
+            // if no mechanic is selected generate error message
+            OORt_selectArepair_label.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  OORt_selectArepair_label.setVisible(false));
+            visibleP.play();
         }
     }
 
-    public String totalNumberOfRepairs;
-    public String averageRepairTime;
-    public String totalRepairTime;
-    public String nameAtOverviewR;
-    public String surnameAtOverviewR;
-    public ObservableList<Mechanics> itemsMechanics;
+    private String totalNumberOfRepairs;
+    private String averageRepairTime;
+    private String totalRepairTime;
+    private String nameAtOverviewR;
+    private String surnameAtOverviewR;
+    private ObservableList<Mechanics> itemsMechanics;
 
     public void loadRepairD() {
         String[] r = null;
@@ -723,7 +836,11 @@ public class MainController implements Initializable {
         }
         else {
             logger.log(Level.WARNING,"Select a mechanic to show repairs - no mechanic selected - aborting");
-            OORt_selectArepair_label.setVisible(true); // if an error occurred (no item is selected), generate error message
+            // if an error occurred (no item is selected), generate error message
+            OORt_selectArepair_label.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  OORt_selectArepair_label.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -902,7 +1019,7 @@ public class MainController implements Initializable {
     @FXML
     protected void filterCar() {
         // get cars based on car model, brand and VIN number and set them to table
-        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModelCar.getText(), carTypeCar.getText(), carVINCar.getText()));
+        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsMaybe(carModelCar.getText(), carTypeCar.getText(), carVINCar.getText()));
 
         if (lCar.isEmpty())
             logger.log(Level.WARNING,"Cars list is empty");
@@ -958,12 +1075,19 @@ public class MainController implements Initializable {
 
             PDFSampleMain.main(parameters);
             SelectARepair.setVisible(false);
-            billGeneratedOK.setVisible(true);
             logger.log(Level.INFO, "Generate PDF - PDF generated correctly");
+            billGeneratedOK.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  billGeneratedOK.setVisible(false));
+            visibleP.play();
         } else {
             logger.log(Level.WARNING, "Generate PDF - no repair is selected - aborting");
-            SelectARepair.setVisible(true);  // if no repair is selected, generate error message
             billGeneratedOK.setVisible(false);
+            // if no repair is selected, generate error message
+            SelectARepair.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  SelectARepair.setVisible(false));
+            visibleP.play();
         }
     }
 
@@ -995,7 +1119,7 @@ public class MainController implements Initializable {
         login_Username_label.setText("Meno :");
         login_Password_label.setText("Heslo :");
         Login_btn.setText("Prihlásiť sa");
-        if (errMess != null) { errMess.setText("Chybné prisahlovacie údaje!"); }
+        if (errMess != null) { errMess.setText("Chybné prihlasovacie údaje!"); }
         global_lang = "svk";
     }
 
@@ -1005,6 +1129,7 @@ public class MainController implements Initializable {
     @FXML private Label NCt_name_label;
     @FXML private Label NCt_surname_label;
     @FXML private Label NCt_phone_num_label;
+    @FXML private Label customerAddedLabel;
     @FXML private Button newCustomer_btn;
     @FXML private Button car_information_btn;
     // AdminMainScene - Account management tab
@@ -1015,6 +1140,7 @@ public class MainController implements Initializable {
     @FXML private Label AMt_name_label;
     @FXML private Label AMt_surname_label;
     @FXML private Label AMt_type_label;
+    @FXML private Label newAccountAddedLabel;
     @FXML private Button AMt_newUser_btn;
     // AdminMainScene - New component tab
     @FXML private Tab NCot_tab;
@@ -1022,6 +1148,7 @@ public class MainController implements Initializable {
     @FXML private Label NCot_carType_label;
     @FXML private Label NCot_cost_label;
     @FXML private Label NCot_amount_label;
+    @FXML private Label newComponentAddedLabel;
     @FXML private Button NCot_addComponent_btn;
     // AdminMainScene - Finance tab
     @FXML private Label Ft_rewrads_label;
@@ -1031,6 +1158,10 @@ public class MainController implements Initializable {
     @FXML private Label Ft_rewardReason_label;
     @FXML private Label Ft_selectMechanic_label;
     @FXML private Label Ft_selectMechanic_label1;
+    @FXML private Label newRewardAddedLabel;
+    @FXML private Label newPayoutAddedLabel;
+    @FXML private Label payoutUpdatedLabel;
+    @FXML private Label payoutDeletedLabel;
     @FXML private Button Ft_selectMechanic_btn;
     @FXML private Button Ft_selectMechanic_btn1;
     @FXML private Button Ft_addReward_btn;
@@ -1065,6 +1196,7 @@ public class MainController implements Initializable {
         car_information_btn.setText("Add car information");
         New_customer_tab.setText("New customer");
         if (invalidFormat != null){ invalidFormat.setText("Missing values!"); }
+        if (customerAddedLabel != null){ customerAddedLabel.setText("Customer added"); }
 
         // AdminMainScene - Account management tab
         Acc_man_tab.setText("Account management");
@@ -1078,6 +1210,7 @@ public class MainController implements Initializable {
         userTypeAdmin.setText("Administrator");
         AMt_newUser_btn.setText("Add");
         if (newUserError != null) { newUserError.setText("Missing values!"); }
+        if (newAccountAddedLabel != null) { newAccountAddedLabel.setText("Account created"); }
 
         // AdminMainScene - New component tab
         NCot_tab.setText("New component");
@@ -1087,6 +1220,7 @@ public class MainController implements Initializable {
         NCot_amount_label.setText("Amount :");
         NCot_addComponent_btn.setText("Add component");
         if (errComponents != null) { errComponents.setText("Invalid values!"); }
+        if (newComponentAddedLabel != null) { newComponentAddedLabel.setText("Component added"); }
 
         // AdminMainScene - Finance tab
         financeTab.setText("Finance");
@@ -1107,6 +1241,10 @@ public class MainController implements Initializable {
         if (invalidFormatP != null) { invalidFormatP.setText("Missing values!"); }
         if (selectedMechanic.getText().equals("Vybraný Mechanik")) { selectedMechanic.setText("Selected Mechanic"); }
         if (selectedMechanic1.getText().equals("Vybraný Mechanik")) { selectedMechanic1.setText("Selected Mechanic"); }
+        if (newRewardAddedLabel != null) { newRewardAddedLabel.setText("Reward added"); }
+        if (newPayoutAddedLabel != null) { newPayoutAddedLabel.setText("Payout added"); }
+        if (payoutUpdatedLabel != null) { payoutUpdatedLabel.setText("Payout updated"); }
+        if (payoutDeletedLabel != null) { payoutDeletedLabel.setText("Payout deleted"); }
 
         // AdminMainScene - Overview of repairs tab
         overview_R_Tab.setText("Overview of repairs");
@@ -1152,6 +1290,7 @@ public class MainController implements Initializable {
         car_information_btn.setText("Pridať auto");
         New_customer_tab.setText("Nový zákazník");
         if (invalidFormat != null){ invalidFormat.setText("Chýbajúce hodnoty!"); }
+        if (customerAddedLabel != null){ customerAddedLabel.setText("Zákazník pridaný"); }
 
         // AdminMainScene - Správa účtov tab
         Acc_man_tab.setText("Správa účtov");
@@ -1165,6 +1304,7 @@ public class MainController implements Initializable {
         userTypeAdmin.setText("Administrátor");
         AMt_newUser_btn.setText("Pridať");
         if (newUserError != null) { newUserError.setText("Chýbajúce hodnoty!"); }
+        if (newAccountAddedLabel != null) { newAccountAddedLabel.setText("Účet vytvorený"); }
 
         // AdminMainScene - Nový komponent tab
         NCot_tab.setText("Nový komponent");
@@ -1174,6 +1314,7 @@ public class MainController implements Initializable {
         NCot_amount_label.setText("Počet :");
         NCot_addComponent_btn.setText("Pridať komponent");
         if (errComponents != null) { errComponents.setText("Neplatné hodnoty!"); }
+        if (newComponentAddedLabel != null) { newComponentAddedLabel.setText("Komponent pridaný"); }
 
         // AdminMainScene - Financie tab
         financeTab.setText("Financie");
@@ -1194,6 +1335,11 @@ public class MainController implements Initializable {
         if (invalidFormatP != null) { invalidFormatP.setText("Chýbajú hodnoty!"); }
         if (selectedMechanic.getText().equals("Selected Mechanic")) { selectedMechanic.setText("Vybraný Mechanik"); }
         if (selectedMechanic1.getText().equals("Selected Mechanic")) { selectedMechanic1.setText("Vybraný Mechanik"); }
+        if (newRewardAddedLabel != null) { newRewardAddedLabel.setText("Odmena pridaná"); }
+        if (newPayoutAddedLabel != null) { newPayoutAddedLabel.setText("Výplata pridaná"); }
+        if (payoutUpdatedLabel != null) { payoutUpdatedLabel.setText("Výplata aktualizovaná"); }
+        if (payoutDeletedLabel != null) { payoutDeletedLabel.setText("Výplata zmazaná"); }
+
 
         // AdminMainScene - Prehľad opráv tab
         overview_R_Tab.setText("Prehľad opráv");
@@ -1205,9 +1351,9 @@ public class MainController implements Initializable {
         OORt_totalNumOfRep_label.setText("Celkový počet opráv:");
         OORt_totalRepTime_label.setText("Celkový čas opráv:");
         OORt_avgRepTime_label.setText("Priemerný čas opráv:");
-        OORt_filter_btn.setText("Filtorvať");
+        OORt_filter_btn.setText("Filtrovať");
         OORt_showDetails_btn.setText("Zobraziť detaily");
-        if (OORt_selectArepair_label != null) { OORt_selectArepair_label.setText("Vyerte opravu!"); }
+        if (OORt_selectArepair_label != null) { OORt_selectArepair_label.setText("Vyberte opravu!"); }
 
         // AdminMainScene - História opráv tab
         repairHistoryTab.setText("História opráv");
@@ -1343,11 +1489,11 @@ public class MainController implements Initializable {
     @FXML
     private void custSel_changeToSlovakLang() {
         custSel_title_label.setText("Výber zákazníka");
-        custSel_filterBy_label.setText("Filtorvať podľa:");
+        custSel_filterBy_label.setText("Filtrovať podľa:");
         custSel_results_label.setText("Výsledky:");
         custSel_name_label.setText("Meno :");
         custSel_surname_label.setText("Priezvisko :");
-        custSel_filter_btn.setText("Filtorvať");
+        custSel_filter_btn.setText("Filtrovať");
         custSel_select_btn.setText("Vybrať");
         global_lang = "svk";
     }

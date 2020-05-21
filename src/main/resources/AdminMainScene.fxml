@@ -44,7 +44,12 @@
                                         <Label layoutX="291.0" layoutY="75.0" text="Email :" textFill="#99aab5" />
                                         <TextField fx:id="Customer_email" layoutX="291.0" layoutY="95.0" />
                                         <Button fx:id="newCustomer_btn" layoutX="106.0" layoutY="278.0" mnemonicParsing="false" onAction="#addNewCustomer" style="-fx-background-color: #23272a;" text="Add Customer" textFill="#99aab5" />
-                                        <Label fx:id="invalidFormat" layoutX="295.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Missing values!" textFill="#e83c3c" visible="false">
+                                        <Label fx:id="invalidFormat" layoutX="220.0" layoutY="301.0" prefHeight="17.0" prefWidth="149.0" text="Missing values!" textFill="#e83c3c" visible="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="customerAddedLabel" layoutX="216.0" layoutY="301.0" text="Customer added" textFill="#59f008" visible="false">
                                             <font>
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
@@ -74,14 +79,18 @@
                                         </RadioButton>
                                         <RadioButton fx:id="userTypeAdmin" layoutX="30.0" layoutY="255.0" prefHeight="17.0" prefWidth="147.0" text="Administrator" textFill="#99aab5" toggleGroup="$UserType" />
                                         <Label fx:id="AMt_type_label" layoutX="31.0" layoutY="198.0" text="Type : " textFill="#99aab5" />
-                                        <Line endX="-100.0" endY="281.0" layoutX="497.0" layoutY="20.0" startX="-100.0" />
                                         <Label fx:id="AMt_name_label" layoutX="226.0" layoutY="45.0" text="Name : " textFill="#99aab5" />
                                         <TextField fx:id="mechanicName" layoutX="227.0" layoutY="62.0" style="-fx-background-color: #3e4247; -fx-text-fill: #99aab5;" />
                                         <Line endX="50.0" layoutX="326.0" layoutY="90.0" startX="-100.0" />
                                         <TextField fx:id="mechanicSurname" layoutX="227.0" layoutY="148.0" style="-fx-background-color: #3e4247; -fx-text-fill: #99aab5;" />
                                         <Label fx:id="AMt_surname_label" layoutX="226.0" layoutY="131.0" text="Surname : " textFill="#99aab5" />
                                         <Line endX="50.0" layoutX="326.0" layoutY="174.0" startX="-100.0" />
-                                        <Label fx:id="newUserError" layoutX="226.0" layoutY="242.0" text="Missing values!" textFill="#e84949" visible="false">
+                                        <Label fx:id="newUserError" layoutX="145.0" layoutY="286.0" text="Missing values!" textFill="#e84949" visible="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="newAccountAddedLabel" layoutX="141.0" layoutY="286.0" text="Account created" textFill="#59f008" visible="false">
                                             <font>
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
@@ -103,7 +112,12 @@
                                         <TextField fx:id="cost" layoutX="34.0" layoutY="139.0" />
                                         <TextField fx:id="amount" layoutX="246.0" layoutY="139.0" />
                                         <Button fx:id="NCot_addComponent_btn" layoutX="294.0" layoutY="195.0" mnemonicParsing="false" onAction="#addNewComponent" style="-fx-background-color: #23272a;" text="Add component" textFill="#99aab5" />
-                                        <Label fx:id="errComponents" layoutX="82.0" layoutY="198.0" text="Invalid values!" textFill="#f24141" visible="false">
+                                        <Label fx:id="errComponents" layoutX="168.0" layoutY="198.0" text="Invalid values!" textFill="#f24141" visible="false">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                        </Label>
+                                        <Label fx:id="newComponentAddedLabel" layoutX="154.0" layoutY="198.0" text="Component added" textFill="#59f008" visible="false">
                                             <font>
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
@@ -151,6 +165,11 @@
                                                 <Insets left="40.0" top="20.0" />
                                             </GridPane.margin>
                                         </Label>
+                                        <Separator maxHeight="295.0" maxWidth="1.0" orientation="VERTICAL" prefHeight="295.0" prefWidth="0.0" GridPane.rowIndex="9">
+                                 <GridPane.margin>
+                                    <Insets left="290.0" top="-265.0" />
+                                 </GridPane.margin>
+                                 </Separator>
                                         <Button fx:id="Ft_addPayout_btn" layoutX="480.0" layoutY="226.0" mnemonicParsing="false" onAction="#addNewPayout" style="-fx-background-color: #23272a;" text="add payout" textFill="#99aab5" GridPane.rowIndex="8">
                                             <GridPane.margin>
                                                 <Insets left="490.0" top="5.0" />
@@ -201,7 +220,7 @@
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
                                             <GridPane.margin>
-                                                <Insets left="300.0" />
+                                                <Insets left="310.0" top="10" />
                                             </GridPane.margin>
                                         </Label>
                                         <Label fx:id="invalidFormatR" layoutX="170.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Missing values!" textFill="#e83c3c" visible="false" GridPane.rowIndex="9">
@@ -209,7 +228,39 @@
                                                 <Font name="System Bold" size="14.0" />
                                             </font>
                                             <GridPane.margin>
-                                                <Insets left="170.0" />
+                                                <Insets left="170.0" top="10.0" />
+                                            </GridPane.margin>
+                                        </Label>
+                                        <Label fx:id="newRewardAddedLabel" layoutX="170.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Reward added" textFill="#59f008" visible="false" GridPane.rowIndex="9">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                            <GridPane.margin>
+                                                <Insets left="170.0" top="10.0" />
+                                            </GridPane.margin>
+                                        </Label>
+                                        <Label fx:id="newPayoutAddedLabel" layoutX="315.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Payout added" textFill="#59f008" visible="false" GridPane.rowIndex="9">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                            <GridPane.margin>
+                                                <Insets left="310.0" top="10.0"/>
+                                            </GridPane.margin>
+                                        </Label>
+                                        <Label fx:id="payoutUpdatedLabel" layoutX="315.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Payout updated" visible="false" textFill="#59f008" GridPane.rowIndex="10">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                            <GridPane.margin>
+                                                <Insets left="310.0" top="15.0"/>
+                                            </GridPane.margin>
+                                        </Label>
+                                        <Label fx:id="payoutDeletedLabel" layoutX="315.0" layoutY="281.0" prefHeight="17.0" prefWidth="149.0" text="Payout deleted" textFill="#59f008" visible="false" GridPane.rowIndex="9">
+                                            <font>
+                                                <Font name="System Bold" size="14.0" />
+                                            </font>
+                                            <GridPane.margin>
+                                                <Insets left="300.0" top="10.0"/>
                                             </GridPane.margin>
                                         </Label>
                                         <TextField fx:id="selectedMechanic" editable="false" layoutX="50.0" layoutY="162.0" maxHeight="50.0" maxWidth="150.0" prefHeight="26.0" prefWidth="100.0" text="Selected Mechanic" GridPane.rowIndex="7">
@@ -236,7 +287,8 @@
                                         <RowConstraints maxHeight="48.0" minHeight="43.0" prefHeight="47.0" />
                                         <RowConstraints />
                                         <RowConstraints />
-                                        <RowConstraints />
+                                        <RowConstraints maxHeight="37.60000000000002" minHeight="37.0" prefHeight="37.0" />
+                              <RowConstraints maxHeight="0.6000000000000227" minHeight="0.0" prefHeight="0.6000000000000227" />
                                     </rowConstraints>
                                 </GridPane>
                             </content>

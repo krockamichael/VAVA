@@ -6,8 +6,6 @@ import com.example.Autoservis.services.PayoutsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class PayoutsServiceImpl implements PayoutsService {
 
@@ -37,20 +35,5 @@ public class PayoutsServiceImpl implements PayoutsService {
     @Override
     public Payouts update(Payouts entity) {
         return payoutsRepository.save(entity);
-    }
-
-    @Override
-    public void delete(Payouts entity) {
-        payoutsRepository.delete(entity);
-    }
-
-    @Override
-    public void delete(Long id) {
-        payoutsRepository.deleteById(id);
-    }
-
-    @Override
-    public List<Payouts> findAll() {
-        return payoutsRepository.findAll();
     }
 }

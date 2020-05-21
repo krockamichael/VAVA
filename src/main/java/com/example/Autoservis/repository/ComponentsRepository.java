@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ComponentsRepository extends JpaRepository<Components, Long> {
-    Components findByNameAndCarType(String name, String carType);
     Components findByComponentId(long component_id);
 }

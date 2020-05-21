@@ -4,6 +4,7 @@ import com.example.Autoservis.bean.*;
 import com.example.Autoservis.config.StageManager;
 import com.example.Autoservis.services.*;
 import com.example.Autoservis.view.FxmlView;
+import javafx.animation.PauseTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -12,6 +13,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.util.Duration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Controller;
@@ -24,7 +26,7 @@ import java.util.logging.Logger;
 
 @Controller
 public class MechanicMainSceneController implements Initializable {
-    private String global_lang = "eng";
+    protected static String global_lang = "eng";
     @FXML private TableView<Cars> carsTable;
     @FXML private TableColumn<Cars,String> modelCol;
     @FXML private TableColumn<Cars,String> typeCol;
@@ -56,7 +58,6 @@ public class MechanicMainSceneController implements Initializable {
     @Lazy @Autowired private StageManager stageManager;
 
     private static final Logger logger = Logger.getLogger(MechanicMainSceneController.class.getName());
-    MainController mainController = new MainController();
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -82,7 +83,7 @@ public class MechanicMainSceneController implements Initializable {
     @FXML
     protected void filter() {
         // get cars based on car model, brand and VIN number and set them to table
-        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsmaybe(carModel.getText(), carType.getText(), carVIN.getText()));
+        ObservableList<Cars> lCar = FXCollections.observableArrayList(carsService.getCarsMaybe(carModel.getText(), carType.getText(), carVIN.getText()));
 
         if (lCar.isEmpty())
             logger.log(Level.WARNING,"Cars list is empty");
@@ -100,6 +101,9 @@ public class MechanicMainSceneController implements Initializable {
         if (carsTable.getSelectionModel().getSelectedItem() == null) {
             logger.log(Level.WARNING,"Add new repair - no car selected - aborting");
             errorMess.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errorMess.setVisible(false));
+            visibleP.play();
             return;
         }
 
@@ -107,6 +111,9 @@ public class MechanicMainSceneController implements Initializable {
         if (repairCost.getText().equals("")) {
             logger.log(Level.WARNING,"Add new repair - invalid cost - aborting");
             errorMess.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errorMess.setVisible(false));
+            visibleP.play();
             return;
         }
         double cost = Double.parseDouble(repairCost.getText());
@@ -146,22 +153,39 @@ public class MechanicMainSceneController implements Initializable {
                 componentsService.update(aComponent);
                 logger.log(Level.INFO,"Component amount updated");
             }
+            repair.setText("");
+            repairCost.setText("");
+            carModel.setText("");
+            carVIN.setText("");
+            carType.setText("");
+            startDate.setValue(null);
+            finishDate.setValue(null);
+            if (global_lang.equals("eng")){componentSelection.setText("Select a Component");}
+            else{componentSelection.setText("Vyberte komponent");}
+
             repairAdded.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  repairAdded.setVisible(false));
+            visibleP.play();
         }
         else {
             logger.log(Level.WARNING,"Add new repair - missing values - aborting");
-            errorMess.setVisible(true); // if some fields are not filled, generate error message
+            // if some fields are not filled, generate error message
+            errorMess.setVisible(true);
+            PauseTransition visibleP = new PauseTransition(Duration.seconds(2));
+            visibleP.setOnFinished(actionEvent ->  errorMess.setVisible(false));
+            visibleP.play();
         }
     }
 
-    public String repairCostM;
-    public String repairTextM;
-    public String modelCarM;
-    public String modelTypeM;
-    public String modelVinM;
-    public LocalDate startingDateM;
-    public LocalDate finishDateM;
-    public ObservableList<Cars> items;
+    private String repairCostM;
+    private String repairTextM;
+    private String modelCarM;
+    private String modelTypeM;
+    private String modelVinM;
+    private LocalDate startingDateM;
+    private LocalDate finishDateM;
+    private ObservableList<Cars> items;
 
     @FXML
     protected void loadComponentSelection() {
@@ -257,7 +281,7 @@ public class MechanicMainSceneController implements Initializable {
         mechMainScene_repair_label.setText("Repair :");
         mechMainScene_filter_btn.setText("Filter");
         mechMainScene_addRepair_btn.setText("Add repair");
-        if (repairAdded != null) { repairAdded.setText("Repair added!"); }
+        if (repairAdded != null) { repairAdded.setText("Repair added"); }
         if (errorMess != null) { errorMess.setText("Missing fields!"); }
         global_lang = "eng";
     }
@@ -276,7 +300,7 @@ public class MechanicMainSceneController implements Initializable {
         mechMainScene_repair_label.setText("Opis opravy :");
         mechMainScene_filter_btn.setText("Filtrovať");
         mechMainScene_addRepair_btn.setText("Pridať opravu");
-        if (repairAdded != null) { repairAdded.setText("Opravy pridané!"); }
+        if (repairAdded != null) { repairAdded.setText("Oprava pridaná"); }
         if (errorMess != null) { errorMess.setText("Chýbajú hodnoty!"); }
         global_lang = "svk";
     }

@@ -57,7 +57,14 @@ public class MechanicMainSceneController implements Initializable {
     @Autowired private ComponentsService componentsService;
     @Lazy @Autowired private StageManager stageManager;
 
-    private static final Logger logger = Logger.getLogger(MechanicMainSceneController.class.getName());
+    private static final Logger logger;
+    static {
+        String path = MechanicMainSceneController.class.getClassLoader()
+                .getResource("logging.properties")
+                .getFile();
+        System.setProperty("java.util.logging.config.file", path);
+        logger = Logger.getLogger(MechanicMainSceneController.class.getName());
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {

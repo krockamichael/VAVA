@@ -145,7 +145,15 @@ public class MainController implements Initializable {
 
     @Lazy @Autowired private StageManager stageManager;
 
-    private static final Logger logger = Logger.getLogger(MainController.class.getName());
+    private static final Logger logger;
+
+    static {
+        String path = MainController.class.getClassLoader()
+                .getResource("logging.properties")
+                .getFile();
+        System.setProperty("java.util.logging.config.file", path);
+        logger = Logger.getLogger(MainController.class.getName());
+    }
 
     public int getUid() {
         return uid;

@@ -2,71 +2,71 @@ package com.example.Autoservis.view;
 
 public enum FxmlView {
 
-    Login {
+    LOGIN {
         @Override
         public String getFxmlFile() {
             return "/LoginScene.fxml";
         }
     },
-    LoginSVK {
+    LOGIN_SVK {
         @Override
         public String getFxmlFile() { return "/LoginSceneSVK.fxml"; }
     },
-    CarScene {
+    CAR_SCENE {
         @Override
         public String getFxmlFile() {
             return "/CarScene.fxml";
         }
     },
-    CarSelection {
+    CAR_SELECTION {
         @Override
         public String getFxmlFile() {
             return "/CarSelection.fxml";
         }
     },
-    ComponentSelection {
+    COMPONENT_SELECTION {
         @Override
         public String getFxmlFile() {
             return "/ComponentSelection.fxml";
         }
     },
-    MechanicSelectionScene{
+    MECHANIC_SELECTION_SCENE {
         @Override
         public String getFxmlFile() {
             return "/MechanicSelectionScene.fxml";
         }
     },
-    CustomerSelection {
+    CUSTOMER_SELECTION {
         @Override
         public String getFxmlFile() {
             return "/CustomerSelection.fxml";
         }
     },
-    RepairScene {
+    REPAIR_SCENE {
         @Override
         public String getFxmlFile() {
             return "/RepairScene.fxml";
         }
     },
-    MechanicSelectionPayoutScene{
+    MECHANIC_SELECTION_PAYOUT_SCENE {
         @Override
         public String getFxmlFile() {
             return "/MechanicSelectionPayoutScene.fxml";
         }
     },
-    AdminScene {
+    ADMIN_SCENE {
         @Override
         public String getFxmlFile() {
             return "/AdminMainScene.fxml";
         }
     },
-    MechanicScene {
+    MECHANIC_SCENE {
         @Override
         public String getFxmlFile() {
             return "/MechanicMainScene.fxml";
         }
     },
-    MechanicSceneSVK {
+    MECHANIC_SCENE_SVK {
         @Override
         public String getFxmlFile() { return "/MechanicMainSceneSVK.fxml"; }
     };

@@ -172,7 +172,7 @@ public class MainController implements Initializable {
 
         // if user is type 1, he is an admin
         if(userType == 1) {
-            stageManager.switchScene(FxmlView.AdminScene);
+            stageManager.switchScene(FxmlView.ADMIN_SCENE);
             // keep selected language
             if (global_lang.equals("eng")) changeToEnglishLang();
             else changeToSlovakLang();
@@ -183,11 +183,11 @@ public class MainController implements Initializable {
             // keep selected language
             if (global_lang.equals("eng")){
                 MechanicMainSceneController.global_lang = "eng";
-                stageManager.switchScene(FxmlView.MechanicScene);
+                stageManager.switchScene(FxmlView.MECHANIC_SCENE);
             }
             else{
                 MechanicMainSceneController.global_lang = "svk";
-                stageManager.switchScene(FxmlView.MechanicSceneSVK);
+                stageManager.switchScene(FxmlView.MECHANIC_SCENE_SVK);
             }
             logger.log(Level.INFO,"Credentials checked, Mechanic is logged in");
             uid = uid-1;
@@ -204,7 +204,7 @@ public class MainController implements Initializable {
 
     @FXML
     protected void logout() {
-        stageManager.switchScene(FxmlView.Login);
+        stageManager.switchScene(FxmlView.LOGIN);
         logger.log(Level.INFO,"User was logged out");
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang_LoginScreen();
@@ -329,7 +329,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void addCarInformation() {
-        stageManager.switchScene(FxmlView.CarScene);
+        stageManager.switchScene(FxmlView.CAR_SCENE);
 
         // keep selected language
         if (global_lang.equals("eng")) carScene_changeToEnglishLang();
@@ -354,7 +354,7 @@ public class MainController implements Initializable {
         // save text field values so they don't reset when changing scenes
         rewardForM = reward.getText();
         reasonForRewardM = reasonReward.getText();
-        stageManager.switchScene(FxmlView.MechanicSelectionScene);
+        stageManager.switchScene(FxmlView.MECHANIC_SELECTION_SCENE);
 
         // keep selected language
         if (global_lang.equals("eng")) mechSel_changeToEnglishLang();
@@ -369,7 +369,7 @@ public class MainController implements Initializable {
     private void selectMechanicPayout() {
         // save text field values so they don't reset when changing scenes
         payoutForM = payout_s.getText();
-        stageManager.switchScene(FxmlView.MechanicSelectionPayoutScene);
+        stageManager.switchScene(FxmlView.MECHANIC_SELECTION_PAYOUT_SCENE);
 
         // keep selected language
         if (global_lang.equals("eng")) mechSelPayoutScene_changeToEnglishLang();
@@ -451,7 +451,7 @@ public class MainController implements Initializable {
             System.out.println("name: " + r1[0]);
             // update payout
             payoutsService.updatePayoutMechanic(Integer.parseInt(number), mechanic.getMechanicId(), r1[0], r1[1]);
-            logger.log(Level.INFO,"A mechniac's payout was updated");
+            logger.log(Level.INFO,"A mechanic's payout was updated");
             // reset text fields
             selectedMechanic1.setText("");
             payout_s.setText("");
@@ -608,7 +608,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void BackToAdminScene() {
-        stageManager.switchScene(FxmlView.AdminScene);
+        stageManager.switchScene(FxmlView.ADMIN_SCENE);
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang();
         else changeToSlovakLang();
@@ -627,7 +627,7 @@ public class MainController implements Initializable {
         modelCarC = Car_model.getText();
         fuelTypeCarC = fuelType.getSelectionModel().getSelectedIndex();
 
-        stageManager.switchScene(FxmlView.CustomerSelection);
+        stageManager.switchScene(FxmlView.CUSTOMER_SELECTION);
         // keep selected language
         if (global_lang.equals("eng")) custSel_changeToEnglishLang();
         else custSel_changeToSlovakLang();
@@ -698,7 +698,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void loadCarSelection() {
-        stageManager.switchScene(FxmlView.CarSelection);
+        stageManager.switchScene(FxmlView.CAR_SELECTION);
         // keep selected language
         if (global_lang.equals("eng")) carSel_changeToEnglishLang();
         else carSel_changeToSlovakLang();
@@ -801,7 +801,7 @@ public class MainController implements Initializable {
             totalRepairTime = TotalRepairT.getText();
             itemsMechanics = OverViewTable.getItems();
 
-            stageManager.switchScene(FxmlView.RepairScene);
+            stageManager.switchScene(FxmlView.REPAIR_SCENE);
             // keep selected language
             if (global_lang.equals("eng")) repairScene_changeToEnglishLang();
             else repairScene_changeToSlovakLang();
@@ -846,7 +846,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void backToAdminSceneRepair() {
-        stageManager.switchScene(FxmlView.AdminScene);
+        stageManager.switchScene(FxmlView.ADMIN_SCENE);
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang();
         else changeToSlovakLang();
@@ -924,7 +924,7 @@ public class MainController implements Initializable {
             customerId = (int) customersTable.getSelectionModel().getSelectedItem().getCustomerId();
         }
 
-        stageManager.switchScene(FxmlView.CarScene);
+        stageManager.switchScene(FxmlView.CAR_SCENE);
 
         // set values of fuel type selectBox
         ObservableList<String> fuelTypeBox = FXCollections.observableArrayList("", "Benzín", "Diesel", "Elektrina");
@@ -957,7 +957,7 @@ public class MainController implements Initializable {
     @FXML
     private void returnMechanic() {
         String selectedMechanicS;
-        stageManager.switchScene(FxmlView.AdminScene);
+        stageManager.switchScene(FxmlView.ADMIN_SCENE);
         tabPane.getSelectionModel().select(financeTab);
 
         // check if a mechanic was selected
@@ -994,7 +994,7 @@ public class MainController implements Initializable {
     @FXML
     private void returnMechanicPayout() {
         String selectedMechanic;
-        stageManager.switchScene(FxmlView.AdminScene);
+        stageManager.switchScene(FxmlView.ADMIN_SCENE);
         tabPane.getSelectionModel().select(financeTab);
 
         // check if a mechanic was selected
@@ -1029,7 +1029,7 @@ public class MainController implements Initializable {
 
     @FXML
     private void selectCar() {
-        stageManager.switchScene(FxmlView.AdminScene);
+        stageManager.switchScene(FxmlView.ADMIN_SCENE);
 
         // keep selected language
         if (global_lang.equals("eng")) changeToEnglishLang();

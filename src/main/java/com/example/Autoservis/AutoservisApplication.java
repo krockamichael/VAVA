@@ -34,7 +34,7 @@ public class AutoservisApplication extends Application {
 	}
 
 	protected void displayInitialScene() {
-		stageManager.switchScene(FxmlView.Login);
+		stageManager.switchScene(FxmlView.LOGIN);
 	}
 
 	private ConfigurableApplicationContext springBootApplicationContext() {

@@ -71,8 +71,8 @@ public class MechanicMainSceneController implements Initializable {
     @FXML
     protected void logout() {
         // keep selected language
-        if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.Login);
-        else stageManager.switchScene(FxmlView.LoginSVK);
+        if (global_lang.equals("eng")) stageManager.switchScene(FxmlView.LOGIN);
+        else stageManager.switchScene(FxmlView.LOGIN_SVK);
     }
 
     @FXML
@@ -198,7 +198,7 @@ public class MechanicMainSceneController implements Initializable {
         modelTypeM = carType.getText();
         modelVinM = carVIN.getText();
         items = carsTable.getItems();
-        stageManager.switchScene(FxmlView.ComponentSelection);
+        stageManager.switchScene(FxmlView.COMPONENT_SELECTION);
 
         // keep selected language
         if (global_lang.equals("eng")) compSel_changeToEnglishLang();
@@ -224,7 +224,7 @@ public class MechanicMainSceneController implements Initializable {
 
     @FXML
     private void selectC() {
-        stageManager.switchScene(FxmlView.MechanicScene);
+        stageManager.switchScene(FxmlView.MECHANIC_SCENE);
 
         // keep selected language
         if (global_lang.equals("eng")) mechanicMainScene_changeToEnglishLang();
